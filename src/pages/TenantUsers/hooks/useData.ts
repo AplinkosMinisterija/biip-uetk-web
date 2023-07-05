@@ -32,7 +32,8 @@ export const useData = () => {
         filter: filters
       }),
     mapData: (list) => mapUsers(list),
-    dependencyArray: [page, filters]
+    dependencyArray: [page, filters],
+    name: "tenantUsers"
   });
 
   const buttonInfo: ButtonInfo = {

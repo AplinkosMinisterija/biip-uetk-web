@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { isEqual } from "lodash";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useMutation } from "react-query";
 import {
   Location,
   Navigate,
@@ -15,17 +17,16 @@ import Cookies from "universal-cookie";
 import api from "./api";
 import DefaultLayout from "./components/layouts/DefaultLayout";
 import LoaderComponent from "./components/other/LoaderComponent";
-import LoginPage from "./pages/Login";
-import { useAppDispatch, useAppSelector } from "./state/hooks";
-import { actions } from "./state/user/reducer";
+import { Login } from "./pages/Login";
+import { useAppSelector } from "./state/hooks";
 import { ProfileId } from "./types";
+import { ServerErrorCodes } from "./utils/constants";
+import { handleUpdateTokens } from "./utils/functions";
 import {
-  handleEGatesSign,
-  handleGetCurrentUser,
-  handleResponse,
-  handleUpdateTokens
-} from "./utils/functions";
-import { useFilteredRoutes } from "./utils/hooks";
+  useCheckAuthMutation,
+  useEGatesSign,
+  useFilteredRoutes
+} from "./utils/hooks";
 import { slugs } from "./utils/routes";
 
 const cookies = new Cookies();
@@ -42,72 +43,110 @@ function App() {
   const [searchParams] = useSearchParams();
   const { ticket, eGates } = Object.fromEntries([...Array.from(searchParams)]);
   const profileId: ProfileId = cookies.get("profileId");
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const routes = useFilteredRoutes();
+  const navigateRef = useRef(navigate);
 
-  const shouldUpdateTokens = async () => {
-    if (!cookies.get("token") && cookies.get("refreshToken")) {
-      await handleResponse({
-        endpoint: () => api.refreshToken(),
-        onSuccess: (data) => {
-          handleUpdateTokens(data);
-        }
-      });
+  const isInvalidProfile =
+    !profiles?.map((profile) => profile?.id?.toString()).includes(profileId) &&
+    loggedIn;
+
+  const updateTokensMutation = useMutation(api.refreshToken, {
+    onError: ({ response }: any) => {
+      if (isEqual(response.status, ServerErrorCodes.NOT_FOUND)) {
+        cookies.remove("refreshToken", { path: "/" });
+      }
+    },
+    onSuccess: (data) => {
+      handleUpdateTokens(data);
     }
-  };
+  });
 
-  const handleCheckAuth = async () => {
-    await shouldUpdateTokens();
+  const updateTokensMutationMutateAsyncFunction =
+    updateTokensMutation.mutateAsync;
 
-    const currentUserData = await handleGetCurrentUser();
-    dispatch(actions.setUser(currentUserData));
-    setLoading(false);
-  };
+  const shouldUpdateTokens = useCallback(async () => {
+    if (!cookies.get("token") && cookies.get("refreshToken")) {
+      await updateTokensMutationMutateAsyncFunction();
+    }
+  }, [updateTokensMutationMutateAsyncFunction]);
+
+  const { mutateAsync: eGateSignsMutation, isLoading: eGatesSignLoading } =
+    useEGatesSign();
+
+  const { mutateAsync: checkAuthMutation } = useCheckAuthMutation();
+
+  const eGatesLoginMutation = useMutation(
+    (ticket: string) => api.eGatesLogin({ ticket }),
+    {
+      onSuccess: (data) => {
+        handleUpdateTokens(data);
+        checkAuthMutation();
+      },
+      retry: false
+    }
+  );
+
+  const isLoading =
+    initialLoading ||
+    [
+      eGatesLoginMutation.isLoading,
+      eGatesSignLoading,
+      updateTokensMutation.isLoading
+    ].some((loading) => loading);
 
   useEffect(() => {
     (async () => {
-      await handleCheckAuth();
+      await shouldUpdateTokens();
+      await checkAuthMutation();
+      setInitialLoading(false);
+    })();
+  }, [location.pathname, checkAuthMutation, shouldUpdateTokens]);
 
+  const eGatesLoginMutationMutateAsync = eGatesLoginMutation.mutateAsync;
+
+  useEffect(() => {
+    (async () => {
       if (loggedIn) return;
 
       if (ticket) {
-        setLoading(true);
-        handleResponse({
-          endpoint: () => api.eGatesLogin({ ticket }),
-          onSuccess: async (data) => {
-            handleUpdateTokens(data);
-            const currentUserData = await handleGetCurrentUser();
-            dispatch(actions.setUser(currentUserData));
-            setLoading(false);
-          }
-        });
+        eGatesLoginMutationMutateAsync(ticket);
       }
       if (eGates !== undefined) {
-        setLoading(true);
-        await handleEGatesSign();
-        setLoading(false);
+        eGateSignsMutation();
       }
     })();
-  }, [ticket, eGates, location.pathname]);
+  }, [
+    ticket,
+    eGates,
+    eGateSignsMutation,
+    eGatesLoginMutationMutateAsync,
+    loggedIn
+  ]);
 
   useEffect(() => {
-    const isValidProfile =
-      !profiles?.map((profile) => profile.id.toString()).includes(profileId) &&
-      loggedIn;
+    if (!isInvalidProfile) return;
 
-    if (isValidProfile) {
-      cookies.remove("profileId", { path: "/" });
+    cookies.remove("profileId", { path: "/" });
 
-      navigate(slugs.profiles);
-    }
-  }, [profileId, loggedIn]);
+    if (!navigateRef?.current) return;
+
+    navigateRef?.current("");
+  }, [profileId, loggedIn, isInvalidProfile]);
+
+  const getDefaultRoute = () => {
+    if (!loggedIn) return "/login";
+
+    if (!profileId) return slugs.profiles;
+
+    return slugs.forms;
+  };
 
   return (
     <>
-      {!loading ? (
+      {!isLoading ? (
         <DefaultLayout loggedIn={loggedIn}>
           <>
             <Routes>
@@ -116,7 +155,7 @@ function App() {
                   <PublicRoute profileId={profileId} loggedIn={loggedIn} />
                 }
               >
-                <Route path="/login" element={<LoginPage />} />
+                <Route path="/login" element={<Login />} />
               </Route>
               <Route
                 element={
@@ -135,10 +174,7 @@ function App() {
                   />
                 ))}
               </Route>
-              <Route
-                path="*"
-                element={<Navigate to={loggedIn ? slugs.forms : "/login"} />}
-              />
+              <Route path="*" element={<Navigate to={getDefaultRoute()} />} />
             </Routes>
             <ToastContainer />
           </>
@@ -160,10 +196,10 @@ const PublicRoute = ({ loggedIn, profileId }: RouteProps) => {
 
 const ProtectedRoute = ({ loggedIn, profileId, location }: RouteProps) => {
   if (!loggedIn) {
-    return <Navigate to={"/prisijungimas"} replace />;
+    return <Navigate to={"/login"} replace />;
   }
 
-  if (location?.pathname == slugs.profiles && !!profileId) {
+  if (location?.pathname === slugs.profiles && !!profileId) {
     return <Navigate to={slugs.forms} replace />;
   }
 

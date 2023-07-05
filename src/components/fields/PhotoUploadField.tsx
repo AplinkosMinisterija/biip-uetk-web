@@ -78,7 +78,7 @@ const PhotoUploadField = ({
   return (
     <Container>
       {photos.map((photo: File | FileProps | any, index: number) => {
-        if (!photo) return;
+        if (!photo) return <></>;
 
         return (
           <div key={`photoUploadField-${index}`}>

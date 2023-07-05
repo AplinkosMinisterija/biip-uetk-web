@@ -42,7 +42,7 @@ export const DeleteComponent = ({
           {buttonsTitles.delete}
         </DeleteButton>
       </DeleteButtonContainer>
-      <Modal onClose={setShowModal} visible={showModal}>
+      <Modal onClose={() => setShowModal(false)} visible={showModal}>
         <DeleteCard
           onClose={() => setShowModal(false)}
           title={deleteTitle}

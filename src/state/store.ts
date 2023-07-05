@@ -4,7 +4,6 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { TableColumns } from "./columns/reducer";
 import { Filters } from "./filters/reducer";
-import { Mocks } from "./mocks/reducer";
 import { UserReducer } from "./user/reducer";
 import { Users } from "./users/reducer";
 
@@ -18,7 +17,6 @@ const reducers = combineReducers({
   user: UserReducer.reducer,
   users: Users.reducer,
   filters: Filters.reducer,
-  mocks: Mocks.reducer,
   columns: TableColumns.reducer
 });
 
@@ -33,7 +31,9 @@ const store = configureStore({
 
 let persistor = persistStore(store);
 
-export default { store, persistor };
+const reduxData = { store, persistor };
+
+export default reduxData;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

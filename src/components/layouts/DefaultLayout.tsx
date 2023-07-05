@@ -1,5 +1,4 @@
 import { useMediaQuery } from "@material-ui/core";
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Cookies from "universal-cookie";
 import { device } from "../../styles";
@@ -18,18 +17,14 @@ export interface DefaultLayoutProps {
 
 const DefaultLayout = ({ children, loggedIn }: DefaultLayoutProps) => {
   const isMobile = useMediaQuery(device.mobileL);
-  const location = useLocation();
-  const loginLayoutPages = ["/profiliai", "/login"];
-  const isLoginLayoutPage = loginLayoutPages.some((loginLayoutPage) =>
-    location.pathname.includes(loginLayoutPage)
-  );
+  const profileId = cookies.get("profileId");
 
-  if (loggedIn && !isLoginLayoutPage) {
+  if (loggedIn && profileId) {
     return (
       <Container>
         {!isMobile ? <Navbar /> : <MobileNavbar />}
 
-        <Content isMap={false}>{children}</Content>
+        <Content>{children}</Content>
         <Footer />
       </Container>
     );
@@ -51,27 +46,14 @@ const Container = styled.div`
   }
 `;
 
-const Content = styled.div<{ isMap: boolean }>`
+const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
 
-  ${({ isMap }) =>
-    isMap &&
-    `
-    padding: 0px;
-    width: 100%;
-    height: 100%;
-  `}
   @media ${device.mobileL} {
     padding: 20px 16px;
-
-    ${({ isMap }) =>
-      isMap &&
-      `
-    padding: 0px;
-  `}
   }
 `;
 export default DefaultLayout;

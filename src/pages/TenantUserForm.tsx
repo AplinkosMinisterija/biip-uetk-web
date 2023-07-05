@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SimpleContainer from "../components/containers/SimpleContainer";
 import NumericTextField from "../components/fields/NumericTextField";
 import SelectField from "../components/fields/SelectField";
 import TextField from "../components/fields/TextField";
-import Icon from "../components/other/Icons";
 import LoaderComponent from "../components/other/LoaderComponent";
 import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
 import { useAppSelector } from "../state/hooks";
@@ -32,8 +31,6 @@ import Api from "./../api";
 const TenantUserForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [user, setUser] = useState<User>();
-  const [loading, setLoading] = useState(true);
   const currentUser = useAppSelector((state) => state.user?.userData);
 
   const handleSubmit = async (values: User) => {
@@ -54,21 +51,24 @@ const TenantUserForm = () => {
     }
   };
 
-  const handleSetUser = async () => {
-    if (isNew(id)) return setLoading(false);
+  const setUser = async () => {
+    if (isNew(id)) return;
 
-    await handleResponse({
-      endpoint: () => Api.tenantUser(id!),
-      onSuccess: (user: User) => {
-        if (currentUser?.id === user?.id) return navigate(slugs.profile);
-        setUser(user);
-      },
+    return Api.tenantUser(id!);
+  };
+
+  const { data: user, isLoading } = useQuery(
+    ["tenantUser", id],
+    () => setUser(),
+    {
       onError: () => {
         navigate(slugs.tenantUsers);
+      },
+      onSuccess: (user) => {
+        if (currentUser?.id === user?.id) return navigate(slugs.profile);
       }
-    });
-    setLoading(false);
-  };
+    }
+  );
 
   const handleRemoveTenantUser = async () => {
     await handleResponse({
@@ -87,10 +87,6 @@ const TenantUserForm = () => {
     deleteName: `${user?.firstName} ${user?.lastName}`,
     deleteFunction: !isNew(id) ? handleRemoveTenantUser : undefined
   };
-
-  useEffect(() => {
-    handleSetUser();
-  }, [id]);
 
   const initialValues: User = {
     firstName: user?.firstName || "",
@@ -162,7 +158,7 @@ const TenantUserForm = () => {
     );
   };
 
-  if (loading) {
+  if (isLoading) {
     return <LoaderComponent />;
   }
 
@@ -201,11 +197,6 @@ const StyledSelectField = styled(SelectField)`
 `;
 const StyledNumericTextField = styled(NumericTextField)`
   flex: 1;
-`;
-const StyledIcon = styled(Icon)`
-  color: #cdd5df;
-  font-size: 2.4rem;
-  margin-right: 12px;
 `;
 
 const InnerContainer = styled.div`

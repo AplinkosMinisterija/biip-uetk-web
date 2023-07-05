@@ -47,7 +47,6 @@ export const mapFormFilters = (filters: FormFilters): FormFiltersProps => {
 
 export const mapForms = (forms: Form[]): TableRow[] =>
   forms.map((form: Form) => {
-    const creatorFUllName = `${form.createdBy?.firstName} ${form.createdBy?.lastName}`;
     return {
       id: form.id,
       name: `${form.objectName}`,

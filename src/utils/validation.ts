@@ -190,7 +190,7 @@ export const validateFileSizes = (files: File[]) => {
 export const validatePhotoTypes = (files: File[]) => {
   for (let i = 0; i < files.length; i++) {
     const availableType = availablePhotoMimeTypes.find(
-      (type) => type == files[i].type
+      (type) => type === files[i].type
     );
     if (!availableType) return false;
   }
@@ -200,7 +200,7 @@ export const validatePhotoTypes = (files: File[]) => {
 export const validateFileTypes = (files: File[]) => {
   for (let i = 0; i < files.length; i++) {
     const availableType = availableMimeTypes.find(
-      (type) => type == files[i].type
+      (type) => type === files[i].type
     );
     if (!availableType) return false;
   }
