@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-const basename = process.env.PUBLIC_PATH || '/';
+const basename = process.env.PUBLIC_URL || '/';
 
 root.render(
   <Provider store={store}>
