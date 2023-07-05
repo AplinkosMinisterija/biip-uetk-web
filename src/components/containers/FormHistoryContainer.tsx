@@ -1,5 +1,5 @@
 import { map } from "lodash";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { GetAllResponse } from "../../api";
@@ -13,12 +13,6 @@ import { ButtonColors } from "../buttons/Button";
 import Avatar from "../other/Avatar";
 import LoaderComponent from "../other/LoaderComponent";
 import SimpleContainer from "./SimpleContainer";
-
-interface HistoryEndpointProps {
-  id?: string;
-  page: number;
-  pageSize: number;
-}
 
 interface FormHistoryContainerProps {
   formHistoryLabels: { [key: string]: string };
@@ -44,31 +38,34 @@ const FormHistoryContainer = ({
 }: FormHistoryContainerProps) => {
   const [loading, setLoading] = useState(false);
   const [history, setHistoryData] = useState<FormHistory[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState(false);
   const { id } = useParams();
 
-  useEffect(() => {
-    handleLoadData();
-  }, []);
+  const handleLoadData = useCallback(
+    async (page) => {
+      setLoading(true);
+      handleResponse({
+        endpoint: () =>
+          endpoint({
+            id,
+            page: page,
+            pageSize: 5
+          }),
+        onSuccess: (list: GetAllResponse<FormHistory>) => {
+          setCurrentPage(list.page!);
+          setHasMore(list.page! < list.totalPages);
+          setHistoryData((prev) => [...prev, ...list?.rows]);
+          setLoading(false);
+        }
+      });
+    },
+    [endpoint, id]
+  );
 
-  const handleLoadData = async () => {
-    setLoading(true);
-    handleResponse({
-      endpoint: () =>
-        endpoint({
-          id,
-          page: currentPage + 1,
-          pageSize: 5
-        }),
-      onSuccess: (list: GetAllResponse<FormHistory>) => {
-        setCurrentPage(list.page!);
-        setHasMore(list.page! < list.totalPages);
-        setHistoryData([...history, ...list?.rows]);
-        setLoading(false);
-      }
-    });
-  };
+  useEffect(() => {
+    handleLoadData(1);
+  }, [handleLoadData]);
 
   const handleScroll = async (e) => {
     const element = e.currentTarget;
@@ -78,7 +75,7 @@ const FormHistoryContainer = ({
       ) < 1;
 
     if (isTheBottom && hasMore && !loading) {
-      handleLoadData();
+      handleLoadData(currentPage + 1);
     }
   };
 

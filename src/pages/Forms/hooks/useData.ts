@@ -32,7 +32,8 @@ export const useData = () => {
         filter: mapFormFilters(filters)
       }),
     mapData: (list) => mapForms(list),
-    dependencyArray: [page, filters]
+    dependencyArray: [page, filters],
+    name: "forms"
   });
 
   const buttonInfo: ButtonInfo = {

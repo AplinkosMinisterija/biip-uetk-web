@@ -1,6 +1,6 @@
 import { FieldArray } from "formik";
 import { isEmpty, isEqual } from "lodash";
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Api from "../api";
@@ -73,8 +73,13 @@ import { validateForm } from "../utils/validation";
 const FormPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [form, setForm] = useState<Form>();
-  const [loading, setLoading] = useState(true);
+
+  const { data: form, isLoading } = useQuery(["form", id], () => setForm(), {
+    onError: () => {
+      navigate(slugs.tenantUsers);
+    }
+  });
+
   const disabled = !isNew(id) && !form?.canEdit;
   const mapQueryString = !disabled
     ? "&types[]=point&multi=true"
@@ -117,24 +122,11 @@ const FormPage = () => {
     }
   };
 
-  const handleSetForm = async () => {
-    if (isNew(id)) return setLoading(false);
+  const setForm = async () => {
+    if (isNew(id)) return;
 
-    await handleResponse({
-      endpoint: () => Api.form(id!),
-      onSuccess: (user: Form) => {
-        setForm(user);
-      },
-      onError: () => {
-        navigate(slugs.forms);
-      }
-    });
-    setLoading(false);
+    return Api.form(id!);
   };
-
-  useEffect(() => {
-    handleSetForm();
-  }, [id]);
 
   const fields = {
     poolArea: (value, error, handleChange) => (
@@ -1415,7 +1407,7 @@ const FormPage = () => {
     );
   };
 
-  if (loading) {
+  if (isLoading) {
     return <LoaderComponent />;
   }
 

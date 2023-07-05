@@ -208,16 +208,6 @@ const FileContainer = styled.div<{ opacity?: number }>`
   width: 100%;
 `;
 
-const ErrorMessage = styled.label`
-  display: inline-block;
-  width: 100%;
-  color: ${({ theme }) => theme.colors.error};
-  font-size: 1.4rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
 const TextRow = styled.div`
   display: flex;
   align-items: center;
@@ -225,12 +215,6 @@ const TextRow = styled.div`
   @media ${device.mobileL} {
     flex-direction: column;
   }
-`;
-const Label = styled.div`
-  text-align: left;
-  font-size: 1.4rem;
-  color: ${({ theme }) => theme.colors.label};
-  opacity: 1;
 `;
 
 const UploadFileContainer = styled.div<{ error: boolean }>`

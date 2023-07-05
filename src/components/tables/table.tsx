@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@material-ui/core";
 import { isEmpty } from "lodash";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import ReactPaginate from "react-paginate";
 import {
   createSearchParams,
@@ -10,7 +10,7 @@ import {
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import styled from "styled-components";
 import { device } from "../../styles";
-import { getActiveColumns, getOrderedColumns } from "../../utils/functions";
+import { getActiveColumns, useGetSortedColumns } from "../../utils/functions";
 import ColumnButton, { ColumnButtonProps } from "../other/ColumnButton";
 import DynamicFilter, { DynamicFilterProps } from "../other/DynamicFilter";
 import Icon from "../other/Icons";
@@ -67,8 +67,9 @@ const Table = ({
   const isMobile = useMediaQuery(device.mobileL);
   const pageRange = isMobile ? 1 : 3;
   const pageMargin = isMobile ? 1 : 3;
-  const sortedColumns = getOrderedColumns(columns, isMobile);
-  const activeColumns = getActiveColumns(sortedColumns);
+  const sortedColumns = useGetSortedColumns(columns);
+  const activeColumns = getActiveColumns(columns);
+  const navigateRef = useRef(navigate);
   const handleRowClick = (row: TableRow) => {
     if (onClick && row.id) {
       onClick(row.id);
@@ -76,15 +77,19 @@ const Table = ({
   };
 
   useEffect(() => {
-    if (!loading && totalPages < parseInt(params?.page)) {
-      navigate({
+    if (
+      !loading &&
+      totalPages < parseInt(params?.page) &&
+      navigateRef?.current
+    ) {
+      navigateRef.current({
         search: `?${createSearchParams({
           ...params,
           [page]: "1"
         })}`
       });
     }
-  }, [searchParams, data, loading]);
+  }, [searchParams, data, loading, totalPages, params, page]);
 
   const notFoundComponent = (
     <NotFound label={label} url={url} urlLabel={urlLabel} />
