@@ -10,14 +10,17 @@ RUN yarn install --frozen-lockfile
 # Copy source
 COPY . .
 
+# Set env variables
+ARG REACT_APP_SENTRY_DSN=
+ARG REACT_APP_SENTRY_ENV=production
+ARG NODE_ENV=production
+ARG PUBLIC_URL=/app
+
 # Build and cleanup
 RUN yarn build
 
 # Caddy stage
 FROM caddy:2.6-alpine
-
-# Set default NODE_ENV
-ENV NODE_ENV=production
 
 # Expose port
 EXPOSE 80
