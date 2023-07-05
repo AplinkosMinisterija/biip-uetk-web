@@ -200,7 +200,6 @@ export const subPoolOptions = [
     code: "LT1170",
     label: "Minijos upės pabaseinis "
   },
-  ,
   {
     code: "LT3400",
     label: "Lielupės upės mažųjų intakų pabaseinis "
@@ -269,4 +268,9 @@ export enum FormDataFields {
   maxPondPressureHeight = "maxPondPressureHeight",
   hydrostaticId = "hydrostaticId",
   fishPassProjectDebit = "fishPassProjectDebit"
+}
+
+export enum ServerErrorCodes {
+  NOT_FOUND = "404",
+  NO_PERMISSION = "401"
 }

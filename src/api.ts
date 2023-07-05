@@ -1,13 +1,7 @@
 import Axios, { AxiosInstance, AxiosResponse } from "axios";
 import { isEmpty } from "lodash";
 import Cookies from "universal-cookie";
-import {
-  Form,
-  FormFilters,
-  FormFiltersProps,
-  User,
-  UserFilters
-} from "./types";
+import { Form, FormFiltersProps, User, UserFilters } from "./types";
 import { Populations, Resources, SortFields } from "./utils/constants";
 const cookies = new Cookies();
 
@@ -287,7 +281,7 @@ class Api {
       pageSize
     });
 
-  form = async (id: string): Promise<GetAllResponse<Form>> =>
+  form = async (id: string): Promise<Form> =>
     await this.getOne({
       resource: Resources.FORMS,
       populate: [Resources.GEOM, Resources.CAN_EDIT],
@@ -378,4 +372,6 @@ class Api {
     });
 }
 
-export default new Api();
+const api = new Api();
+
+export default api;

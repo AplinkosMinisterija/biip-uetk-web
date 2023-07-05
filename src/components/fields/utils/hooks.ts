@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { handleResponse } from "../../../utils/functions";
 import { getFilteredOptions } from "./functions";
 
@@ -33,38 +33,37 @@ export const useAsyncSelectData = ({
     onChange(option);
   };
 
+  const handleLoadData = useCallback(
+    async (input: string, page: number) => {
+      setLoading(true);
+      handleResponse({
+        endpoint: () => setSuggestionsFromApi(input, page, dependantId),
+        onSuccess: (response: any) => {
+          setCurrentPage(response.page);
+          setSuggestions((prev) =>
+            page !== 1
+              ? [...prev, ...response?.[optionsKey]]
+              : response?.[optionsKey]
+          );
+          setHasMore(response.page < response.totalPages);
+          setLoading(false);
+        }
+      });
+    },
+    [optionsKey, dependantId, setSuggestionsFromApi]
+  );
+
   useEffect(() => {
     if (isEmpty(suggestions) && showSelect) {
       handleLoadData("", 1);
     }
-  }, [showSelect]);
+  }, [showSelect, handleLoadData, suggestions]);
 
   useEffect(() => {
     if (!dependantId) return;
 
     handleLoadData("", 1);
-  }, [dependantId]);
-
-  const handleLoadData = async (
-    input: string,
-    page: number,
-    lazyLoading = false
-  ) => {
-    setLoading(true);
-    handleResponse({
-      endpoint: () => setSuggestionsFromApi(input, page, dependantId),
-      onSuccess: (response: any) => {
-        setCurrentPage(response.page);
-        setSuggestions(
-          lazyLoading
-            ? [...suggestions, ...response?.[optionsKey]]
-            : response?.[optionsKey]
-        );
-        setHasMore(response.page < response.totalPages);
-        setLoading(false);
-      }
-    });
-  };
+  }, [dependantId, handleLoadData]);
 
   const handleScroll = async (e: any) => {
     const element = e.currentTarget;
@@ -74,7 +73,7 @@ export const useAsyncSelectData = ({
       ) < 1;
 
     if (isTheBottom && hasMore && !loading) {
-      handleLoadData(input, currentPage + 1, true);
+      handleLoadData(input, currentPage + 1);
     }
   };
 

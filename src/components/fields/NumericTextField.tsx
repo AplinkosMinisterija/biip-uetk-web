@@ -54,8 +54,8 @@ const NumericTextField = ({
 
   const handleChange = (input) => {
     const regex = wholeNumber
-      ? /^[0-9]{0,11}$/
-      : /^\d{0,100}$|(?=^.{1,10}$)^\d+[\.\,]\d{0,10}$/;
+      ? /^[0-9]{0,16}$/
+      : /^\d{0,100}$|(?=^.{1,10}$)^\d+[.,]\d{0,10}$/;
 
     if (regex.test(input)) onChange(input.replaceAll(",", "."));
   };

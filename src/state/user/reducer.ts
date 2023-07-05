@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../types";
 import type { RootState } from "../store";
 
-interface UserReducerProps {
+export interface UserReducerProps {
   userData: User;
   loggedIn: boolean;
 }

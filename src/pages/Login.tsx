@@ -1,135 +1,140 @@
-import { Formik } from "formik";
-import { useRef, useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useFormik } from "formik";
+import { useMutation } from "react-query";
 import styled from "styled-components";
 import api from "../api";
-import Button, { ButtonColors } from "../components/buttons/Button";
-import SingleCheckBox from "../components/buttons/CheckBox";
+import Button from "../components/buttons/Button";
 import PasswordField from "../components/fields/PasswordField";
 import TextField from "../components/fields/TextField";
-import { ErrorMessage } from "../components/other/ErrorMessage";
-import { useAppDispatch } from "../state/hooks";
-import { actions } from "../state/user/reducer";
-import { device } from "../styles";
+import { handleAlert, handleUpdateTokens } from "../utils/functions";
+import { useCheckAuthMutation, useEGatesSign } from "../utils/hooks";
 import {
-  handleEGatesSign,
-  handleGetCurrentUser,
-  handleResponse,
-  handleUpdateTokens
-} from "../utils/functions";
-import { buttonsTitles, inputLabels } from "../utils/texts";
+  buttonsTitles,
+  formLabels,
+  inputLabels,
+  validationTexts
+} from "../utils/texts";
 import { loginSchema } from "../utils/validation";
 
-const Login = () => {
-  const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [eLoading, setELoading] = useState(false);
-  const captchaRef = useRef<any>();
+interface LoginProps {
+  email: string;
+  password: string;
+}
 
-  const handleSubmit = async ({
+export const Login = () => {
+  const onSubmit = async ({
     email,
-    password,
-    refresh
+    password
   }: {
     email: string;
     password: string;
-    refresh: boolean;
   }) => {
-    const captchaToken = await captchaRef?.current?.execute();
-    const params = { email, password, refresh, captchaToken };
-
-    setLoading(true);
-
-    await handleResponse({
-      endpoint: () => api.login(params),
-      onError: (error) => {
-        setError(error);
-      },
-      onSuccess: handleSuccess
-    });
-
-    setLoading(false);
+    const params = { email, password };
+    loginMutation.mutateAsync(params);
   };
 
-  const handleSuccess = async (data: any) => {
-    handleUpdateTokens(data);
-    const currentUserData = await handleGetCurrentUser(true);
-    dispatch(actions.setUser(currentUserData));
-  };
+  const loginMutation = useMutation((params: LoginProps) => api.login(params), {
+    onError: ({ response }: any) => {
+      const text = validationTexts[response?.data?.type];
 
-  const handleEGateSIgn = async () => {
-    setELoading(true);
-    await handleEGatesSign();
-    setELoading(false);
+      if (text) {
+        return setErrors({ password: text });
+      }
+
+      handleAlert();
+    },
+    onSuccess: (data) => {
+      handleUpdateTokens(data);
+      checkAuthMutation();
+    },
+    retry: false
+  });
+
+  const { mutateAsync: eGatesMutation, isLoading: eGatesSignLoading } =
+    useEGatesSign();
+
+  const { mutateAsync: checkAuthMutation, isLoading: checkAuthLoading } =
+    useCheckAuthMutation();
+
+  const loading = [loginMutation.isLoading, checkAuthLoading].some(
+    (loading) => loading
+  );
+
+  const { values, errors, setFieldValue, handleSubmit, setErrors } = useFormik({
+    initialValues: {
+      email: "",
+      password: ""
+    },
+    validateOnChange: false,
+    validationSchema: loginSchema,
+    onSubmit
+  });
+
+  const handleType = (field: string, value: string) => {
+    setFieldValue(field, value);
+    setErrors({});
   };
 
   return (
-    <Formik
-      validationSchema={loginSchema}
-      initialValues={{ email: "", password: "", refresh: false }}
-      validateOnChange={false}
+    <FormContainer
       onSubmit={handleSubmit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleSubmit();
+        }
+      }}
     >
-      {({ values, errors, setFieldValue, handleSubmit }) => (
-        <FormContainer
-          onSubmit={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSubmit();
-            }
-          }}
-        >
-          <Container>
-            <TextField
-              value={values.email}
-              type="email"
-              error={errors.email}
-              onChange={(value) => setFieldValue("email", value)}
-              label={inputLabels.email}
-            />
-            <PasswordField
-              value={values.password}
-              error={errors.password}
-              onChange={(value) => setFieldValue("password", value)}
-              label={inputLabels.password}
-            />
-            <ErrorMessage error={error} />
-            <Row>
-              <SingleCheckBox
-                onChange={(value) => setFieldValue("refresh", value)}
-                value={values.refresh}
-                label={inputLabels.rememberMe}
-              />
-              <Button loading={loading} type="submit">
-                {buttonsTitles.login}
-              </Button>
-            </Row>
-            <OrRow>
-              <Hr />
-              <OrLabel>{inputLabels.or}</OrLabel>
-              <Hr />
-            </OrRow>
-            <Button
-              type="button"
-              leftIcon={<EvvIcon src="./icons/EVV.svg" />}
-              variant={ButtonColors.PRIMARY}
-              onClick={handleEGateSIgn}
-              loading={eLoading}
-            >
-              {buttonsTitles.eGates}
-            </Button>
-            <ReCAPTCHA
-              ref={captchaRef}
-              size="invisible"
-              sitekey="6LdydlggAAAAAO-vBvg9yBWEVxlulH5b4X6BijMV"
-            />
-          </Container>
-        </FormContainer>
-      )}
-    </Formik>
+      <H1>{formLabels.login}</H1>
+      <InnerContainer>
+        <TextField
+          label={inputLabels.email}
+          type="email"
+          value={values.email}
+          error={errors.email}
+          onChange={(e) => handleType("email", e)}
+        />
+        <PasswordField
+          label={inputLabels.password}
+          value={values.password}
+          error={errors.password}
+          onChange={(e) => handleType("password", e)}
+        />
+        <ButtonContainer>
+          <StyledButton loading={loading} type="submit">
+            {buttonsTitles.login}
+          </StyledButton>
+        </ButtonContainer>
+
+        <OrContainer>
+          <Or>
+            <Separator />
+            <SeparatorLabelContainer>
+              <SeparatorLabel> {buttonsTitles.or}</SeparatorLabel>
+            </SeparatorLabelContainer>
+          </Or>
+        </OrContainer>
+      </InnerContainer>
+      <StyledButton
+        loading={eGatesSignLoading}
+        type="button"
+        onClick={() => eGatesMutation()}
+      >
+        {buttonsTitles.eLogin}
+      </StyledButton>
+    </FormContainer>
   );
 };
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  max-width: 300px;
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
 
 const H1 = styled.h1`
   text-align: center;
@@ -144,53 +149,63 @@ const H1 = styled.h1`
 `;
 
 const FormContainer = styled.form`
+  width: 100%;
+  height: 100%;
+  max-width: 440px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
   align-items: center;
 `;
 
-const EvvIcon = styled.img`
-  width: 18px;
-  height: 18px;
-  margin-right: 12px;
-`;
-
-const OrLabel = styled.div`
-  font-weight: normal;
-  font-size: 1.4rem;
-  letter-spacing: 0.56px;
-  color: #716c6b;
-  margin: 0 17px;
-`;
-
-const OrRow = styled.div`
+const InnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 12px 0px;
-  width: 100%;
-  @media ${device.mobileL} {
-    margin: 6px 0px;
-  }
+  flex-direction: column;
+  gap: 12px;
 `;
 
-const Hr = styled.div`
-  background-color: #d3d2d2;
+const OrContainer = styled.div`
   width: 100%;
+`;
+
+const Or = styled.div`
+  width: 100%;
+  height: 50px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const SeparatorLabelContainer = styled.div`
+  font: normal normal 600 16px/40px;
+  letter-spacing: 1.02px;
+  color: #0b1f518f;
+  position: absolute;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  opacity: 1;
+`;
+
+const SeparatorLabel = styled.span`
+  font: normal normal 600 16px/40px;
+  letter-spacing: 1.02px;
+  color: #0b1f518f;
+  background-color: white;
+  padding: 0 8px;
+  margin: 0 auto;
+  vertical-align: middle;
+  opacity: 1;
+`;
+
+const Separator = styled.div`
   height: 1px;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  background-color: ${({ theme }) => theme?.colors?.border};
+  margin: auto 0;
+  position: absolute;
+  max-width: 400px;
   width: 100%;
+  margin: 24px 0;
 `;
-
-export default Login;

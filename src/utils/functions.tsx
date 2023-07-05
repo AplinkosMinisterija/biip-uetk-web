@@ -1,10 +1,12 @@
+import { useMediaQuery } from "@material-ui/core";
 import { map } from "lodash";
 import { NavigateFunction } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "universal-cookie";
 import { default as api, default as Api } from "../api";
 import { FilterConfig } from "../components/other/DynamicFilter/Filter";
-import { actions } from "../state/user/reducer";
+import { actions, UserReducerProps } from "../state/user/reducer";
+import { device } from "../styles";
 import { Columns, Profile, ProfileId } from "../types";
 import {
   FormDataFields,
@@ -36,7 +38,7 @@ interface UpdateTokenProps {
   refreshToken?: string;
 }
 
-export const handleAlert = (responseError: string) => {
+export const handleAlert = (responseError?: string) => {
   toast.error(
     validationTexts[responseError as keyof typeof validationTexts] ||
       validationTexts.error,
@@ -128,36 +130,13 @@ export const sortMobile = (columns: Columns, key: string, key2: string) => {
       : -1;
   }
 
-  if (columns[key].desktopOrder && columns[key2].desktopOrder) {
-    return columns?.[key]?.desktopOrder! > columns?.[key2]?.desktopOrder!
-      ? 1
-      : -1;
-  }
-
-  return 0;
+  return sortDesktop(columns, key, key2);
 };
 
-export const getOrderedColumns = (columns: Columns, isMobile: boolean) =>
-  Object.keys(columns)
-    .sort((key, key2) =>
-      isMobile
-        ? sortMobile(columns, key, key2)
-        : sortDesktop(columns, key, key2)
-    )
-    .reduce((obj, key) => {
-      const isVisible =
-        !columns[key].hasOwnProperty("visible") || columns[key].visible;
-
-      if (isVisible) {
-        obj[key] = columns[key];
-      }
-      return obj;
-    }, {});
-
-export const getActiveColumns = (orderedColumns: Columns) =>
-  Object.keys(orderedColumns).reduce((obj, key) => {
-    if (orderedColumns[key].show) {
-      obj[key] = orderedColumns[key];
+export const getActiveColumns = (sortedColumns: Columns) =>
+  Object.keys(sortedColumns).reduce((obj, key) => {
+    if (sortedColumns[key].show) {
+      obj[key] = sortedColumns[key];
     }
     return obj;
   }, {});
@@ -215,7 +194,7 @@ export const handleIsTenantOwner = (role?: RolesTypes) =>
   role === RolesTypes.ADMIN;
 
 export const handleSelectProfile = (profileId: ProfileId) => {
-  if (cookies.get("profileId") == profileId) return;
+  if (cookies.get("profileId")?.toString() === profileId?.toString()) return;
 
   cookies.set("profileId", `${profileId}`, { path: "/" });
 
@@ -244,6 +223,11 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
       return { minDate: new Date(values[dateFrom]) };
     }
   }
+};
+
+export const emptyUser: UserReducerProps = {
+  userData: {},
+  loggedIn: false
 };
 
 export const clearCookies = () => {
@@ -280,45 +264,34 @@ export const handleUpdateTokens = (data: UpdateTokenProps) => {
   }
 };
 
-export const handleGetCurrentUser = async (justLoggedIn: boolean = false) => {
-  const emptyUser = { userData: null, loggedIn: false };
-
+export const handleGetCurrentUser = async () => {
   if (!cookies.get("token")) return emptyUser;
 
-  return handleResponse({
-    endpoint: () => Api.checkAuth(),
-    onError: () => {
-      clearCookies();
-      return emptyUser;
-    },
-    onSuccess: (userData) => {
-      handleSetProfile(userData?.profiles, justLoggedIn);
-      return { userData: userData, loggedIn: true };
-    }
-  });
+  return { userData: await api.checkAuth(), loggedIn: true };
 };
 
 export const getLocationList = async (input: string, page: number | string) => {
   return await api.getLocations({ search: input, page });
 };
 
-const handleSetProfile = (
-  profiles?: Profile[],
-  justLoggedIn: boolean = false
-) => {
+export const handleSetProfile = (profiles?: Profile[]) => {
   const isOneProfile = profiles?.length === 1;
   const profileId = cookies.get("profileId");
 
-  if (profileId && justLoggedIn) {
-    const hasProfile = profiles?.some((profile) => profile.id == profileId);
+  if (isOneProfile) {
+    return handleSelectProfile(profiles[0].id);
+  }
+
+  if (profileId) {
+    const hasProfile = profiles?.some(
+      (profile) => profile.id.toString() === profileId.toString()
+    );
 
     if (hasProfile) {
       handleSelectProfile(profileId);
     } else {
       cookies.remove("profileId", { path: "/" });
     }
-  } else if (isOneProfile) {
-    handleSelectProfile(profiles[0].id);
   }
 };
 
@@ -339,3 +312,25 @@ export const isMapEditAttribute = (attribute) =>
 
 export const handleHasCoordinatesField = (editFields) =>
   editFields.some((item) => isMapEditAttribute(item?.attribute));
+
+export const useGetSortedColumns = (columns: Columns) => {
+  const isMobile = useMediaQuery(device.mobileL);
+
+  const sortedColumns = Object.keys(columns)
+    .sort((key, key2) =>
+      isMobile
+        ? sortMobile(columns, key, key2)
+        : sortDesktop(columns, key, key2)
+    )
+    .reduce((obj, key) => {
+      const isVisible =
+        !columns[key].hasOwnProperty("visible") || columns[key].visible;
+
+      if (isVisible) {
+        obj[key] = columns[key];
+      }
+      return obj;
+    }, {});
+
+  return sortedColumns;
+};

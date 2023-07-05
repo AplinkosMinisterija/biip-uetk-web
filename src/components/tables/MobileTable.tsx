@@ -67,7 +67,7 @@ const MobileTable = ({
                 </ExpandedColumnContainer>
               );
 
-              if (i % 2 == 0) {
+              if (i % 2 === 0) {
                 return (
                   <>
                     <RowTD />
