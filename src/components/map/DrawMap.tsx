@@ -30,18 +30,18 @@ const DrawMap = ({
   const handleLoadMap = () => {
     if (!value) return;
 
-    iframeRef?.current?.contentWindow?.postMessage(JSON.stringify(value), "*");
+    iframeRef?.current?.contentWindow?.postMessage({ geom: value }, "*");
   };
 
   const handleSaveGeom = useCallback(
     (event) => {
       if (!event?.data?.mapIframeMsg) return;
 
-      const userObjects = JSON.parse(event?.data?.mapIframeMsg?.userObjects);
+      const data = JSON.parse(event?.data?.mapIframeMsg?.data);
 
-      if (!userObjects) return;
+      if (!data) return;
 
-      onSave && onSave(userObjects);
+      onSave && onSave(data);
     },
     [onSave]
   );

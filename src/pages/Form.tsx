@@ -1155,7 +1155,10 @@ const FormPage = () => {
                   onChange={(e) => {
                     handleChange("type", e);
                     handleChange("data", {});
-                    handleChange("editFields", []);
+                    handleChange("editFields", [
+                      { attribute: undefined, value: "" }
+                    ]);
+                    handleChange("geom", undefined);
                   }}
                   isSelected={(option) => option === values?.type}
                   getOptionLabel={(option) => {
