@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { device } from "../../styles";
 import { ChildrenType } from "../../types";
+import { getPublicUrl } from "../../utils/functions";
 import { descriptions } from "../../utils/texts";
 
 export interface LoginLayoutProps {
@@ -10,9 +11,9 @@ export interface LoginLayoutProps {
 const LoginLayout = ({ children }: LoginLayoutProps) => {
   return (
     <Container>
-      <LayoutImage src={"./LoginImage.jpg"} />
+      <LayoutImage src={getPublicUrl("LoginImage.jpg")} />
       <InnerContainer>
-        <Logo src="/logo.svg" />
+        <Logo src={getPublicUrl("logo.svg")} />
         <Description>{descriptions.mainDescription}</Description>
         {children}
       </InnerContainer>

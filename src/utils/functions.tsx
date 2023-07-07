@@ -334,3 +334,5 @@ export const useGetSortedColumns = (columns: Columns) => {
 
   return sortedColumns;
 };
+
+export const getPublicUrl = (url: string) => `${process.env.PUBLIC_URL}/${url}`;

@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { getPublicUrl } from "../../utils/functions";
 
 const AppLogo = () => {
   const navigate = useNavigate();
   return (
     <LogoContainer onClick={() => navigate("/")}>
-      <Logo src="/logo.svg" />
+      <Logo src={getPublicUrl("logo.svg")} />
     </LogoContainer>
   );
 };
