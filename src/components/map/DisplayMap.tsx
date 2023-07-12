@@ -27,7 +27,7 @@ const DisplayMap = ({
   const [loading, setLoading] = useState(true);
   const iframeRef = useRef<any>(null);
 
-  const src = `${Url.SPECIES}${queryString}`;
+  const src = `${Url.UETK}${queryString}`;
 
   const handleLoadMap = () => {
     setLoading(false);
