@@ -33,20 +33,23 @@ const DrawMap = ({
     iframeRef?.current?.contentWindow?.postMessage({ geom: value }, "*");
   };
 
-  const handleSaveGeom = useCallback((event) => {
-    if (!event?.data?.mapIframeMsg) return;
+  const handleSaveGeom = useCallback(
+    (event) => {
+      if (!event?.data?.mapIframeMsg) return;
 
-    const userObjects = JSON.parse(event?.data?.mapIframeMsg?.data);
+      const data = JSON.parse(event?.data?.mapIframeMsg?.data);
 
-    if (!userObjects) return;
+      if (!data) return;
 
-    onSave && onSave(userObjects);
-  }, []);
+      onSave && onSave(data);
+    },
+    [onSave]
+  );
 
   useEffect(() => {
     window.addEventListener("message", handleSaveGeom);
     return () => window.removeEventListener("message", handleSaveGeom);
-  }, []);
+  }, [handleSaveGeom]);
 
   return (
     <>
