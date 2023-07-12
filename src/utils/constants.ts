@@ -138,7 +138,7 @@ export const colorsByStatus = {
 
 const mapsHost = process.env.REACT_APP_MAPS_HOST || "https://maps.biip.lt";
 export const Url = {
-  DRAW: `${mapsHost}/edit?`,
+  DRAW: `${mapsHost}/edit`,
   UETK: `${mapsHost}/uetk`
 };
 
