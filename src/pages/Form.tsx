@@ -81,9 +81,7 @@ const FormPage = () => {
   });
 
   const disabled = !isNew(id) && !form?.canEdit;
-  const mapQueryString = !disabled
-    ? "?types[]=point&buffer=true"
-    : "?preview=true";
+  const mapQueryString = !disabled ? "?types[]=point" : "?preview=true";
   const title = isNew(id) ? pageTitles.newForm : pageTitles.updateForm;
 
   const typeOptions = {
