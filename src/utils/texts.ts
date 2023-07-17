@@ -460,7 +460,7 @@ export const descriptions = {
   getMoreDataAboutPlaces:
     "Norėdami matyti daugiau radaviečių žemėlapyje, pateikite prašymą gauti duomenis.",
   mainDescription:
-    "Naudotojai gali teikti informaciją apie pastebėtas saugomas ir invazines rūšis bei gauti duomenis apie jų paplitimą.",
+    "Elektroninių paslaugų sistema teikianti ir gaunanti duomenis bei informaciją apie vandens telkinius.",
   forgotPasswordDescription:
     "Jeigu pamiršote slaptažodį, įrašykite savo el. pašto adresą ir mes padėsime jį atkurti",
   instructionSentDescription:

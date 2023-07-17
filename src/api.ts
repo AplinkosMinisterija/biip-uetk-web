@@ -97,13 +97,9 @@ class Api {
   }
 
   errorWrapper = async (endpoint: () => Promise<AxiosResponse<any, any>>) => {
-    try {
-      const { data } = await endpoint();
+    const { data } = await endpoint();
 
-      return data;
-    } catch (e: any) {
-      return { error: e.response.data };
-    }
+    return data;
   };
 
   getAll = async ({

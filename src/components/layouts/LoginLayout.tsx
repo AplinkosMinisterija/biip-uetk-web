@@ -46,6 +46,7 @@ const LayoutImage = styled.img`
   max-width: 70%;
   position: sticky;
   object-fit: cover;
+
   @media ${device.mobileXL} {
     width: 50%;
   }
@@ -55,9 +56,8 @@ const LayoutImage = styled.img`
 `;
 
 const Logo = styled.img`
-  width: 186px;
-  height: 43px;
-  margin-left: -20px;
+  width: 220px;
+  height: 50px;
   margin-bottom: 23px;
   color: white;
   display: flex;
