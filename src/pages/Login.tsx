@@ -29,7 +29,7 @@ export const Login = () => {
     password: string;
   }) => {
     const params = { email, password };
-    loginMutation.mutateAsync(params);
+    await loginMutation.mutateAsync(params);
   };
 
   const loginMutation = useMutation((params: LoginProps) => api.login(params), {
