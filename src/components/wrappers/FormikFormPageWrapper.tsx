@@ -48,7 +48,7 @@ const FormPageWrapper = ({
   disabled,
   deleteInfo,
   twoColumn = false,
-  submitButtonText = buttonsTitles.save
+  submitButtonText = buttonsTitles.submit
 }: FormPageWrapperProps) => {
   const navigate = useNavigate();
   const [validateOnChange, setValidateOnChange] = useState(false);
@@ -111,17 +111,19 @@ const FormPageWrapper = ({
                 <DeleteComponent deleteInfo={deleteInfo} />
               </Row>
               {renderForm(values, errors, setFieldValue, setValues)}
-              <MessageContainer>
-                {!isEmpty(errors) && (
+
+              {!isEmpty(errors) && (
+                <MessageContainer>
                   <ErrorMessage>{validationTexts.formFillError}</ErrorMessage>
-                )}
-              </MessageContainer>
+                  <Invisible />
+                </MessageContainer>
+              )}
               {canSubmit && !disabled && (
                 <ButtonContainer>
                   <Button
                     onClick={handleSubmit as any}
                     type="button"
-                    height={32}
+                    height={40}
                     buttonPadding="6px 8px"
                     loading={loading}
                     disabled={disabled}
@@ -165,7 +167,7 @@ const Title = styled.div`
 const StyledForm = styled(Form)<{ two_column: number }>`
   display: flex;
   flex-direction: column;
-  flex-basis: ${({ two_column }) => (two_column ? "1200px" : "800px")};
+  flex-basis: 1200px;
 `;
 
 const StyledBackIcon = styled(Icon)`
@@ -195,21 +197,40 @@ const InnerRow = styled.div`
 `;
 
 const MessageContainer = styled.div`
-  display: flex;
-  width: 100%;
-  margin-top: 8px;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr minmax(168px, 412px);
+
+  @media ${device.mobileL} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const ErrorMessage = styled.div`
-  display: flex;
-  width: 100%;
   background-color: #ffedf0;
   color: #fe1d42;
   border: 1px solid #fe1d42;
   border-radius: 4px;
   padding: 5px 15px 5px 15px;
-  margin: 0 0 10px 0;
+  margin: 8px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 485.47px;
+  flex: 2;
+  @media ${device.mobileL} {
+    width: 100%;
+  }
+`;
+
+const Invisible = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  flex: 1;
+
+  @media ${device.mobileL} {
+    width: 100%;
+  }
 `;
 
 export default FormPageWrapper;

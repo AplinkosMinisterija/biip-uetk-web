@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { device } from ".";
 
 export const Container = styled.div`
-  display: flex;
   gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 400px);
   @media ${device.mobileL} {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 `;
 export const ColumnOne = styled.div`
@@ -20,13 +21,10 @@ export const ColumnOne = styled.div`
 
 export const ColumnTwo = styled.div`
   display: flex;
-  width: 400px;
   gap: 8px;
   flex-direction: column;
   flex: 1;
-  @media ${device.mobileXL} {
-    width: 280px;
-  }
+
   @media ${device.mobileL} {
     width: 100%;
   }
