@@ -7,7 +7,7 @@ import { device } from "../../styles";
 import { FormHistory } from "../../types";
 import { HistoryTypes } from "../../utils/constants";
 import { formatDateAndTime } from "../../utils/format";
-import { handleResponse } from "../../utils/functions";
+import { getPublicUrl, handleResponse } from "../../utils/functions";
 import { formLabels } from "../../utils/texts";
 import { ButtonColors } from "../buttons/Button";
 import Avatar from "../other/Avatar";
@@ -109,7 +109,7 @@ const FormHistoryContainer = ({
                     {colorKey && (
                       <IMG
                         variant={colorKey}
-                        src={`/icons/${history.type}.svg`}
+                        src={getPublicUrl(`icons/${history.type}.svg`)}
                       />
                     )}
                     <HistoryType>{formHistoryLabels[history.type]}</HistoryType>

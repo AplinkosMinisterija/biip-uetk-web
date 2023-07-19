@@ -272,6 +272,7 @@ class Api {
     await this.getAll({
       resource: Resources.FORMS,
       populate: [Resources.CREATED_BY],
+      sort: [SortFields.CREATED_AT],
       page,
       filter,
       pageSize

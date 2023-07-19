@@ -151,7 +151,7 @@ const H1 = styled.h1`
 const FormContainer = styled.form`
   width: 100%;
   height: 100%;
-  max-width: 440px;
+  max-width: 510px;
   display: flex;
   flex-direction: column;
   align-items: center;

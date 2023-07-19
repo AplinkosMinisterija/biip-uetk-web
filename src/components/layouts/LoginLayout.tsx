@@ -13,8 +13,10 @@ const LoginLayout = ({ children }: LoginLayoutProps) => {
     <Container>
       <LayoutImage src={getPublicUrl("LoginImage.jpg")} />
       <InnerContainer>
-        <Logo src={getPublicUrl("logo.svg")} />
-        <Description>{descriptions.mainDescription}</Description>
+        <LogoContainer>
+          <Logo src={getPublicUrl("logo.svg")} />
+          <Description>{descriptions.mainDescription}</Description>
+        </LogoContainer>
         {children}
       </InnerContainer>
     </Container>
@@ -28,6 +30,8 @@ const Container = styled.div`
   overflow-y: auto;
 `;
 
+const LogoContainer = styled.div``;
+
 const InnerContainer = styled.div`
   background-color: #ffffff;
   padding: 0 48px 16px 55px;
@@ -37,6 +41,7 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   @media ${device.mobileM} {
     padding: 16px;
   }

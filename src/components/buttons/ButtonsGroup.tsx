@@ -62,6 +62,9 @@ const StyledButton = styled.button<{
   align-items: center;
   height: 40px;
   padding: 12px;
+  background-color: ${({ selected, theme }) =>
+    selected ? `#0862ab1a` : "inherit"};
+
   border-color: ${({ selected, theme }) =>
     selected ? theme.colors.primary : "#cdd5df"};
   border-style: solid;
