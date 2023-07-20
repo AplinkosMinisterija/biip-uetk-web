@@ -1129,6 +1129,12 @@ const FormPage = () => {
       isNewType ||
       values.editFields?.some((item) => isMapEditAttribute(item.attribute));
 
+    const mapField = [FormObjectType.RIVER, FormObjectType.CANAL].includes(
+      values.objectType!
+    )
+      ? formLabels.selectRiverMouth
+      : formLabels.selectCenter;
+
     return (
       <Container>
         <ColumnOne>
@@ -1325,7 +1331,7 @@ const FormPage = () => {
               </SimpleContainer>
             )}
             {hasMapField && (
-              <SimpleContainer title={formLabels.selectRiverMouth}>
+              <SimpleContainer title={mapField}>
                 <Map
                   queryString={mapQueryString}
                   error={errors?.geom}
