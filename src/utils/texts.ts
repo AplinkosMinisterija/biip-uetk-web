@@ -393,18 +393,17 @@ export const formObjectTypeLabels = {
 };
 
 export const formObjectLabelsToType = {
-  Kanalas: [FormObjectType.CANAL],
-  "Žemių užtvanka": [FormObjectType.EARTH_DAM],
-  "Žuvų perlaida": [FormObjectType.FISH_PASS],
-  Hidroelektrinė: [FormObjectType.HYDRO_POWER_PLANT],
-  "Nepratekamas dirbtinis paviršinis vandens telkinys": [
-    FormObjectType.ISOLATED_WATER_BODY
-  ],
-  "Natūralus ežeras": [FormObjectType.NATURAL_LAKE],
-  Tvenkinys: [FormObjectType.POND],
-  "Patvenktas ežeras": [FormObjectType.PONDED_LAKE],
-  Upė: [FormObjectType.RIVER],
-  "Vandens pertekliaus pralaida": [FormObjectType.WATER_EXCESS_CULVERT]
+  Kanalas: FormObjectType.CANAL,
+  "Žemių užtvanka": FormObjectType.EARTH_DAM,
+  "Žuvų perlaida": FormObjectType.FISH_PASS,
+  Hidroelektrinė: FormObjectType.HYDRO_POWER_PLANT,
+  "Nepratekamas dirbtinis paviršinis vandens telkinys":
+    FormObjectType.ISOLATED_WATER_BODY,
+  "Natūralus ežeras": FormObjectType.NATURAL_LAKE,
+  Tvenkinys: FormObjectType.POND,
+  "Patvenktas ežeras": FormObjectType.PONDED_LAKE,
+  Upė: FormObjectType.RIVER,
+  "Vandens pertekliaus pralaida": FormObjectType.WATER_EXCESS_CULVERT
 };
 
 export const waterExcessCulvertTypeLabels = {
