@@ -105,14 +105,18 @@ const FormPage = () => {
   };
 
   const createOrUpdate = async (values: Form) => {
-    const data = !isEmpty(values.editFields)
-      ? values.editFields?.reduce((obj, curr) => {
-          obj[curr?.attribute!] = curr.value;
-          return obj;
-        }, {})
-      : values.data;
+    const { editFields, ...rest } = values;
 
-    const params = { ...values, data };
+    const data =
+      values.type == FormType.EDIT
+        ? editFields?.reduce((obj, curr) => {
+            obj[curr?.attribute!] = curr.value;
+            return obj;
+          }, {})
+        : values.data;
+
+    const params = { ...rest, data };
+
     if (isNew(id)) {
       return await Api.createForm(params);
     } else {
@@ -1130,22 +1134,23 @@ const FormPage = () => {
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutObject}>
               <Row>
-                <SelectField
-                  label={inputLabels.objectType}
-                  value={values.objectType}
-                  disabled={mainFieldsDisabled}
-                  options={formObjectTypes}
-                  getOptionLabel={(option) => formObjectTypeLabels[option]}
-                  error={errors.objectType}
-                  name="objectType"
-                  onChange={(firstName) => {
-                    handleChange("objectType", firstName);
-                    handleChange("data", {});
-                    handleChange("editFields", [
-                      { attribute: undefined, value: "" }
-                    ]);
-                  }}
-                />
+                {isNewType && (
+                  <SelectField
+                    label={inputLabels.objectType}
+                    value={values.objectType}
+                    options={formObjectTypes}
+                    getOptionLabel={(option) => formObjectTypeLabels[option]}
+                    error={errors.objectType}
+                    name="objectType"
+                    onChange={(firstName) => {
+                      handleChange("objectType", firstName);
+                      handleChange("data", {});
+                      handleChange("editFields", [
+                        { attribute: undefined, value: "" }
+                      ]);
+                    }}
+                  />
+                )}
                 <ButtonsGroup
                   label={inputLabels.formType}
                   options={Object.keys(FormType)}
@@ -1167,7 +1172,6 @@ const FormPage = () => {
               {isNewType ? (
                 <TextField
                   label={inputLabels.objectName}
-                  disabled={mainFieldsDisabled}
                   value={values.objectName}
                   error={errors.objectName}
                   name="objectName"
@@ -1177,9 +1181,8 @@ const FormPage = () => {
                 />
               ) : (
                 <AsyncSelectField
-                  label={inputLabels.objectName}
+                  label={inputLabels.objectNameOrCode}
                   value={values.objectName}
-                  disabled={mainFieldsDisabled}
                   error={errors.objectName}
                   onChange={(value) => {
                     handleChange("objectName", value?.properties?.name);

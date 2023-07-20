@@ -296,6 +296,7 @@ export const inputLabels = {
   providerType: "Duomenų teikėjo statusas objekto atžvilgiu",
   formType: "Teikiami duomenys dėl",
   objectName: "Pavadinimas",
+  objectNameOrCode: "Pavadinimas arba kodas",
   agreeWithConditions: "Su duomenų teikimo sąlygomis susipažinau ir sutinku.",
   providedByFullName: "Teikėjo Vardas, Pavardė / Įmonės pavadinimas",
   poolArea: "Baseino plotas",
