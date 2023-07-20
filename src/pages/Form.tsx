@@ -61,6 +61,7 @@ import {
   fishPassTypeLabels,
   formHistoryLabels,
   formLabels,
+  formObjectLabelsToType,
   formObjectTypeLabels,
   formProviderTypeLabels,
   formTypeLabels,
@@ -109,7 +110,7 @@ const FormPage = () => {
     const { editFields, ...rest } = values;
 
     const data =
-      values.type == FormType.EDIT
+      values.type === FormType.EDIT
         ? editFields?.reduce((obj, curr) => {
             obj[curr?.attribute!] = curr.value;
             return obj;
@@ -1136,7 +1137,7 @@ const FormPage = () => {
       : formLabels.selectCenter;
 
     const textareaLabel =
-      FormType.REMOVE == values.type
+      FormType.REMOVE === values.type
         ? formLabels.deregistration
         : formLabels.otherInfo;
 
@@ -1198,6 +1199,10 @@ const FormPage = () => {
                   error={errors.objectName}
                   onChange={(value) => {
                     handleChange("objectName", value?.properties?.name);
+                    handleChange(
+                      "objectType",
+                      formObjectLabelsToType[value?.properties?.category]
+                    );
                     handleChange(
                       "cadastralId",
                       value?.properties?.cadastral_id
