@@ -28,7 +28,8 @@ export const emptyStateUrlLabels = {
 export const url = {
   new: "naujas",
   publicUETK: "https://uetk.biip.lt/",
-  upload: "/api/public/files"
+  upload: "/api/public/files",
+  termsAndConditions: "https://uetk.biip.lt/duomenu-teikimo-taisykles/"
 };
 
 export const subTitles = {
@@ -247,6 +248,7 @@ export const formLabels = {
   selectCenter: "Pažymėkite centro koordinates",
   uploadFiles: "Įkelkite papildomus dokumentus",
   otherInfo: "Kita papildoma informacija",
+  deregistration: "Išregistravimo pagrindas",
   cadastralObjects: "Kadastro objektai",
   avgPerennialDebit: "VIDUTINIS DAUGIAMETIS VANDENS DEBITAS",
   avgPerennialDebit95: "Vidutinis daugiametis debitas 95 %",
@@ -296,6 +298,7 @@ export const inputLabels = {
   providerType: "Duomenų teikėjo statusas objekto atžvilgiu",
   formType: "Teikiami duomenys dėl",
   objectName: "Pavadinimas",
+  objectNameOrCode: "Pavadinimas arba kodas",
   agreeWithConditions: "Su duomenų teikimo sąlygomis susipažinau ir sutinku.",
   providedByFullName: "Teikėjo Vardas, Pavardė / Įmonės pavadinimas",
   poolArea: "Baseino plotas",
@@ -387,6 +390,21 @@ export const formObjectTypeLabels = {
   [FormObjectType.PONDED_LAKE]: "Patvenktas ežeras",
   [FormObjectType.RIVER]: "Upė",
   [FormObjectType.WATER_EXCESS_CULVERT]: "Vandens pertekliaus pralaida"
+};
+
+export const formObjectLabelsToType = {
+  Kanalas: [FormObjectType.CANAL],
+  "Žemių užtvanka": [FormObjectType.EARTH_DAM],
+  "Žuvų perlaida": [FormObjectType.FISH_PASS],
+  Hidroelektrinė: [FormObjectType.HYDRO_POWER_PLANT],
+  "Nepratekamas dirbtinis paviršinis vandens telkinys": [
+    FormObjectType.ISOLATED_WATER_BODY
+  ],
+  "Natūralus ežeras": [FormObjectType.NATURAL_LAKE],
+  Tvenkinys: [FormObjectType.POND],
+  "Patvenktas ežeras": [FormObjectType.PONDED_LAKE],
+  Upė: [FormObjectType.RIVER],
+  "Vandens pertekliaus pralaida": [FormObjectType.WATER_EXCESS_CULVERT]
 };
 
 export const waterExcessCulvertTypeLabels = {

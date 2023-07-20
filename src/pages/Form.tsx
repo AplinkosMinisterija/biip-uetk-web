@@ -27,6 +27,7 @@ import {
   SquareMeter,
   ThousandsPerCubicMeter
 } from "../components/other/MeasurmentUnits";
+import TermsAndConditions from "../components/other/TermsAndConditions";
 import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
 import { device } from "../styles";
 import {
@@ -60,6 +61,7 @@ import {
   fishPassTypeLabels,
   formHistoryLabels,
   formLabels,
+  formObjectLabelsToType,
   formObjectTypeLabels,
   formProviderTypeLabels,
   formTypeLabels,
@@ -105,14 +107,18 @@ const FormPage = () => {
   };
 
   const createOrUpdate = async (values: Form) => {
-    const data = !isEmpty(values.editFields)
-      ? values.editFields?.reduce((obj, curr) => {
-          obj[curr?.attribute!] = curr.value;
-          return obj;
-        }, {})
-      : values.data;
+    const { editFields, ...rest } = values;
 
-    const params = { ...values, data };
+    const data =
+      values.type === FormType.EDIT
+        ? editFields?.reduce((obj, curr) => {
+            obj[curr?.attribute!] = curr.value;
+            return obj;
+          }, {})
+        : values.data;
+
+    const params = { ...rest, data };
+
     if (isNew(id)) {
       return await Api.createForm(params);
     } else {
@@ -1124,28 +1130,40 @@ const FormPage = () => {
       isNewType ||
       values.editFields?.some((item) => isMapEditAttribute(item.attribute));
 
+    const mapField = [FormObjectType.RIVER, FormObjectType.CANAL].includes(
+      values.objectType!
+    )
+      ? formLabels.selectRiverMouth
+      : formLabels.selectCenter;
+
+    const textareaLabel =
+      FormType.REMOVE === values.type
+        ? formLabels.deregistration
+        : formLabels.otherInfo;
+
     return (
       <Container>
         <ColumnOne>
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutObject}>
               <Row>
-                <SelectField
-                  label={inputLabels.objectType}
-                  value={values.objectType}
-                  disabled={mainFieldsDisabled}
-                  options={formObjectTypes}
-                  getOptionLabel={(option) => formObjectTypeLabels[option]}
-                  error={errors.objectType}
-                  name="objectType"
-                  onChange={(firstName) => {
-                    handleChange("objectType", firstName);
-                    handleChange("data", {});
-                    handleChange("editFields", [
-                      { attribute: undefined, value: "" }
-                    ]);
-                  }}
-                />
+                {isNewType && (
+                  <SelectField
+                    label={inputLabels.objectType}
+                    value={values.objectType}
+                    options={formObjectTypes}
+                    getOptionLabel={(option) => formObjectTypeLabels[option]}
+                    error={errors.objectType}
+                    name="objectType"
+                    onChange={(firstName) => {
+                      handleChange("objectType", firstName);
+                      handleChange("data", {});
+                      handleChange("editFields", [
+                        { attribute: undefined, value: "" }
+                      ]);
+                    }}
+                  />
+                )}
                 <ButtonsGroup
                   label={inputLabels.formType}
                   options={Object.keys(FormType)}
@@ -1167,7 +1185,6 @@ const FormPage = () => {
               {isNewType ? (
                 <TextField
                   label={inputLabels.objectName}
-                  disabled={mainFieldsDisabled}
                   value={values.objectName}
                   error={errors.objectName}
                   name="objectName"
@@ -1177,12 +1194,15 @@ const FormPage = () => {
                 />
               ) : (
                 <AsyncSelectField
-                  label={inputLabels.objectName}
+                  label={inputLabels.objectNameOrCode}
                   value={values.objectName}
-                  disabled={mainFieldsDisabled}
                   error={errors.objectName}
                   onChange={(value) => {
                     handleChange("objectName", value?.properties?.name);
+                    handleChange(
+                      "objectType",
+                      formObjectLabelsToType[value?.properties?.category]
+                    );
                     handleChange(
                       "cadastralId",
                       value?.properties?.cadastral_id
@@ -1321,7 +1341,7 @@ const FormPage = () => {
               </SimpleContainer>
             )}
             {hasMapField && (
-              <SimpleContainer title={formLabels.selectRiverMouth}>
+              <SimpleContainer title={mapField}>
                 <Map
                   queryString={mapQueryString}
                   error={errors?.geom}
@@ -1344,7 +1364,7 @@ const FormPage = () => {
               </SimpleContainer>
             )}
 
-            <SimpleContainer title={formLabels.otherInfo}>
+            <SimpleContainer title={textareaLabel}>
               <TextAreaField
                 disabled={disabled}
                 value={values.description}
@@ -1385,7 +1405,7 @@ const FormPage = () => {
                 )}
                 <SingleCheckBox
                   disabled={disabled}
-                  label={inputLabels.agreeWithConditions}
+                  label={<TermsAndConditions />}
                   value={values.agreeWithConditions}
                   error={!!errors?.agreeWithConditions}
                   onChange={(value) =>
