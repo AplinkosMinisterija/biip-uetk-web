@@ -1147,7 +1147,7 @@ const FormPage = () => {
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutObject}>
               <Row>
-                {isNewType && (
+                {isNewType ? (
                   <SelectField
                     label={inputLabels.objectType}
                     value={values.objectType}
@@ -1163,6 +1163,8 @@ const FormPage = () => {
                       ]);
                     }}
                   />
+                ) : (
+                  <div />
                 )}
                 <ButtonsGroup
                   label={inputLabels.formType}
