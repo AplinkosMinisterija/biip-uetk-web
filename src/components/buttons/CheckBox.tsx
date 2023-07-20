@@ -4,7 +4,7 @@ export interface SingleCheckBoxProps {
   value?: boolean;
   onChange: (value?: boolean) => void;
   disabled?: boolean;
-  label?: string;
+  label?: string | JSX.Element;
   error?: boolean;
   className?: string;
   someChildrenSelected?: boolean;

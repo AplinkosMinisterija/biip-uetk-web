@@ -28,7 +28,8 @@ export const emptyStateUrlLabels = {
 export const url = {
   new: "naujas",
   publicUETK: "https://uetk.biip.lt/",
-  upload: "/api/public/files"
+  upload: "/api/public/files",
+  termsAndConditions: "https://uetk.biip.lt/duomenu-teikimo-taisykles/"
 };
 
 export const subTitles = {

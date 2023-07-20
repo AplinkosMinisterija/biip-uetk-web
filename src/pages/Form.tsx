@@ -27,6 +27,7 @@ import {
   SquareMeter,
   ThousandsPerCubicMeter
 } from "../components/other/MeasurmentUnits";
+import TermsAndConditions from "../components/other/TermsAndConditions";
 import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
 import { device } from "../styles";
 import {
@@ -1388,7 +1389,7 @@ const FormPage = () => {
                 )}
                 <SingleCheckBox
                   disabled={disabled}
-                  label={inputLabels.agreeWithConditions}
+                  label={<TermsAndConditions />}
                   value={values.agreeWithConditions}
                   error={!!errors?.agreeWithConditions}
                   onChange={(value) =>
