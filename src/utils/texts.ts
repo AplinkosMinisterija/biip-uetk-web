@@ -248,6 +248,7 @@ export const formLabels = {
   selectCenter: "Pažymėkite centro koordinates",
   uploadFiles: "Įkelkite papildomus dokumentus",
   otherInfo: "Kita papildoma informacija",
+  deregistration: "Išregistravimo pagrindas",
   cadastralObjects: "Kadastro objektai",
   avgPerennialDebit: "VIDUTINIS DAUGIAMETIS VANDENS DEBITAS",
   avgPerennialDebit95: "Vidutinis daugiametis debitas 95 %",

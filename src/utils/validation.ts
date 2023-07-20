@@ -51,6 +51,14 @@ export const validateForm = Yup.object().shape({
     },
     then: Yup.object().required(validationTexts.requireText)
   }),
+  description: Yup.string().when(["type"], {
+    is: (type: FormType) => {
+      const isRemoveType = isEqual(type, FormType.REMOVE);
+
+      return isRemoveType;
+    },
+    then: Yup.string().required(validationTexts.requireText)
+  }),
   editFields: Yup.array().when(["type"], {
     is: (type: FormType) => {
       return isEqual(type, FormType.EDIT);
@@ -133,6 +141,7 @@ export const validateForm = Yup.object().shape({
 
     return Yup.mixed().notRequired();
   }),
+
   agreeWithConditions: Yup.boolean()
     .required(validationTexts.requireSelect)
     .oneOf([true], validationTexts.requireSelect)

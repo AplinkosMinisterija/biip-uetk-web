@@ -1135,6 +1135,11 @@ const FormPage = () => {
       ? formLabels.selectRiverMouth
       : formLabels.selectCenter;
 
+    const textareaLabel =
+      FormType.REMOVE == values.type
+        ? formLabels.deregistration
+        : formLabels.otherInfo;
+
     return (
       <Container>
         <ColumnOne>
@@ -1354,7 +1359,7 @@ const FormPage = () => {
               </SimpleContainer>
             )}
 
-            <SimpleContainer title={formLabels.otherInfo}>
+            <SimpleContainer title={textareaLabel}>
               <TextAreaField
                 disabled={disabled}
                 value={values.description}
