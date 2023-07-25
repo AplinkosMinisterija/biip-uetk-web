@@ -138,9 +138,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   getOptionLabel={(option) =>
                     !!optionLabel ? optionLabel(option) : option.name
                   }
-                  setSuggestionsFromApi={(input, page) =>
-                    filter.api(input, page)
-                  }
+                  loadOptions={(input, page) => filter.api(input, page)}
                 />
               </InputWrapper>
             );
@@ -162,9 +160,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   getOptionValue={(option) =>
                     !!optionValue ? optionValue(option) : option.name
                   }
-                  setSuggestionsFromApi={(input, page) =>
-                    filter.api(input, page)
-                  }
+                  loadOptions={(input, page) => filter.api(input, page)}
                 />
               </InputWrapper>
             );

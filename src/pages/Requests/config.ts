@@ -1,8 +1,8 @@
 import { FilterInputTypes } from "../../components/other/DynamicFilter/Filter";
 import {
-  getFormObjectTypes,
-  getFormStatusTypes,
-  getFormSTypes
+  getDeliveryTypes,
+  getPurposeTypes,
+  getRequestStatusTypes
 } from "../../utils/options";
 import { formFiltersLabels } from "../../utils/texts";
 
@@ -17,29 +17,29 @@ export const filterConfig = {
     key: "createdTo",
     inputType: FilterInputTypes.date
   },
-  type: {
+  delivery: {
     label: formFiltersLabels.type,
-    key: "type",
+    key: "delivery",
     inputType: FilterInputTypes.multiselect,
-    options: getFormSTypes()
+    options: getDeliveryTypes()
   },
-  objectType: {
+  purpose: {
     label: formFiltersLabels.objectType,
-    key: "objectType",
+    key: "purpose",
     inputType: FilterInputTypes.multiselect,
-    options: getFormObjectTypes()
+    options: getPurposeTypes()
   },
   status: {
     label: formFiltersLabels.status,
     key: "status",
     inputType: FilterInputTypes.multiselect,
-    options: getFormStatusTypes()
+    options: getRequestStatusTypes()
   }
 };
 
 export const rowConfig = [
-  ["objectType"],
-  ["type"],
   ["createdFrom", "createdTo"],
+  ["delivery"],
+  ["purpose"],
   ["status"]
 ];

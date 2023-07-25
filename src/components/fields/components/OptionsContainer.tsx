@@ -56,7 +56,7 @@ const OptionsContainer = ({
 
 const OptionContainer = styled.div`
   position: absolute;
-  z-index: 9;
+  z-index: 119;
   width: 100%;
   padding: 10px 0px;
   display: block;

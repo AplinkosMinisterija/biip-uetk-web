@@ -26,7 +26,7 @@ export interface AsyncSelectFieldProps {
   placeholder?: string;
   backgroundColor?: string;
   hasBorder?: boolean;
-  setSuggestionsFromApi: (input: any, page: number | string, id?: any) => any;
+  loadOptions: (input: any, page: number | string, id?: any) => any;
   getOptionValue?: (option: any) => any;
   dependantId?: string;
   optionsKey?: string;
@@ -50,7 +50,7 @@ const AsyncSelectField = ({
   getOptionLabel = (option) => option.label,
   getOptionValue = (option) => option.id,
   getInputLabel,
-  setSuggestionsFromApi,
+  loadOptions,
   dependantId,
   placeholder = inputLabels.chooseOption
 }: AsyncSelectFieldProps) => {
@@ -65,7 +65,7 @@ const AsyncSelectField = ({
     handleBlur,
     handleClick
   } = useAsyncSelectData({
-    setSuggestionsFromApi,
+    loadOptions,
     disabled,
     onChange,
     dependantId,

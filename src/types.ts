@@ -1,9 +1,11 @@
 import {
+  DeliveryTypes,
   FormDataFields,
   FormObjectType,
   FormProviderType,
   FormType,
   HistoryTypes,
+  PurposeTypes,
   RolesTypes,
   StatusTypes,
   TableItemWidth
@@ -145,6 +147,21 @@ export interface FormFiltersProps {
   objectType?: { $in: FormObjectType[] };
 }
 
+export interface RequestFilters {
+  createdFrom?: string;
+  createdTo?: string;
+  status?: { id: StatusTypes; label: string }[];
+  delivery?: { id: DeliveryTypes; label: string }[];
+  purpose?: { id: PurposeTypes; label: string }[];
+}
+
+export interface RequestFiltersProps {
+  status?: { $in: StatusTypes[] };
+  createdAt?: { $gte?: Date; $lt?: Date };
+  delivery?: { $in: DeliveryTypes[] };
+  purpose?: { $in: PurposeTypes[] };
+}
+
 export interface Form {
   id?: string;
   type: FormType;
@@ -165,4 +182,23 @@ export interface Form {
   canValidate?: boolean;
   agreeWithConditions?: boolean;
   editFields?: { attribute?: string; value?: string }[];
+}
+
+export interface Request {
+  id?: string;
+  notifyEmail?: string;
+  objects?: { properties: { cadastral_id: string } }[];
+  status?: StatusTypes;
+  delivery?: DeliveryTypes;
+  purpose?: PurposeTypes;
+  canEdit?: boolean;
+  canValidate?: boolean;
+  data?: {
+    unverified?: boolean;
+  };
+  geom?: any;
+  agreeWithConditions?: boolean;
+  respondedAt?: Date;
+  createdAt?: Date;
+  generatedFile?: any;
 }

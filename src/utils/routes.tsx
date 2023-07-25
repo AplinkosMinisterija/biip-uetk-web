@@ -4,6 +4,8 @@ import Form from "../pages/Form";
 import Forms from "../pages/Forms";
 import ProfilePage from "../pages/Profile";
 import Profiles from "../pages/Profiles";
+import RequestPage from "../pages/Request";
+import Requests from "../pages/Requests";
 import TenantUserForm from "../pages/TenantUserForm";
 import TenantUsers from "../pages/TenantUsers";
 import { Profile } from "../types";
@@ -81,6 +83,14 @@ const routes = [
     slug: slugs.tenantUser(":id"),
     tenantOwner: true,
     component: <TenantUserForm />
+  },
+  {
+    slug: slugs.requests,
+    component: <Requests />
+  },
+  {
+    slug: slugs.request(":id"),
+    component: <RequestPage />
   },
   {
     slug: slugs.profiles,

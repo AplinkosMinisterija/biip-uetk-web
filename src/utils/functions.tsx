@@ -1,5 +1,4 @@
 import { useMediaQuery } from "@material-ui/core";
-import { map } from "lodash";
 import { NavigateFunction } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "universal-cookie";
@@ -12,17 +11,10 @@ import {
   FormDataFields,
   FormObjectType,
   FormProviderType,
-  FormType,
   RolesTypes,
   StatusTypes
 } from "./constants";
-import {
-  formObjectTypeLabels,
-  formStatusLabels,
-  formTypeLabels,
-  roleLabels,
-  validationTexts
-} from "./texts";
+import { validationTexts } from "./texts";
 
 const cookies = new Cookies();
 interface SetResponseProps {
@@ -80,30 +72,6 @@ export const bytesIntoMb = (bytes: number) => {
 
 export const formObjectTypes = Object.keys(FormObjectType);
 export const formProviderTypes = Object.keys(FormProviderType);
-
-export const getFormStatusTypes = () =>
-  map(StatusTypes, (Status) => ({
-    id: Status,
-    label: formStatusLabels[Status]
-  }));
-
-export const getFormSTypes = () =>
-  map(FormType, (Status) => ({
-    id: Status,
-    label: formTypeLabels[Status]
-  }));
-
-export const getFormObjectTypes = () =>
-  map(FormObjectType, (Status) => ({
-    id: Status,
-    label: formObjectTypeLabels[Status]
-  }));
-
-export const getRolesTypes = () =>
-  map(RolesTypes, (role) => ({
-    id: role,
-    label: roleLabels[role]
-  }));
 
 export const canShowResponseDate = (status) => {
   return [

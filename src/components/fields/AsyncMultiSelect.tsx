@@ -21,7 +21,7 @@ export interface SelectFieldProps {
   disabled?: boolean;
   getOptionLabel: (option: any) => string;
   getOptionValue?: (option: any) => any;
-  setSuggestionsFromApi: (search: string, page: any) => any;
+  loadOptions: (search: string, page: any) => any;
 }
 
 const AsyncMultiSelect = ({
@@ -32,7 +32,7 @@ const AsyncMultiSelect = ({
   disabled = false,
   getOptionLabel,
   getOptionValue = (option) => option.id,
-  setSuggestionsFromApi
+  loadOptions
 }: SelectFieldProps) => {
   const {
     loading,
@@ -45,7 +45,7 @@ const AsyncMultiSelect = ({
     handleBlur,
     handleClick
   } = useAsyncSelectData({
-    setSuggestionsFromApi,
+    loadOptions,
     disabled,
     onChange: (option) => onChange([...values, option])
   });

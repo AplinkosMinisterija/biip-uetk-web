@@ -3,7 +3,7 @@ import { isEmpty, isEqual } from "lodash";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import Api from "../api";
+import { default as api, default as Api } from "../api";
 import ButtonsGroup from "../components/buttons/ButtonsGroup";
 import SingleCheckBox from "../components/buttons/CheckBox";
 import SimpleButton from "../components/buttons/SimpleButton";
@@ -76,11 +76,16 @@ const FormPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data: form, isLoading } = useQuery(["form", id], () => setForm(), {
-    onError: () => {
-      navigate(slugs.tenantUsers);
+  const { data: form, isLoading } = useQuery(
+    ["form", id],
+    () => api.form(id!),
+    {
+      onError: () => {
+        navigate(slugs.forms);
+      },
+      enabled: !isNew(id)
     }
-  });
+  );
 
   const disabled = !isNew(id) && !form?.canEdit;
   const mapQueryString = !disabled ? "?types[]=point" : "?preview=true";
@@ -124,12 +129,6 @@ const FormPage = () => {
     } else {
       return await Api.updateForm(id!, params);
     }
-  };
-
-  const setForm = async () => {
-    if (isNew(id)) return;
-
-    return Api.form(id!);
   };
 
   const fields = {
@@ -689,7 +688,7 @@ const FormPage = () => {
         getOptionLabel={(option) => {
           return `${option?.properties?.name}, ${option?.properties?.cadastral_id}, ${option?.properties?.category}`;
         }}
-        setSuggestionsFromApi={(input: string, page: number | string) =>
+        loadOptions={(input: string, page: number | string) =>
           getLocationList(input, page)
         }
       />
@@ -1217,10 +1216,9 @@ const FormPage = () => {
                   getOptionLabel={(option) => {
                     return `${option?.properties?.name}, ${option?.properties?.cadastral_id}, ${option?.properties?.category}`;
                   }}
-                  setSuggestionsFromApi={(
-                    input: string,
-                    page: number | string
-                  ) => getLocationList(input, page)}
+                  loadOptions={(input: string, page: number | string) =>
+                    getLocationList(input, page)
+                  }
                 />
               )}
               {isNewType &&

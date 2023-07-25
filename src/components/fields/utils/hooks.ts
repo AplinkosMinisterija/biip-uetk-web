@@ -4,11 +4,11 @@ import { handleResponse } from "../../../utils/functions";
 import { getFilteredOptions } from "./functions";
 
 export const useAsyncSelectData = ({
-  setSuggestionsFromApi,
+  loadOptions,
   disabled,
   onChange,
   dependantId,
-  optionsKey,
+  optionsKey = "rows",
   hasOptionKey
 }: any) => {
   const [loading, setLoading] = useState(true);
@@ -37,9 +37,10 @@ export const useAsyncSelectData = ({
     async (input: string, page: number) => {
       setLoading(true);
       handleResponse({
-        endpoint: () => setSuggestionsFromApi(input, page, dependantId),
+        endpoint: () => loadOptions(input, page, dependantId),
         onSuccess: (response: any) => {
           setCurrentPage(response.page);
+
           setSuggestions((prev) =>
             page !== 1
               ? [...prev, ...response?.[optionsKey]]
@@ -50,7 +51,7 @@ export const useAsyncSelectData = ({
         }
       });
     },
-    [optionsKey, dependantId, setSuggestionsFromApi]
+    [optionsKey, dependantId, loadOptions]
   );
 
   useEffect(() => {

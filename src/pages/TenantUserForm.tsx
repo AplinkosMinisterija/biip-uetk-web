@@ -11,7 +11,8 @@ import { useAppSelector } from "../state/hooks";
 import { device } from "../styles";
 import { DeleteInfoProps, User } from "../types";
 import { RolesTypes } from "../utils/constants";
-import { getRolesTypes, handleResponse, isNew } from "../utils/functions";
+import { handleResponse, isNew } from "../utils/functions";
+import { getRolesTypes } from "../utils/options";
 import { slugs } from "../utils/routes";
 import {
   buttonsTitles,

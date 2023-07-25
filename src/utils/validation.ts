@@ -222,3 +222,15 @@ export const loginSchema = Yup.object().shape({
     .email(validationTexts.badEmailFormat),
   password: Yup.string().required(validationTexts.requireText)
 });
+
+export const validateRequest = Yup.object().shape({
+  delivery: Yup.string().required(validationTexts.requireText).nullable(),
+  purpose: Yup.string().required(validationTexts.requireText).nullable(),
+  agreeWithConditions: Yup.boolean()
+    .required(validationTexts.requireSelect)
+    .oneOf([true], validationTexts.requireSelect),
+  notifyEmail: Yup.string()
+    .email(validationTexts.badEmailFormat)
+    .required(validationTexts.requireText)
+    .nullable()
+});
