@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import { useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -61,7 +62,6 @@ export interface RequestPayload {
     unverified?: boolean;
   };
   geom: any;
-  agreeWithConditions: boolean;
 }
 
 const RequestPage = () => {
@@ -74,7 +74,7 @@ const RequestPage = () => {
     () => api.request(id!),
     {
       onError: () => {
-        navigate(slugs.forms);
+        navigate(slugs.requests);
       },
       enabled: !isNew(id)
     }
@@ -112,7 +112,7 @@ const RequestPage = () => {
   );
 
   const handleSubmit = async (values: RequestProps) => {
-    const { unverified, objects, ...rest } = values;
+    const { agreeWithConditions, unverified, objects, ...rest } = values;
     const params: RequestPayload = {
       ...rest,
       objects: objects.map((item) => {
@@ -147,6 +147,8 @@ const RequestPage = () => {
     status: request?.status || undefined,
     unverified: request?.data?.unverified || false
   };
+
+  const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
 
   const renderForm = (values: RequestProps, errors: any, handleChange: any) => {
     return (
@@ -242,7 +244,9 @@ const RequestPage = () => {
               formHistoryLabels={formHistoryLabels}
               endpoint={Api.getRequestHistory}
             />
-            <GeneratedFileComponent generatedFile={request?.generatedFile} />
+            {isApproved && (
+              <GeneratedFileComponent generatedFile={request?.generatedFile} />
+            )}
           </ColumnTwo>
         )}
       </Container>

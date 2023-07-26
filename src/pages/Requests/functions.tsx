@@ -2,12 +2,7 @@ import { isEmpty } from "lodash";
 import TableStatusRowItem from "../../components/fields/TableStatusRowItem";
 import FilesToDownload from "../../components/other/FilesToDownload";
 import { TableRow } from "../../components/tables/table";
-import {
-  FormFiltersProps,
-  Request,
-  RequestFilters,
-  RequestFiltersProps
-} from "../../types";
+import { Request, RequestFilters, RequestFiltersProps } from "../../types";
 import { colorsByStatus } from "../../utils/constants";
 import { formatDate, formatDateFrom, formatDateTo } from "../../utils/format";
 import { canShowResponseDate } from "../../utils/functions";
@@ -17,9 +12,7 @@ import {
   requestStatusLabels
 } from "../../utils/texts";
 
-export const mapRequestFilters = (
-  filters: RequestFilters
-): FormFiltersProps => {
+export const mapRequestFilters = (filters: RequestFilters) => {
   let params: RequestFiltersProps = {};
 
   if (filters) {
