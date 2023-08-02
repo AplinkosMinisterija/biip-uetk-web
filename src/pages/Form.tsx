@@ -1,6 +1,6 @@
 import { FieldArray } from "formik";
 import { isEmpty, isEqual } from "lodash";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { default as api, default as Api } from "../api";
@@ -51,7 +51,7 @@ import {
   formObjectTypes,
   formProviderTypes,
   getLocationList,
-  handleResponse,
+  handleAlert,
   isMapEditAttribute,
   isNew
 } from "../utils/functions";
@@ -72,6 +72,7 @@ import {
 } from "../utils/texts";
 import { validateForm } from "../utils/validation";
 
+type FormPayload = Omit<Form, "editFields">;
 const FormPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -88,7 +89,20 @@ const FormPage = () => {
   );
 
   const disabled = !isNew(id) && !form?.canEdit;
-  const mapQueryString = !disabled ? "?types[]=point" : "?preview=true";
+  const getMapQueryString = (disabled = false) => {
+    const queryString = `?`;
+    const param = new URLSearchParams();
+
+    if (disabled) {
+      param.append("preview", "true");
+      return queryString + param;
+    }
+    param.append("types[]", "point");
+    param.append("buffer", "true");
+    return queryString + param;
+  };
+
+  const mapQueryString = getMapQueryString(disabled);
   const title = isNew(id) ? pageTitles.newForm : pageTitles.updateForm;
 
   const typeOptions = {
@@ -102,19 +116,36 @@ const FormPage = () => {
     [FormObjectType.FISH_PASS]: fishPassTypeLabels
   };
 
-  const handleSubmit = async (values: Form) => {
-    await handleResponse({
-      endpoint: () => createOrUpdate(values),
+  const createForm = useMutation(
+    (values: FormPayload) => api.createForm(values),
+    {
+      onError: () => {
+        handleAlert();
+      },
       onSuccess: () => {
         navigate(slugs.forms);
-      }
-    });
-  };
+      },
+      retry: false
+    }
+  );
 
-  const createOrUpdate = async (values: Form) => {
+  const updateForm = useMutation(
+    (values: FormPayload) => api.updateForm(id!, values),
+    {
+      onError: () => {
+        handleAlert();
+      },
+      onSuccess: () => {
+        navigate(slugs.forms);
+      },
+      retry: false
+    }
+  );
+
+  const handleSubmit = async (values: Form) => {
     const { editFields, ...rest } = values;
 
-    const data =
+    const data: { [key in FormDataFields]?: string } | any =
       values.type === FormType.EDIT
         ? editFields?.reduce((obj, curr) => {
             obj[curr?.attribute!] = curr.value;
@@ -122,13 +153,13 @@ const FormPage = () => {
           }, {})
         : values.data;
 
-    const params = { ...rest, data };
+    const params: FormPayload = { ...rest, data };
 
     if (isNew(id)) {
-      return await Api.createForm(params);
-    } else {
-      return await Api.updateForm(id!, params);
+      return await createForm.mutateAsync(params);
     }
+
+    return await updateForm.mutateAsync(params);
   };
 
   const fields = {
@@ -1188,6 +1219,7 @@ const FormPage = () => {
                   label={inputLabels.objectName}
                   value={values.objectName}
                   error={errors.objectName}
+                  disabled={disabled}
                   name="objectName"
                   onChange={(objectName) =>
                     handleChange("objectName", objectName)
@@ -1197,6 +1229,7 @@ const FormPage = () => {
                 <AsyncSelectField
                   label={inputLabels.objectNameOrCode}
                   value={values.objectName}
+                  disabled={disabled}
                   error={errors.objectName}
                   onChange={(value) => {
                     handleChange("objectName", value?.properties?.name);
@@ -1214,7 +1247,8 @@ const FormPage = () => {
                     `${values?.objectName}, ${values?.cadastralId}`
                   }
                   getOptionLabel={(option) => {
-                    return `${option?.properties?.name}, ${option?.properties?.cadastral_id}, ${option?.properties?.category}`;
+                    const { name, cadastral_id, category } = option?.properties;
+                    return `${name}, ${cadastral_id}, ${category}`;
                   }}
                   loadOptions={(input: string, page: number | string) =>
                     getLocationList(input, page)
@@ -1291,6 +1325,7 @@ const FormPage = () => {
                               getOptionLabel={(option) => inputLabels[option]}
                               error={editFieldErrors?.attribute}
                               disabled={disabled}
+                              showError={false}
                               name="attribute"
                               onChange={(attribute) =>
                                 handleChange(
@@ -1419,6 +1454,7 @@ const FormPage = () => {
         {!isNew(id) && (
           <ColumnTwo>
             <FormHistoryContainer
+              name="formRequests"
               formHistoryLabels={formHistoryLabels}
               endpoint={Api.getFormHistory}
             />

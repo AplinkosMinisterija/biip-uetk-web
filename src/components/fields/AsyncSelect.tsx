@@ -50,7 +50,8 @@ const AsyncSelectField = ({
   getOptionValue = (option) => option.id,
   loadOptions,
   dependantId,
-  placeholder = inputLabels.chooseOption
+  placeholder = inputLabels.chooseOption,
+  getInputLabel
 }: AsyncSelectFieldProps) => {
   const {
     loading,
@@ -71,6 +72,13 @@ const AsyncSelectField = ({
     optionsKey,
     name
   });
+
+  const placeholderValue = value
+    ? getInputLabel
+      ? getInputLabel(value)
+      : getOptionLabel(value)
+    : placeholder;
+
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
@@ -88,7 +96,7 @@ const AsyncSelectField = ({
         rightIcon={<StyledIcon name={"dropdownArrow"} />}
         onChange={handleInputChange}
         disabled={disabled}
-        placeholder={(value && getOptionLabel(value)) || placeholder}
+        placeholder={placeholderValue}
         selectedValue={value}
       />
 

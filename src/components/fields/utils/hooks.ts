@@ -35,7 +35,6 @@ export const useAsyncSelectData = ({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery([name, input], ({ pageParam }) => fetchData(pageParam), {
       getNextPageParam: (lastPage) => lastPage.page,
-      enabled: !isEmpty(input),
       cacheTime: 60000
     });
 
@@ -72,7 +71,7 @@ export const useAsyncSelectData = ({
   };
 
   const handleToggleSelect = () => {
-    !disabled && !isEmpty(input) && setShowSelect(!showSelect);
+    !disabled && setShowSelect(!showSelect);
   };
 
   const handleInputChange = (input: string) => {

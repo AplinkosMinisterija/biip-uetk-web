@@ -4,8 +4,8 @@ import Icon from "../components/other/Icons";
 import LoaderComponent from "../components/other/LoaderComponent";
 import ProfileCard from "../components/other/ProfileCard";
 import { useAppSelector } from "../state/hooks";
-import { handleSelectProfile } from "../utils/functions";
 import { useLogoutMutation } from "../utils/hooks";
+import { handleSelectProfile } from "../utils/loginFunctions";
 import { buttonsTitles, formLabels } from "../utils/texts";
 
 const Profiles = () => {

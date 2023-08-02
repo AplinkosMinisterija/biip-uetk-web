@@ -1,5 +1,4 @@
 import { isEqual } from "lodash";
-import { useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -81,9 +80,22 @@ const RequestPage = () => {
   );
 
   const disabled = !isNew(id) && !request?.canEdit;
-  const mapQueryString = !disabled
-    ? "?types[]=polygon&multi=true"
-    : "?preview=true";
+
+  const getMapQueryString = (disabled = false) => {
+    const queryString = `?`;
+    const param = new URLSearchParams();
+
+    if (disabled) {
+      param.append("preview", "true");
+      return queryString + param;
+    }
+
+    param.append("types[]", "polygon");
+    param.append("multi", "true");
+    return queryString + param;
+  };
+
+  const mapQueryString = getMapQueryString(disabled);
 
   const createRequest = useMutation(
     (values: RequestPayload) => api.createRequests(values),
@@ -130,12 +142,6 @@ const RequestPage = () => {
 
     return await updateRequest.mutateAsync(params);
   };
-
-  const handleSetForm = async () => {};
-
-  useEffect(() => {
-    handleSetForm();
-  }, [id]);
 
   const initialValues: RequestProps = {
     notifyEmail: request?.notifyEmail || "",
@@ -241,6 +247,7 @@ const RequestPage = () => {
         {!isNew(id) && (
           <ColumnTwo>
             <FormHistoryContainer
+              name="historyRequests"
               formHistoryLabels={formHistoryLabels}
               endpoint={Api.getRequestHistory}
             />

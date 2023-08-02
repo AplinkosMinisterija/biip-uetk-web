@@ -5,14 +5,13 @@ import api from "../api";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { actions, UserReducerProps } from "../state/user/reducer";
 import { ServerErrorCodes } from "./constants";
+import { handleAlert, handleIsTenantUser } from "./functions";
 import {
   clearCookies,
   emptyUser,
-  handleAlert,
   handleGetCurrentUser,
-  handleIsTenantUser,
   handleSetProfile
-} from "./functions";
+} from "./loginFunctions";
 import { filteredRoutes } from "./routes";
 
 const cookies = new Cookies();

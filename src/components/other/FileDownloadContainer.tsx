@@ -11,7 +11,7 @@ const FileDownloadContainer = ({ url, showFileName }: FileDownloadProps) => {
   if (url) {
     return (
       <>
-        {showFileName && <FileName>{url.replace(/^.*[\\\/]/, "")}</FileName>}
+        {showFileName && <FileName>{url.replace(/^.*[\\/]/, "")}</FileName>}
 
         <Container
           onClick={(e) => {

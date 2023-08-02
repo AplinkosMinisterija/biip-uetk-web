@@ -5,8 +5,9 @@ import api from "../api";
 import Button from "../components/buttons/Button";
 import PasswordField from "../components/fields/PasswordField";
 import TextField from "../components/fields/TextField";
-import { handleAlert, handleUpdateTokens } from "../utils/functions";
+import { handleAlert } from "../utils/functions";
 import { useCheckAuthMutation, useEGatesSign } from "../utils/hooks";
+import { handleUpdateTokens } from "../utils/loginFunctions";
 import {
   buttonsTitles,
   formLabels,

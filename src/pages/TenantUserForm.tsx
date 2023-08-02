@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SimpleContainer from "../components/containers/SimpleContainer";
@@ -11,7 +11,7 @@ import { useAppSelector } from "../state/hooks";
 import { device } from "../styles";
 import { DeleteInfoProps, User } from "../types";
 import { RolesTypes } from "../utils/constants";
-import { handleResponse, isNew } from "../utils/functions";
+import { handleAlert, isNew } from "../utils/functions";
 import { getRolesTypes } from "../utils/options";
 import { slugs } from "../utils/routes";
 import {
@@ -27,58 +27,70 @@ import {
   validateCreateTenantUser,
   validateUpdateTenantUser
 } from "../utils/validation";
-import Api from "./../api";
+import { default as api } from "./../api";
 
 const TenantUserForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const currentUser = useAppSelector((state) => state.user?.userData);
 
-  const handleSubmit = async (values: User) => {
-    await handleResponse({
-      endpoint: () => createOrUpdate(values),
+  const createUser = useMutation(
+    (values: User) => api.createTenantUser(values),
+    {
+      onError: () => {
+        handleAlert();
+      },
       onSuccess: () => {
         navigate(slugs.tenantUsers);
-      }
-    });
-  };
-
-  const createOrUpdate = async (values: User) => {
-    const params = { ...values };
-    if (isNew(id)) {
-      return await Api.createTenantUser(params);
-    } else {
-      return await Api.updateTenantUser(params, id);
+      },
+      retry: false
     }
-  };
+  );
 
-  const setUser = async () => {
-    if (isNew(id)) return;
+  const updateUser = useMutation(
+    (values: User) => api.updateTenantUser(values, id),
+    {
+      onError: () => {
+        handleAlert();
+      },
+      onSuccess: () => {
+        navigate(slugs.tenantUsers);
+      },
+      retry: false
+    }
+  );
 
-    return Api.tenantUser(id!);
+  const handleSubmit = async (values: User) => {
+    if (isNew(id)) {
+      return await createUser.mutateAsync(values);
+    }
+
+    return await updateUser.mutateAsync(values);
   };
 
   const { data: user, isLoading } = useQuery(
     ["tenantUser", id],
-    () => setUser(),
+    () => api.tenantUser(id!),
     {
       onError: () => {
         navigate(slugs.tenantUsers);
       },
       onSuccess: (user) => {
         if (currentUser?.id === user?.id) return navigate(slugs.profile);
-      }
+      },
+      enabled: !isNew(id)
     }
   );
 
-  const handleRemoveTenantUser = async () => {
-    await handleResponse({
-      endpoint: () => Api.deleteTenantUser(id!),
-      onSuccess: () => {
-        navigate(slugs.tenantUsers);
-      }
-    });
-  };
+  const removeUser = useMutation(() => api.deleteTenantUser(id!), {
+    onError: () => {
+      handleAlert();
+    },
+    onSuccess: () => {
+      navigate(slugs.tenantUsers);
+    },
+    retry: false
+  });
 
   const deleteInfo: DeleteInfoProps = {
     deleteButtonText: buttonsTitles.removeTenantUser,
@@ -86,7 +98,7 @@ const TenantUserForm = () => {
     deleteDescriptionSecondPart: deleteDescriptionSecondPart.tenantUser,
     deleteTitle: deleteTitles.tenantUser,
     deleteName: `${user?.firstName} ${user?.lastName}`,
-    deleteFunction: !isNew(id) ? handleRemoveTenantUser : undefined
+    deleteFunction: !isNew(id) ? removeUser.mutateAsync : undefined
   };
 
   const initialValues: User = {
