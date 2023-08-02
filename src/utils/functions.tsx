@@ -56,7 +56,7 @@ export const handleSuccess = (message: string) => {
 
 export const isNew = (id?: string) => !id || id === "naujas";
 
-export const bytesIntoMb = (bytes: number) => {
+export const bytesToMb = (bytes: number) => {
   const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
   if (bytes === 0) return "n/a";
 
@@ -304,3 +304,10 @@ export const useGetSortedColumns = (columns: Columns) => {
 };
 
 export const getPublicUrl = (url: string) => `${process.env.PUBLIC_URL}/${url}`;
+
+export const availableMimeTypes = [
+  "image/png",
+  "image/jpg",
+  "image/jpeg",
+  "application/pdf"
+];

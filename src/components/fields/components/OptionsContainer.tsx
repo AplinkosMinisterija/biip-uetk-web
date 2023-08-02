@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import styled from "styled-components";
+import { inputLabels } from "../../../utils/texts";
 import LoaderComponent from "../../other/LoaderComponent";
 
 export interface SelectOption {
@@ -15,21 +16,57 @@ export interface OptionsContainerProps {
   handleScroll?: (option: any) => any;
   loading?: boolean;
   showSelect: boolean;
+  hideNoOptions?: boolean;
+  observerRef?: any;
   handleClick: (option: any) => any;
 }
 
 const OptionsContainer = ({
   values = [],
   disabled = false,
+  hideNoOptions = false,
   getOptionLabel,
   handleClick,
   handleScroll,
   showSelect,
-  loading
+  loading,
+  observerRef
 }: OptionsContainerProps) => {
-  if (!showSelect || disabled || isEmpty(values)) {
+  if (!showSelect || disabled) {
     return <></>;
   }
+
+  if (isEmpty(values) && hideNoOptions) {
+    return <></>;
+  }
+
+  const renderOptions = () => {
+    if (isEmpty(values))
+      return loading ? (
+        <LoaderComponent />
+      ) : (
+        <Option key={inputLabels.noOptions}>{inputLabels.noOptions}</Option>
+      );
+
+    return (
+      <>
+        {values.map((option) => {
+          return (
+            <Option
+              key={JSON.stringify(option)}
+              onClick={() => {
+                handleClick(option);
+              }}
+            >
+              {getOptionLabel && getOptionLabel(option)}
+            </Option>
+          );
+        })}
+        {loading && <LoaderComponent />}
+        {observerRef && <div ref={observerRef} />}
+      </>
+    );
+  };
 
   return (
     <OptionContainer
@@ -37,26 +74,14 @@ const OptionsContainer = ({
       className="optionContainer"
       onScroll={handleScroll}
     >
-      {values.map((option, index) => {
-        return (
-          <Option
-            key={index}
-            onClick={() => {
-              handleClick(option);
-            }}
-          >
-            {getOptionLabel && getOptionLabel(option)}
-          </Option>
-        );
-      })}
-      {loading && <LoaderComponent />}
+      {renderOptions()}
     </OptionContainer>
   );
 };
 
 const OptionContainer = styled.div`
   position: absolute;
-  z-index: 119;
+  z-index: 9;
   width: 100%;
   padding: 10px 0px;
   display: block;

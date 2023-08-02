@@ -9,7 +9,7 @@ import SingleCheckBox from "../components/buttons/CheckBox";
 import SimpleButton from "../components/buttons/SimpleButton";
 import FormHistoryContainer from "../components/containers/FormHistoryContainer";
 import SimpleContainer from "../components/containers/SimpleContainer";
-import AsyncSelectField from "../components/fields/AsyncSelectField";
+import AsyncSelectField from "../components/fields/AsyncSelect";
 import DragAndDropUploadField from "../components/fields/DragAndDropUploadField";
 import NumericTextField from "../components/fields/NumericTextField";
 import SelectField from "../components/fields/SelectField";
@@ -1357,7 +1357,7 @@ const FormPage = () => {
                   disabled={disabled}
                   error={errors?.files}
                   onUpload={handleUploadFile}
-                  onChange={(files: File[]) => handleChange("files", files)}
+                  onDelete={(files: File[]) => handleChange("files", files)}
                   files={values?.files || []}
                   label={""}
                 />

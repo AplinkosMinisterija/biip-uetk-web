@@ -1,14 +1,16 @@
 import { isEmpty, isEqual } from "lodash";
 import * as Yup from "yup";
-import { availableMimeTypes } from "../components/fields/DragAndDropUploadField";
-import { availablePhotoMimeTypes } from "../components/fields/PhotoUploadField";
 import {
   FormDataFields,
   FormObjectType,
   FormProviderType,
   FormType
 } from "./constants";
-import { handleHasCoordinatesField, isMapEditAttribute } from "./functions";
+import {
+  availableMimeTypes,
+  handleHasCoordinatesField,
+  isMapEditAttribute
+} from "./functions";
 import { validationTexts } from "./texts";
 
 export const validateCreateTenantUser = Yup.object().shape({
@@ -193,16 +195,6 @@ export const validateFileSizes = (files: File[]) => {
     }
   }
 
-  return true;
-};
-
-export const validatePhotoTypes = (files: File[]) => {
-  for (let i = 0; i < files.length; i++) {
-    const availableType = availablePhotoMimeTypes.find(
-      (type) => type === files[i].type
-    );
-    if (!availableType) return false;
-  }
   return true;
 };
 

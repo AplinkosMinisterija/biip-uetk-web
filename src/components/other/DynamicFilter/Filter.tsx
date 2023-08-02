@@ -6,7 +6,7 @@ import { handleDateRestriction } from "../../../utils/functions";
 import { buttonsTitles } from "../../../utils/texts";
 import Button, { ButtonColors } from "../../buttons/Button";
 import AsyncMultiSelect from "../../fields/AsyncMultiSelect";
-import AsyncSelectField from "../../fields/AsyncSelectField";
+import AsyncSelectField from "../../fields/AsyncSelect";
 import DatePicker from "../../fields/DatePicker";
 import MultiSelect from "../../fields/MultiSelect";
 import SelectField from "../../fields/SelectField";

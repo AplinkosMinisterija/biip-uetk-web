@@ -16,11 +16,13 @@ export interface TextFieldProps {
   disabled?: boolean;
   height?: number;
   onInputClick?: () => void;
+  secondLabel?: JSX.Element;
   placeholder?: string;
 }
 
 const PasswordField = ({
   value,
+  secondLabel,
   name,
   error,
   showError = true,
@@ -38,6 +40,7 @@ const PasswordField = ({
   return (
     <FieldWrapper
       padding={padding}
+      secondLabel={secondLabel}
       className={className}
       label={label}
       error={error}
