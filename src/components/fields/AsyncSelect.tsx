@@ -60,7 +60,6 @@ const AsyncSelectField = ({
     handleToggleSelect,
     input,
     showSelect,
-
     handleBlur,
     handleClick,
     observerRef

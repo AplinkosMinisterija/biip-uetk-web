@@ -14,6 +14,7 @@ import { GeneratedFileComponent } from "../components/other/GeneratedFileCompone
 import LoaderComponent from "../components/other/LoaderComponent";
 import TermsAndConditions from "../components/other/TermsAndConditions";
 import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
+import { useAppSelector } from "../state/hooks";
 import { device } from "../styles";
 import {
   ColumnOne,
@@ -22,6 +23,7 @@ import {
 } from "../styles/GenericStyledComponents";
 import { DeliveryTypes, PurposeTypes, StatusTypes } from "../utils/constants";
 import { getLocationList, handleAlert, isNew } from "../utils/functions";
+import { useGetCurrentProfile } from "../utils/hooks";
 import { deliveryTypesOptions, purposeTypesOptions } from "../utils/options";
 import { slugs } from "../utils/routes";
 import {
@@ -44,6 +46,7 @@ export interface RequestProps {
   canEdit?: boolean;
   canValidate?: boolean;
   unverified?: boolean;
+  extended?: boolean;
   geom: any;
   agreeWithConditions: boolean;
 }
@@ -59,12 +62,15 @@ export interface RequestPayload {
   canValidate?: boolean;
   data?: {
     unverified?: boolean;
+    extended?: boolean;
   };
   geom: any;
 }
 
 const RequestPage = () => {
   const navigate = useNavigate();
+  const userEmail = useAppSelector((state) => state?.user?.userData?.email);
+  const currentProfile = useGetCurrentProfile();
   const { id } = useParams();
   const title = isNew(id) ? pageTitles.newRequest : pageTitles.request(id!);
 
@@ -124,7 +130,8 @@ const RequestPage = () => {
   );
 
   const handleSubmit = async (values: RequestProps) => {
-    const { agreeWithConditions, unverified, objects, ...rest } = values;
+    const { agreeWithConditions, unverified, extended, objects, ...rest } =
+      values;
     const params: RequestPayload = {
       ...rest,
       objects: objects.map((item) => {
@@ -133,7 +140,7 @@ const RequestPage = () => {
           id: item?.properties?.cadastral_id
         };
       }),
-      data: { unverified }
+      data: { unverified, extended }
     };
 
     if (isNew(id)) {
@@ -144,14 +151,16 @@ const RequestPage = () => {
   };
 
   const initialValues: RequestProps = {
-    notifyEmail: request?.notifyEmail || "",
+    notifyEmail:
+      request?.notifyEmail || currentProfile?.email || userEmail || "",
     objects: request?.objects || [],
     geom: request?.geom || undefined,
     agreeWithConditions: disabled || false,
     delivery: request?.delivery || DeliveryTypes.EMAIL,
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
     status: request?.status || undefined,
-    unverified: request?.data?.unverified || false
+    unverified: request?.data?.unverified || false,
+    extended: request?.data?.extended || false
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
@@ -187,21 +196,28 @@ const RequestPage = () => {
                   label={inputLabels.dataReceivingPurpose}
                   value={values.purpose}
                   error={errors.dataReceivingPurpose}
-                  name={"dataReceivingPurpose"}
-                  onChange={(e) => handleChange("dataReceivingPurpose", e)}
+                  name={"purpose"}
+                  onChange={(e) => handleChange("purpose", e)}
                   options={purposeTypesOptions}
                   getOptionLabel={(e) => {
                     return purposeTypeLabels[e];
                   }}
                 />
               </Row>
-
-              <SingleCheckBox
-                disabled={disabled}
-                label={inputLabels.receiveUnverifiedData}
-                value={values.unverified}
-                onChange={(value) => handleChange(`unverified`, value)}
-              />
+              <Row columns={1}>
+                <SingleCheckBox
+                  disabled={disabled}
+                  label={inputLabels.receiveUnverifiedData}
+                  value={values.unverified}
+                  onChange={(value) => handleChange(`unverified`, value)}
+                />
+                <SingleCheckBox
+                  disabled={disabled}
+                  label={inputLabels.extended}
+                  value={values.extended}
+                  onChange={(value) => handleChange(`extended`, value)}
+                />
+              </Row>
             </SimpleContainer>
 
             <SimpleContainer title={formLabels.map}>
@@ -246,14 +262,14 @@ const RequestPage = () => {
         </ColumnOne>
         {!isNew(id) && (
           <ColumnTwo>
-            <FormHistoryContainer
-              name="historyRequests"
-              formHistoryLabels={formHistoryLabels}
-              endpoint={Api.getRequestHistory}
-            />
             {isApproved && (
               <GeneratedFileComponent generatedFile={request?.generatedFile} />
             )}
+            <FormHistoryContainer
+              name={`historyRequests-${id}`}
+              formHistoryLabels={formHistoryLabels}
+              endpoint={Api.getRequestHistory}
+            />
           </ColumnTwo>
         )}
       </Container>
@@ -277,12 +293,11 @@ const RequestPage = () => {
   );
 };
 
-const Row = styled.div`
+const Row = styled.div<{ columns?: number }>`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(${({ columns }) => columns || 2}, 1fr);
   gap: 12px;
   margin: 12px 0;
-
   @media ${device.mobileL} {
     grid-template-columns: 1fr;
   }

@@ -254,6 +254,7 @@ export const inputLabels = {
   hydrostaticId: "Hidrostatinio unikalus identifikatorius",
   attribute: "Atributas",
   receiveUnverifiedData: "Gauti nepatikrintus duomenis automatiškai",
+  extended: "Noriu gauti išplėstinius objektų duomenis",
   requestDeliveryType: "Išrašo pristatymo būdas",
   dataReceivingPurpose: "Duomenų gavimo tikslas",
   noData: "Nėra duomenų",

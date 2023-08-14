@@ -195,6 +195,7 @@ export interface Request {
   canValidate?: boolean;
   data?: {
     unverified?: boolean;
+    extended?: boolean;
   };
   geom?: any;
   agreeWithConditions?: boolean;

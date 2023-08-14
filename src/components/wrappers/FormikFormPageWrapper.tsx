@@ -56,7 +56,11 @@ const FormPageWrapper = ({
 
   const handleSubmit = async (values: any, helper?: any) => {
     setLoading(true);
-    await onSubmit(values, helper);
+    try {
+      await onSubmit(values, helper);
+    } catch (e) {
+      console.log(e);
+    }
     setLoading(false);
   };
 
