@@ -3,15 +3,16 @@ import { useEffect, useRef } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { device } from "../../styles";
+import { device, theme } from "../../styles";
 import { FormHistory } from "../../types";
 import { intersectionObserverConfig } from "../../utils/configs";
 import { HistoryTypes } from "../../utils/constants";
 import { formatDateAndTime } from "../../utils/format";
-import { getPublicUrl, handleAlert } from "../../utils/functions";
+import { handleAlert } from "../../utils/functions";
 import { formLabels } from "../../utils/texts";
 import { ButtonColors } from "../buttons/Button";
 import Avatar from "../other/Avatar";
+import Icon from "../other/Icons";
 import LoaderComponent from "../other/LoaderComponent";
 import SimpleContainer from "./SimpleContainer";
 
@@ -20,18 +21,17 @@ interface FormHistoryContainerProps {
   endpoint: (props: any) => Promise<any>;
   name: string;
 }
-type HistoryContainerColorsType = {
-  [key in HistoryTypes]: ButtonColors | null;
-};
 
-const historyContainerColors: HistoryContainerColorsType = {
-  [HistoryTypes.APPROVED]: ButtonColors.SUCCESS,
-  [HistoryTypes.RETURNED]: ButtonColors.PRIMARY,
-  [HistoryTypes.REJECTED]: ButtonColors.DANGER,
-  [HistoryTypes.CREATED]: null,
-  [HistoryTypes.UPDATED]: null,
-  [HistoryTypes.DELETED]: null,
-  [HistoryTypes.FILE_GENERATED]: null
+const iconsByHistoryType = {
+  [HistoryTypes.APPROVED]: (
+    <Icon name="approved" color={theme.colors[ButtonColors.SUCCESS]} />
+  ),
+  [HistoryTypes.REJECTED]: (
+    <Icon name="rejected" color={theme.colors[ButtonColors.DANGER]} />
+  ),
+  [HistoryTypes.RETURNED]: (
+    <Icon name="returned" color={theme.colors[ButtonColors.PRIMARY]} />
+  )
 };
 
 const FormHistoryContainer = ({
@@ -94,9 +94,7 @@ const FormHistoryContainer = ({
     <SimpleContainer title={formLabels.history}>
       <Container>
         {map(suggestions, (history: FormHistory, index: number) => {
-          const type = history.type;
-
-          const colorKey = historyContainerColors[type];
+          const hasIcon = !!iconsByHistoryType[history.type];
 
           return (
             <Row key={`formHistory-${index}`}>
@@ -117,12 +115,7 @@ const FormHistoryContainer = ({
                 <Comment>{history.comment}</Comment>
                 <InnerContainer>
                   <InnerRow>
-                    {colorKey && (
-                      <IMG
-                        variant={colorKey}
-                        src={getPublicUrl(`icons/${history.type}.svg`)}
-                      />
-                    )}
+                    {hasIcon && iconsByHistoryType[history.type]}
                     <HistoryType>{formHistoryLabels[history.type]}</HistoryType>
                   </InnerRow>
                 </InnerContainer>
@@ -150,17 +143,6 @@ const Container = styled.div`
   @media ${device.mobileL} {
     max-height: 100%;
   }
-`;
-
-const IMG = styled.img<{ variant: ButtonColors }>`
-  width: 16px;
-  height: 16px;
-  background-color: ${({ theme, variant }) => theme.colors[variant]};
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Comment = styled.div`

@@ -5,15 +5,11 @@ import api from "../api";
 import Button from "../components/buttons/Button";
 import PasswordField from "../components/fields/PasswordField";
 import TextField from "../components/fields/TextField";
+import Icon from "../components/other/Icons";
 import { handleAlert } from "../utils/functions";
 import { useCheckAuthMutation, useEGatesSign } from "../utils/hooks";
 import { handleUpdateTokens } from "../utils/loginFunctions";
-import {
-  buttonsTitles,
-  formLabels,
-  inputLabels,
-  validationTexts
-} from "../utils/texts";
+import { buttonsTitles, inputLabels, validationTexts } from "../utils/texts";
 import { loginSchema } from "../utils/validation";
 
 interface LoginProps {
@@ -84,7 +80,6 @@ export const Login = () => {
         }
       }}
     >
-      <H1>{formLabels.login}</H1>
       <InnerContainer>
         <TextField
           label={inputLabels.email}
@@ -114,13 +109,14 @@ export const Login = () => {
           </Or>
         </OrContainer>
       </InnerContainer>
-      <StyledButton
-        loading={eGatesSignLoading}
+      <Button
         type="button"
+        leftIcon={<Icon name="evv" />}
+        loading={eGatesSignLoading}
         onClick={() => eGatesMutation()}
       >
-        {buttonsTitles.eLogin}
-      </StyledButton>
+        {buttonsTitles.eGates}
+      </Button>
     </FormContainer>
   );
 };
@@ -135,18 +131,6 @@ const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-`;
-
-const H1 = styled.h1`
-  text-align: center;
-  font: normal normal bold 32px/44px;
-  letter-spacing: 0px;
-  color: #121a55;
-  opacity: 1;
-  padding-bottom: 24px;
-  @media only screen and (max-width: 1000px) {
-    padding-bottom: 0px;
-  }
 `;
 
 const FormContainer = styled.form`

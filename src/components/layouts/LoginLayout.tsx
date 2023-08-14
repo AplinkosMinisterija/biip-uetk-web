@@ -3,6 +3,7 @@ import { device } from "../../styles";
 import { ChildrenType } from "../../types";
 import { getPublicUrl } from "../../utils/functions";
 import { descriptions } from "../../utils/texts";
+import Icon from "../other/Icons";
 
 export interface LoginLayoutProps {
   children?: ChildrenType;
@@ -14,7 +15,7 @@ const LoginLayout = ({ children }: LoginLayoutProps) => {
       <LayoutImage src={getPublicUrl("LoginImage.jpg")} />
       <InnerContainer>
         <LogoContainer>
-          <Logo src={getPublicUrl("logo.svg")} />
+          <Icon name="logo" width="250px" height="40px" />
           <Description>{descriptions.mainDescription}</Description>
         </LogoContainer>
         {children}
@@ -60,21 +61,12 @@ const LayoutImage = styled.img`
   }
 `;
 
-const Logo = styled.img`
-  width: 220px;
-  height: 50px;
-  margin-bottom: 23px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Description = styled.div`
   font-weight: normal;
   font-size: 1.4rem;
   color: #121926;
   margin-bottom: 48px;
+  margin-top: 12px;
   line-height: 24px;
 `;
 

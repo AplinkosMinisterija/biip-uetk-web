@@ -78,6 +78,7 @@ const StyledButton = styled.button<{
   padding?: string;
 }>`
   display: flex;
+  gap: 12px;
   justify-content: center;
   align-items: center;
   height: ${({ height }) => (height ? height + "px" : "40px")};
