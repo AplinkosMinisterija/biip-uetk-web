@@ -7,7 +7,6 @@ import {
   useNavigate,
   useSearchParams
 } from "react-router-dom";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import styled from "styled-components";
 import { device } from "../../styles";
 import { getActiveColumns, useGetSortedColumns } from "../../utils/functions";
