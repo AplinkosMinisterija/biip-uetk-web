@@ -167,7 +167,6 @@ const RequestPage = () => {
     agreeWithConditions: disabled || false,
     delivery: request?.delivery || DeliveryTypes.EMAIL,
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    status: request?.status || undefined,
     unverified: request?.data?.unverified || false,
     extended: request?.data?.extended || false
   };
