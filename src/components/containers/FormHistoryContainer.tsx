@@ -1,91 +1,100 @@
 import { map } from "lodash";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { GetAllResponse } from "../../api";
-import { device } from "../../styles";
+import { device, theme } from "../../styles";
 import { FormHistory } from "../../types";
+import { intersectionObserverConfig } from "../../utils/configs";
 import { HistoryTypes } from "../../utils/constants";
 import { formatDateAndTime } from "../../utils/format";
-import { getPublicUrl, handleResponse } from "../../utils/functions";
+import { handleAlert } from "../../utils/functions";
 import { formLabels } from "../../utils/texts";
 import { ButtonColors } from "../buttons/Button";
 import Avatar from "../other/Avatar";
+import Icon from "../other/Icons";
 import LoaderComponent from "../other/LoaderComponent";
 import SimpleContainer from "./SimpleContainer";
 
 interface FormHistoryContainerProps {
   formHistoryLabels: { [key: string]: string };
   endpoint: (props: any) => Promise<any>;
+  name: string;
 }
-type HistoryContainerColorsType = {
-  [key in HistoryTypes]: ButtonColors | null;
-};
 
-const historyContainerColors: HistoryContainerColorsType = {
-  [HistoryTypes.APPROVED]: ButtonColors.SUCCESS,
-  [HistoryTypes.RETURNED]: ButtonColors.PRIMARY,
-  [HistoryTypes.REJECTED]: ButtonColors.DANGER,
-  [HistoryTypes.CREATED]: null,
-  [HistoryTypes.UPDATED]: null,
-  [HistoryTypes.DELETED]: null,
-  [HistoryTypes.FILE_GENERATED]: null
+const iconsByHistoryType = {
+  [HistoryTypes.APPROVED]: (
+    <Icon name="approved" color={theme.colors[ButtonColors.SUCCESS]} />
+  ),
+  [HistoryTypes.REJECTED]: (
+    <Icon name="rejected" color={theme.colors[ButtonColors.DANGER]} />
+  ),
+  [HistoryTypes.RETURNED]: (
+    <Icon name="returned" color={theme.colors[ButtonColors.PRIMARY]} />
+  )
 };
 
 const FormHistoryContainer = ({
   formHistoryLabels,
-  endpoint
+  endpoint,
+  name
 }: FormHistoryContainerProps) => {
-  const [loading, setLoading] = useState(false);
-  const [history, setHistoryData] = useState<FormHistory[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [hasMore, setHasMore] = useState(false);
   const { id } = useParams();
+  const observerRef = useRef(null);
 
-  const handleLoadData = useCallback(
-    async (page) => {
-      setLoading(true);
-      handleResponse({
-        endpoint: () =>
-          endpoint({
-            id,
-            page: page,
-            pageSize: 5
-          }),
-        onSuccess: (list: GetAllResponse<FormHistory>) => {
-          setCurrentPage(list.page!);
-          setHasMore(list.page! < list.totalPages);
-          setHistoryData((prev) => [...prev, ...list?.rows]);
-          setLoading(false);
-        }
-      });
-    },
-    [endpoint, id]
-  );
+  const fetchData = async (page: number) => {
+    const data = await endpoint({
+      id,
+      page: page,
+      pageSize: 5
+    });
+
+    return {
+      data: data?.rows,
+      page: data.page < data.totalPages ? data.page + 1 : undefined
+    };
+  };
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery([name], ({ pageParam }) => fetchData(pageParam), {
+      onError: () => {
+        handleAlert();
+      },
+      getNextPageParam: (lastPage) => lastPage.page,
+      cacheTime: 60000
+    });
 
   useEffect(() => {
-    handleLoadData(1);
-  }, [handleLoadData]);
+    const currentObserver = observerRef.current;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    }, intersectionObserverConfig);
 
-  const handleScroll = async (e) => {
-    const element = e.currentTarget;
-    const isTheBottom =
-      Math.abs(
-        element.scrollHeight - element.clientHeight - element.scrollTop
-      ) < 1;
-
-    if (isTheBottom && hasMore && !loading) {
-      handleLoadData(currentPage + 1);
+    if (currentObserver) {
+      observer.observe(currentObserver);
     }
-  };
+
+    return () => {
+      if (currentObserver) {
+        observer.unobserve(currentObserver);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, data]);
+
+  const suggestions = data
+    ? data.pages
+        .flat()
+        .map((item) => item?.data)
+        .flat()
+    : [];
 
   return (
     <SimpleContainer title={formLabels.history}>
-      <Container onScroll={handleScroll}>
-        {map(history, (history: FormHistory, index: number) => {
-          const type = history.type;
-
-          const colorKey = historyContainerColors[type];
+      <Container>
+        {map(suggestions, (history: FormHistory, index: number) => {
+          const hasIcon = !!iconsByHistoryType[history.type];
 
           return (
             <Row key={`formHistory-${index}`}>
@@ -106,12 +115,7 @@ const FormHistoryContainer = ({
                 <Comment>{history.comment}</Comment>
                 <InnerContainer>
                   <InnerRow>
-                    {colorKey && (
-                      <IMG
-                        variant={colorKey}
-                        src={getPublicUrl(`icons/${history.type}.svg`)}
-                      />
-                    )}
+                    {hasIcon && iconsByHistoryType[history.type]}
                     <HistoryType>{formHistoryLabels[history.type]}</HistoryType>
                   </InnerRow>
                 </InnerContainer>
@@ -119,7 +123,8 @@ const FormHistoryContainer = ({
             </Row>
           );
         })}
-        {loading && <LoaderComponent />}
+        {observerRef && <div ref={observerRef} />}
+        {isFetching && <LoaderComponent />}
       </Container>
     </SimpleContainer>
   );
@@ -138,17 +143,6 @@ const Container = styled.div`
   @media ${device.mobileL} {
     max-height: 100%;
   }
-`;
-
-const IMG = styled.img<{ variant: ButtonColors }>`
-  width: 16px;
-  height: 16px;
-  background-color: ${({ theme, variant }) => theme.colors[variant]};
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Comment = styled.div`

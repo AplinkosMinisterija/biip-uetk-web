@@ -6,7 +6,7 @@ import { handleDateRestriction } from "../../../utils/functions";
 import { buttonsTitles } from "../../../utils/texts";
 import Button, { ButtonColors } from "../../buttons/Button";
 import AsyncMultiSelect from "../../fields/AsyncMultiSelect";
-import AsyncSelectField from "../../fields/AsyncSelectField";
+import AsyncSelectField from "../../fields/AsyncSelect";
 import DatePicker from "../../fields/DatePicker";
 import MultiSelect from "../../fields/MultiSelect";
 import SelectField from "../../fields/SelectField";
@@ -138,9 +138,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   getOptionLabel={(option) =>
                     !!optionLabel ? optionLabel(option) : option.name
                   }
-                  setSuggestionsFromApi={(input, page) =>
-                    filter.api(input, page)
-                  }
+                  loadOptions={(input, page) => filter.api(input, page)}
                 />
               </InputWrapper>
             );
@@ -162,9 +160,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   getOptionValue={(option) =>
                     !!optionValue ? optionValue(option) : option.name
                   }
-                  setSuggestionsFromApi={(input, page) =>
-                    filter.api(input, page)
-                  }
+                  loadOptions={(input, page) => filter.api(input, page)}
                 />
               </InputWrapper>
             );

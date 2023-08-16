@@ -21,12 +21,12 @@ import { Login } from "./pages/Login";
 import { useAppSelector } from "./state/hooks";
 import { ProfileId } from "./types";
 import { ServerErrorCodes } from "./utils/constants";
-import { handleUpdateTokens } from "./utils/functions";
 import {
   useCheckAuthMutation,
   useEGatesSign,
   useFilteredRoutes
 } from "./utils/hooks";
+import { handleUpdateTokens } from "./utils/loginFunctions";
 import { slugs } from "./utils/routes";
 
 const cookies = new Cookies();

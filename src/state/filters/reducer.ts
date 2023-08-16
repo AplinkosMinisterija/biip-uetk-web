@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FormFilters, UserFilters } from "../../types";
+import { FormFilters, RequestFilters, UserFilters } from "../../types";
 
 interface FiltersState {
   userFilters: UserFilters;
   formFilters: FormFilters;
+  requestFilters: RequestFilters;
 }
 
 const initialState: FiltersState = {
   userFilters: {},
-  formFilters: {}
+  formFilters: {},
+  requestFilters: {}
 };
 
 export const Filters = createSlice({
@@ -20,6 +22,9 @@ export const Filters = createSlice({
     },
     setFormFilters: (state, action) => {
       return { ...state, formFilters: action.payload };
+    },
+    setRequestFilters: (state, action) => {
+      return { ...state, requestFilters: action.payload };
     }
   }
 });

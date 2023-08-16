@@ -1,9 +1,8 @@
-import styled from "styled-components";
-import Icon from "../other/Icons";
+import { useState } from "react";
 import FieldWrapper from "./components/FieldWrapper";
 import OptionsContainer from "./components/OptionsContainer";
 import TextFieldInput from "./components/TextFieldInput";
-import { useSelectData } from "./utils/hooks";
+import { getFilteredOptions } from "./utils/functions";
 
 export interface SelectFieldProps {
   id?: string;
@@ -18,6 +17,7 @@ export interface SelectFieldProps {
   right?: JSX.Element;
   padding?: string;
   onChange: (option: any) => void;
+  onSelect: (option: any) => void;
   disabled?: boolean;
   getOptionLabel: (option: any) => string;
   getInputLabel?: (option: any) => string;
@@ -30,7 +30,7 @@ export interface SelectFieldProps {
   refreshOptions?: (dependantId?: string) => any;
 }
 
-const SelectField = ({
+const SuggestionsSelect = ({
   label,
   value,
   name,
@@ -51,27 +51,35 @@ const SelectField = ({
   getInputLabel,
   isClearable = false,
   dependantId,
+  onSelect,
   refreshOptions,
   ...rest
 }: SelectFieldProps) => {
-  const {
-    suggestions,
-    input,
-    handleToggleSelect,
-    showSelect,
-    handleBlur,
-    handleClick,
-    handleOnChange,
-    loading
-  } = useSelectData({
-    options,
-    disabled,
-    onChange,
-    getOptionLabel,
-    refreshOptions,
-    dependantId,
-    value
-  });
+  const [input, setInputValue] = useState<any>(null);
+  const [showSelect, setShowSelect] = useState(false);
+
+  const [suggestions, setSuggestions] = useState(options);
+
+  const handleToggleSelect = () => {
+    !disabled && setShowSelect(!showSelect);
+  };
+
+  const handleBlur = (event: any) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setShowSelect(false);
+    }
+  };
+
+  const handleOnChange = (input: string) => {
+    if (!options) return;
+
+    if (input) {
+      setShowSelect(true);
+    }
+    setInputValue(input);
+    onChange(input);
+    setSuggestions(getFilteredOptions(options, input, getOptionLabel));
+  };
 
   return (
     <FieldWrapper
@@ -87,28 +95,28 @@ const SelectField = ({
         value={input}
         name={name}
         error={error}
-        leftIcon={left}
-        rightIcon={<StyledIcon name={"dropdownArrow"} />}
         onChange={handleOnChange}
         disabled={disabled}
-        placeholder={(value && getOptionLabel(value)) || placeholder}
+        placeholder={
+          (value && getInputLabel
+            ? getInputLabel(value)
+            : getOptionLabel(value)) || placeholder
+        }
         selectedValue={value}
       />
       <OptionsContainer
+        hideNoOptions={true}
         values={suggestions}
         getOptionLabel={getOptionLabel}
-        loading={loading}
         showSelect={showSelect}
-        handleClick={handleClick}
+        handleClick={(val) => {
+          setInputValue(getOptionLabel(value));
+          onSelect(val);
+          setShowSelect(false);
+        }}
       />
     </FieldWrapper>
   );
 };
 
-const StyledIcon = styled(Icon)`
-  color: #cdd5df;
-  font-size: 2.4rem;
-  margin-right: 12px;
-`;
-
-export default SelectField;
+export default SuggestionsSelect;

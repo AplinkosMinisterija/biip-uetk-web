@@ -1,3 +1,4 @@
+import { useMutation } from "react-query";
 import styled from "styled-components";
 import api from "../api";
 import SimpleContainer from "../components/containers/SimpleContainer";
@@ -6,11 +7,8 @@ import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
 import { useAppSelector } from "../state/hooks";
 import { device } from "../styles";
 import { User } from "../types";
-import {
-  handleGetCurrentUser,
-  handleResponse,
-  handleSuccess
-} from "../utils/functions";
+import { handleAlert, handleSuccess } from "../utils/functions";
+import { handleGetCurrentUser } from "../utils/loginFunctions";
 import { formLabels, inputLabels, pageTitles } from "../utils/texts";
 import { validateProfileForm } from "../utils/validation";
 
@@ -23,16 +21,19 @@ export interface UserProps {
 
 const Profile = () => {
   const user: User = useAppSelector((state) => state?.user?.userData);
-
-  const handleProfileSubmit = async (values: UserProps) => {
-    await handleResponse({
-      endpoint: () => api.updateProfile(user?.id!, values),
+  const updateForm = useMutation(
+    (values: UserProps) => api.updateProfile(user?.id!, values),
+    {
+      onError: () => {
+        handleAlert();
+      },
       onSuccess: () => {
         handleGetCurrentUser();
         handleSuccess(formLabels.profileUpdated);
-      }
-    });
-  };
+      },
+      retry: false
+    }
+  );
 
   const initialProfileValues: UserProps = {
     firstName: user?.firstName || "",
@@ -93,7 +94,7 @@ const Profile = () => {
       back={false}
       title={pageTitles.updateProfile}
       initialValues={initialProfileValues}
-      onSubmit={handleProfileSubmit}
+      onSubmit={updateForm.mutateAsync}
       renderForm={renderProfileForm}
       validationSchema={validateProfileForm}
     />

@@ -1,5 +1,4 @@
 import { isEmpty, map } from "lodash";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import styled from "styled-components";
 import { Columns } from "../../types";
 import { TableItemWidth } from "../../utils/constants";

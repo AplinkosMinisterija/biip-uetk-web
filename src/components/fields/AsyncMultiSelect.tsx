@@ -14,29 +14,56 @@ export interface SelectFieldProps {
   id?: string;
   name?: string;
   label?: string;
-  values?: any;
+  values?: any[];
   error?: string;
   showError?: boolean;
+  editable?: boolean;
+  left?: JSX.Element;
+  right?: JSX.Element;
+  padding?: string;
   onChange: (option: any) => void;
+  handleLogs?: (data: any) => void;
   disabled?: boolean;
-  getOptionLabel: (option: any) => string;
+  className?: string;
+  placeholder?: string;
+  backgroundColor?: string;
+  hasBorder?: boolean;
+  getOptionLabel?: (option: any) => string;
   getOptionValue?: (option: any) => any;
-  setSuggestionsFromApi: (search: string, page: any) => any;
+  isSearchable?: boolean;
+  loadOptions: (input: any, page: number, id?: any) => any;
+  dependantId?: string;
+  handleRefresh?: () => void;
+  optionsKey?: string;
 }
 
 const AsyncMultiSelect = ({
   label,
   values = [],
+  name,
   error,
+  hasBorder,
+  showError = true,
+  editable = true,
+  className,
+  left,
+  right,
+  padding,
+  optionsKey = "rows",
   onChange,
+  handleLogs,
   disabled = false,
-  getOptionLabel,
+  backgroundColor,
+  getOptionLabel = (option) => option.label,
   getOptionValue = (option) => option.id,
-  setSuggestionsFromApi
+  isSearchable = false,
+  loadOptions,
+  dependantId,
+  handleRefresh,
+  ...rest
 }: SelectFieldProps) => {
   const {
     loading,
-    handleScroll,
     suggestions,
     handleInputChange,
     handleToggleSelect,
@@ -45,9 +72,11 @@ const AsyncMultiSelect = ({
     handleBlur,
     handleClick
   } = useAsyncSelectData({
-    setSuggestionsFromApi,
+    loadOptions,
     disabled,
-    onChange: (option) => onChange([...values, option])
+    onChange: (option: any) => onChange([...values, option]),
+    dependantId,
+    optionsKey
   });
 
   return (
@@ -74,7 +103,6 @@ const AsyncMultiSelect = ({
         loading={loading}
         showSelect={showSelect}
         handleClick={handleClick}
-        handleScroll={handleScroll}
       />
     </FieldWrapper>
   );

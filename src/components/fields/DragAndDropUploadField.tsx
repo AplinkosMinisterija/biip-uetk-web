@@ -1,22 +1,31 @@
 import { map } from "lodash";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import styled from "styled-components";
 import { device } from "../../styles";
-import { FileProps } from "../../types";
-import { bytesIntoMb, handleAlert } from "../../utils/functions";
+import { bytesToMb, handleAlert } from "../../utils/functions";
 import { inputLabels } from "../../utils/texts";
 import { validateFileSizes, validateFileTypes } from "../../utils/validation";
 import Icon from "../other/Icons";
 import LoaderComponent from "../other/LoaderComponent";
 import FieldWrapper from "./components/FieldWrapper";
 
+export type FileProps = {
+  url: string;
+  name: string;
+  size: number;
+  main?: boolean;
+};
+
 export interface FileFieldProps {
-  onChange?: (files: File[]) => void;
-  onUpload?: (files: File[]) => Promise<void>;
+  onDelete?: (files: File[]) => void;
+  onUpload?: (files: File[]) => void;
   files: FileProps[] | File[] | any[];
+  loading?: boolean;
   label: string;
   disabled: boolean;
   error?: string;
+  showError?: boolean;
+  multiple?: boolean;
 }
 
 export const availableMimeTypes = [
@@ -29,27 +38,25 @@ export const availableMimeTypes = [
 const availableExtensionsTypes = [".png", ".jpg", ".jpeg", ".pdf"];
 
 const DragAndDropUploadField = ({
-  onChange,
+  onDelete,
   onUpload,
+  multiple = true,
   files,
   label,
   disabled,
-  error
+  loading,
+  error,
+  showError = false
 }: FileFieldProps) => {
   const inputRef = useRef<any>(null);
-  const [loading, setLoading] = useState(false);
 
-  const handleSetFiles = async (currentFiles: File[]) => {
+  const handleSetFiles = (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles);
     if (!isValidFileTypes) return handleAlert("badFileTypes");
     const isValidFileSizes = validateFileSizes(currentFiles);
     if (!isValidFileSizes) return handleAlert("fileSizesExceeded");
 
-    if (onUpload) {
-      setLoading(true);
-      await onUpload(currentFiles);
-      setLoading(false);
-    }
+    onUpload && onUpload(currentFiles);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -76,10 +83,18 @@ const DragAndDropUploadField = ({
     inputRef?.current?.click();
   };
 
+  const handleDelete = (e, index) => {
+    e.stopPropagation();
+
+    if (onDelete) {
+      onDelete([...files?.slice(0, index), ...files?.slice(index + 1)]);
+    }
+  };
+
   return (
     <>
       {!disabled && (
-        <FieldWrapper label={label} error={error}>
+        <FieldWrapper error={error} showError={showError} label={label}>
           <UploadFileContainer
             error={!!error}
             onDragOver={(e) => e.preventDefault()}
@@ -90,7 +105,7 @@ const DragAndDropUploadField = ({
               ref={inputRef}
               type="file"
               accept={availableExtensionsTypes.join(", ")}
-              multiple={true}
+              multiple={multiple}
               onChange={handleChange}
             />
             <TextRow>
@@ -103,16 +118,16 @@ const DragAndDropUploadField = ({
       )}
       {loading && <LoaderComponent />}
       {map(files, (file, index) => {
-        if (!files) return null;
+        if (!file) return <></>;
 
         return (
           <FileContainer key={`${index}-file`}>
             <FileInnerContainer>
               <FileName>{file?.name}</FileName>
-              <FileSize>{bytesIntoMb(file.size)}</FileSize>
+              <FileSize>{bytesToMb(file.size)}</FileSize>
             </FileInnerContainer>
             <IconContainer
-              href={file.url}
+              href={file?.url}
               target="_blank"
               download={file?.name}
             >
@@ -121,13 +136,7 @@ const DragAndDropUploadField = ({
             {!disabled && (
               <IconContainer
                 onClick={(e) => {
-                  e.stopPropagation();
-
-                  onChange &&
-                    onChange([
-                      ...files?.slice(0, index),
-                      ...files?.slice(index + 1)
-                    ]);
+                  handleDelete(e, index);
                 }}
               >
                 <StyledIcon name="remove" />
@@ -172,7 +181,7 @@ const FileName = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 500px;
+  max-width: 400px;
 `;
 
 const FileInnerContainer = styled.div`

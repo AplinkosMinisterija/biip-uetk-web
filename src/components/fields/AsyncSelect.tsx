@@ -26,7 +26,7 @@ export interface AsyncSelectFieldProps {
   placeholder?: string;
   backgroundColor?: string;
   hasBorder?: boolean;
-  setSuggestionsFromApi: (input: any, page: number | string, id?: any) => any;
+  loadOptions: (input: any, page: number, id?: any) => any;
   getOptionValue?: (option: any) => any;
   dependantId?: string;
   optionsKey?: string;
@@ -42,36 +42,41 @@ const AsyncSelectField = ({
   showError = true,
   className,
   padding,
-  hasOptionKey = true,
   optionsKey = "rows",
   onChange,
   name,
   disabled = false,
   getOptionLabel = (option) => option.label,
   getOptionValue = (option) => option.id,
-  getInputLabel,
-  setSuggestionsFromApi,
+  loadOptions,
   dependantId,
-  placeholder = inputLabels.chooseOption
+  placeholder = inputLabels.chooseOption,
+  getInputLabel
 }: AsyncSelectFieldProps) => {
   const {
     loading,
-    handleScroll,
     suggestions,
     handleInputChange,
     handleToggleSelect,
     input,
     showSelect,
     handleBlur,
-    handleClick
+    handleClick,
+    observerRef
   } = useAsyncSelectData({
-    setSuggestionsFromApi,
+    loadOptions,
     disabled,
     onChange,
     dependantId,
     optionsKey,
-    hasOptionKey
+    name
   });
+
+  const placeholderValue = value
+    ? getInputLabel
+      ? getInputLabel(value)
+      : getOptionLabel(value)
+    : placeholder;
 
   return (
     <FieldWrapper
@@ -90,19 +95,13 @@ const AsyncSelectField = ({
         rightIcon={<StyledIcon name={"dropdownArrow"} />}
         onChange={handleInputChange}
         disabled={disabled}
-        placeholder={
-          value
-            ? getInputLabel
-              ? getInputLabel(value)
-              : getOptionLabel(value)
-            : placeholder
-        }
+        placeholder={placeholderValue}
         selectedValue={value}
       />
 
       <OptionsContainer
         loading={loading}
-        handleScroll={handleScroll}
+        observerRef={observerRef}
         values={suggestions}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}

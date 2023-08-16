@@ -1,25 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getPublicUrl } from "../../utils/functions";
+import Icon from "../other/Icons";
 
 const AppLogo = () => {
   const navigate = useNavigate();
   return (
     <LogoContainer onClick={() => navigate("/")}>
-      <Logo src={getPublicUrl("logo.svg")} />
+      <Icon width="180px" height="40px" name="logo" />
     </LogoContainer>
   );
 };
 
 export default AppLogo;
-
-const Logo = styled.img`
-  width: 180px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 const LogoContainer = styled.div`
   display: flex;

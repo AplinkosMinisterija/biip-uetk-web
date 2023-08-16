@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-//@ts-ignore
-import lt from "date-fns/locale/lt";
-import { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-//@ts-ignore
 import { useMediaQuery } from "@material-ui/core";
 import { format } from "date-fns";
-import DatePicker from "react-datepicker";
+import lt from "date-fns/locale/lt";
+import React, { useEffect, useState } from "react";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import styled from "styled-components";
 import { device } from "../../styles";
-import Icons from "../other/Icons";
+import Icon from "../other/Icons";
 import TextField from "./TextField";
 
 registerLocale("lt", lt);
@@ -19,15 +15,15 @@ export interface DatepickerProps {
   startDate?: Date;
   setStartDate?: React.Dispatch<React.SetStateAction<Date>>;
   disabled?: boolean;
-  value?: Date;
+  value?: Date | string;
   padding?: string;
   error?: string;
   onChange: (date?: Date) => void;
   label?: string;
   name?: string;
   className?: string;
-  maxDate?: Date;
-  minDate?: Date;
+  maxDate?: Date | string;
+  minDate?: Date | string;
   bottom?: boolean;
 }
 
@@ -54,6 +50,8 @@ const Datepicker = ({
   };
 
   const handleBlurInput = (event: any) => {
+    if (disabled) return;
+
     if (!event.currentTarget.contains(event.relatedTarget)) {
       if (!validDate(inputValue)) {
         setInputValue("");
@@ -90,7 +88,7 @@ const Datepicker = ({
     isMoreThanMinDate(date) &&
     isLessThanMaxDate(date);
 
-  const handleChange = (date) => {
+  const handleChange = (date: any) => {
     setInputValue(date);
     if (validDate(date)) {
       onChange(new Date(date));
@@ -136,13 +134,21 @@ const Datepicker = ({
           <DatePicker
             locale="lt"
             open={open}
-            {...(maxDate ? { maxDate } : {})}
-            {...(minDate ? { minDate } : {})}
+            {...(maxDate ? { maxDate: new Date(maxDate) } : {})}
+            {...(minDate ? { minDate: new Date(minDate) } : {})}
             selected={value ? new Date(value as any) : null}
             onClickOutside={() => setOpen(false)}
             onSelect={() => setOpen(false)}
             onChange={(date: Date) => {
-              onChange(date as Date);
+              if (maxDate && date > new Date(maxDate)) {
+                return onChange(new Date(maxDate));
+              }
+
+              if (minDate && date < new Date(minDate)) {
+                return onChange(new Date(minDate));
+              }
+
+              onChange(date);
               setOpen(false);
             }}
             inline
@@ -172,7 +178,7 @@ const DateContainer = styled.div`
   }
 `;
 
-const CalendarIcon = styled(Icons)`
+const CalendarIcon = styled(Icon)`
   color: rgb(122, 126, 159);
   vertical-align: middle;
   margin-right: 8px;
@@ -180,7 +186,7 @@ const CalendarIcon = styled(Icons)`
   align-self: center;
 `;
 
-const CloseIcon = styled(Icons)`
+const CloseIcon = styled(Icon)`
   color: white;
   font-size: 2.8rem;
   align-self: center;
@@ -228,11 +234,11 @@ const Container = styled.div<{ disabled: boolean; bottom: boolean }>`
     position: relative;
     font: normal normal normal 1.5rem/21px Atkinson Hyperlegible;
     &:hover {
-      background-color: #febc1d;
+      background-color: ${({ theme }) => theme.colors.secondary};
       &::before {
         content: "";
         position: absolute;
-        background-color: #febc1d;
+        background-color: ${({ theme }) => theme.colors.secondary};
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -309,7 +315,7 @@ const Container = styled.div<{ disabled: boolean; bottom: boolean }>`
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: -1;
-    background: #febc1d 0% 0% no-repeat padding-box;
+    background-color: ${({ theme }) => theme.colors.secondary};
     width: 50px;
     height: 50px;
     border-radius: 25px;

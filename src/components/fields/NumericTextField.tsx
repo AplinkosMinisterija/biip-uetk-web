@@ -2,7 +2,7 @@ import FieldWrapper from "./components/FieldWrapper";
 import TextFieldInput from "./components/TextFieldInput";
 
 export interface NumericTextFieldProps {
-  value?: string;
+  value?: string | number;
   name?: string;
   error?: string;
   showError?: boolean;
@@ -52,7 +52,7 @@ const NumericTextField = ({
     }
   };
 
-  const handleChange = (input) => {
+  const handleChange = (input: string) => {
     const regex = wholeNumber
       ? /^[0-9]{0,16}$/
       : /^\d{0,100}$|(?=^.{1,10}$)^\d+[.,]\d{0,10}$/;
@@ -65,9 +65,9 @@ const NumericTextField = ({
       handleBlur={handleBlur}
       padding={padding}
       className={className}
+      bottomLabel={bottomLabel}
       label={label}
       error={error}
-      bottomLabel={bottomLabel}
       showError={showError}
     >
       <TextFieldInput

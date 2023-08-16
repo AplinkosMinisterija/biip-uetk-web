@@ -14,7 +14,7 @@ export interface SelectFieldProps {
   id?: string;
   name?: string;
   label?: string;
-  values?: any;
+  values: any[];
   error?: string;
   showError?: boolean;
   editable?: boolean;
@@ -32,17 +32,33 @@ export interface SelectFieldProps {
   getOptionLabel?: (option: any) => string;
   getOptionValue?: (option: any) => any;
   isSearchable?: boolean;
+  refreshOptions?: (id?: string) => any;
+  dependantId?: string;
 }
 
 const MultiSelect = ({
   label,
   values = [],
+  name,
   error,
-  options = [],
+  hasBorder,
+  showError = true,
+  editable = true,
+  options,
+  className,
+  left,
+  right,
+  padding,
   onChange,
+  handleLogs,
   disabled = false,
+  backgroundColor,
   getOptionLabel = (option) => option.label,
-  getOptionValue = (option) => option.id
+  getOptionValue = (option) => option.id,
+  refreshOptions,
+  isSearchable = false,
+  dependantId,
+  ...rest
 }: SelectFieldProps) => {
   const {
     suggestions,
@@ -51,14 +67,17 @@ const MultiSelect = ({
     showSelect,
     handleBlur,
     handleClick,
-    handleOnChange
+    handleOnChange,
+    loading
   } = useSelectData({
     options,
     disabled,
-    onChange: (option) => onChange([...values, option]),
-    getOptionLabel
+    getOptionLabel,
+    refreshOptions,
+    dependantId,
+    value: values,
+    onChange: (option: any) => onChange([...values, option])
   });
-
   return (
     <FieldWrapper
       onClick={handleToggleSelect}
@@ -82,6 +101,7 @@ const MultiSelect = ({
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}
         handleClick={handleClick}
+        loading={loading}
       />
     </FieldWrapper>
   );

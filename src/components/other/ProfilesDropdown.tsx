@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
+import { useAppSelector } from "../../state/hooks";
+import { handleNavigate } from "../../utils/functions";
 import {
-  handleLogout,
-  handleNavigate,
-  handleSelectProfile
-} from "../../utils/functions";
-import { useFilteredRoutes, useGetCurrentProfile } from "../../utils/hooks";
+  useFilteredRoutes,
+  useGetCurrentProfile,
+  useLogoutMutation
+} from "../../utils/hooks";
+import { handleSelectProfile } from "../../utils/loginFunctions";
 import { slugs } from "../../utils/routes";
 import { buttonsTitles, inputLabels } from "../../utils/texts";
 import Icon from "./Icons";
@@ -23,10 +24,10 @@ const ProfilesDropdown = () => {
   const user = useAppSelector((state) => state.user?.userData);
   const currentProfile = useGetCurrentProfile();
   const [showSelect, setShowSelect] = useState(false);
-  const dispatch = useAppDispatch();
   const routes = useFilteredRoutes();
   const location = useLocation();
   const navigate = useNavigate();
+  const { mutateAsync } = useLogoutMutation();
 
   const handleBlur = (event) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -84,7 +85,7 @@ const ProfilesDropdown = () => {
               </Tab>
             ))}
           <Hr />
-          <BottomRow onClick={() => handleLogout(dispatch)}>
+          <BottomRow onClick={() => mutateAsync()}>
             <StyledLogoutIcon name="exit" />
             <Name>{buttonsTitles.logout}</Name>
           </BottomRow>

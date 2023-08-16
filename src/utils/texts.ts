@@ -1,10 +1,12 @@
 import {
+  DeliveryTypes,
   FishPassType,
   FormObjectType,
   FormProviderType,
   FormType,
   HistoryTypes,
   HydroPowerPlantType,
+  PurposeTypes,
   RolesTypes,
   ServerErrors,
   StatusTypes,
@@ -15,7 +17,7 @@ import {
 export const emptyStateLabels = {
   form: "Jūs neturite pateikę duomenų teikimų. Sukurkite ",
   user: "Jūs neturite Naudotojų. Sukurkite ",
-  accessRequest: "Jūs neturite pateikę prašymų. Pateikite ",
+  request: "Jūs neturite pateikę prašymų. Pateikite ",
   excerpt: "Jūs neturite pateikę išrašų prašymų Pateikite "
 };
 
@@ -64,6 +66,51 @@ export const tenantUsersLabels = {
   role: { label: "Teisė", show: true }
 };
 
+export const requestLabels = {
+  tableId: {
+    label: "Id",
+    mobileOrder: 0,
+    desktopOrder: 0,
+    show: true
+  },
+  delivery: {
+    label: "Išrašo pristatymo būdas",
+    mobileOrder: 1,
+    desktopOrder: 1,
+    show: true
+  },
+  purpose: {
+    label: "Duomenų gavimo tikslas",
+    mobileOrder: 2,
+    desktopOrder: 3,
+    show: true
+  },
+  createdAt: {
+    label: "Duomenų įvedimo data",
+    mobileOrder: 6,
+    desktopOrder: 5,
+    show: true
+  },
+  status: {
+    label: "Būsena",
+    mobileOrder: 2,
+    desktopOrder: 7,
+    show: true
+  },
+  respondedAt: {
+    label: "Atsakymo data",
+    mobileOrder: 8,
+    desktopOrder: 8,
+    show: true
+  },
+  generatedFile: {
+    label: "",
+    mobileOrder: 9,
+    desktopOrder: 9,
+    show: true
+  }
+};
+
 export const formTableLabels = {
   name: {
     label: "Objekto Pavadinimas",
@@ -110,64 +157,11 @@ export const formTableLabels = {
   }
 };
 
-export const requestsLabels = ({
-  visibleStatus = true,
-  visibleCreator = true,
-  visibleDeleteDate = false
-}) => {
-  return {
-    createdBy: {
-      label: "Pateikė",
-      mobileOrder: 1,
-      desktopOrder: 1,
-      show: true,
-      visible: visibleCreator
-    },
-    type: {
-      label: "Tipas",
-      mobileOrder: 3,
-      desktopOrder: 2,
-      show: true
-    },
-    createdAt: {
-      label: "Teikimo data",
-      mobileOrder: 4,
-      desktopOrder: 3,
-      show: true
-    },
-    status: {
-      label: "Būsena",
-      mobileOrder: 2,
-      desktopOrder: 4,
-      show: true,
-      visible: visibleStatus
-    },
-    respondedAt: {
-      label: "Atsakymo data",
-      mobileOrder: 5,
-      desktopOrder: 5,
-      show: true
-    },
-    deletedAt: {
-      label: "Panaikinimo data",
-      mobileOrder: 6,
-      desktopOrder: 6,
-      show: true,
-      visible: visibleDeleteDate
-    },
-    generatedFile: {
-      label: "",
-      mobileOrder: 7,
-      desktopOrder: 7,
-      show: true
-    }
-  };
-};
-
 export const pageTitles = {
   request: (id: string) => `Prašymo nr. ${id}`,
-  newExcerpt: "Naujas išrašas",
-  excerpt: (id: string) => `Išrašo prašymas nr. ${id}`,
+  requests: "Prašymai",
+  newRequest: "Naujas prašymas",
+  excerpt: (id: string) => `Prašymas nr. ${id}`,
   profile: "Profilis",
   newForm: "Naujas Duomenų teikimas",
   updateForm: "Atnaujinti Duomenų teikimą",
@@ -193,7 +187,7 @@ export const buttonsTitles = {
   login: "Prisijungti",
   eLogin: "Prisijungti per el. valdžios vartus",
   fillOutRequest: "Pildyti prašymą",
-  newExcerpt: "Naujas išrašas",
+  newExcerpt: "Naujas prašymas",
   inviteTenantUser: "Pakviesti darbuotoją",
   columns: "Stulpeliai",
   addNew: "+ Pridėti naują",
@@ -256,8 +250,13 @@ export const formLabels = {
   springDebit1: "Pavasario potvynio (lietaus poplūdžio) 1 % debitas"
 };
 export const inputLabels = {
+  generating: "Išrašas kuriamas",
   hydrostaticId: "Hidrostatinio unikalus identifikatorius",
   attribute: "Atributas",
+  receiveUnverifiedData: "Gauti nepatikrintus duomenis automatiškai",
+  extended: "Noriu gauti išplėstinius objektų duomenis",
+  requestDeliveryType: "Išrašo pristatymo būdas",
+  dataReceivingPurpose: "Duomenų gavimo tikslas",
   noData: "Nėra duomenų",
   chooseOption: "Pasirinkite",
   comment: "Komentaras",
@@ -298,6 +297,7 @@ export const inputLabels = {
   providerType: "Duomenų teikėjo statusas objekto atžvilgiu",
   formType: "Teikiami duomenys dėl",
   objectName: "Pavadinimas",
+  objects: "Objektai",
   objectNameOrCode: "Pavadinimas arba kodas",
   agreeWithConditions: "Su duomenų teikimo sąlygomis susipažinau ir sutinku.",
   providedByFullName: "Teikėjo Vardas, Pavardė / Įmonės pavadinimas",
@@ -528,4 +528,18 @@ export const formHistoryLabels = {
   [HistoryTypes.RETURNED]: "Grąžinta taisyti",
   [HistoryTypes.APPROVED]: "Priimta",
   [HistoryTypes.DELETED]: "Ištrinta"
+};
+
+export const deliveryTypeLabels = {
+  [DeliveryTypes.EMAIL]: "El. paštu",
+  [DeliveryTypes.REGULAR_MAIL]: "Įprastiniu paštu",
+  [DeliveryTypes.WITHDRAW]: "Atsiimti"
+};
+
+export const purposeTypeLabels = {
+  [PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT]:
+    "Teritorijų planavimo dokumentui",
+  [PurposeTypes.TECHNICAL_PROJECT]: "Techniniam projektui",
+  [PurposeTypes.SCIENTIFIC_INVESTIGATION]: "Moksliniam tyrimui",
+  [PurposeTypes.OTHER]: "Kiti tikslai"
 };

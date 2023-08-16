@@ -1,7 +1,5 @@
 import { isEmpty, map } from "lodash";
 import { useState } from "react";
-import { Tbody } from "react-super-responsive-table";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import styled from "styled-components";
 import { Columns } from "../../types";
 import { descriptions } from "../../utils/texts";
@@ -114,7 +112,7 @@ const MobileTable = ({
           </TR>
         </THEAD>
 
-        <Tbody>{generateTableContent()}</Tbody>
+        <tbody>{generateTableContent()}</tbody>
       </CustomTable>
     </TableContainer>
   );

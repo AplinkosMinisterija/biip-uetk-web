@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance, AxiosResponse } from "axios";
 import { isEmpty } from "lodash";
 import Cookies from "universal-cookie";
-import { Form, FormFiltersProps, User, UserFilters } from "./types";
+import { Form, FormFiltersProps, Request, User, UserFilters } from "./types";
 import { Populations, Resources, SortFields } from "./utils/constants";
 const cookies = new Cookies();
 
@@ -295,6 +295,42 @@ class Api {
   updateForm = async (id: string, params: any): Promise<Form> => {
     return await this.update({
       resource: Resources.FORMS,
+      params,
+      id
+    });
+  };
+
+  requests = async ({
+    filter,
+    page,
+    pageSize
+  }: TableList<FormFiltersProps>): Promise<GetAllResponse<Request>> =>
+    await this.getAll({
+      resource: Resources.REQUESTS,
+      populate: [Resources.CREATED_BY],
+      sort: [SortFields.CREATED_AT],
+      page,
+      filter,
+      pageSize
+    });
+
+  request = async (id: string): Promise<Request> =>
+    await this.getOne({
+      resource: Resources.REQUESTS,
+      populate: [Resources.GEOM, Populations.CAN_EDIT, Populations.OBJECTS],
+      id
+    });
+
+  createRequests = async (params: any): Promise<Request> => {
+    return await this.create({
+      resource: Resources.REQUESTS,
+      params
+    });
+  };
+
+  updaterRequest = async (id: string, params: any): Promise<Request> => {
+    return await this.update({
+      resource: Resources.REQUESTS,
       params,
       id
     });

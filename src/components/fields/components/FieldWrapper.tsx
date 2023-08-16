@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { ChildrenType } from "../../../types";
 import { ErrorMessage } from "../../other/ErrorMessage";
 export interface FieldWrapperProps {
   error?: string;
@@ -12,7 +11,7 @@ export interface FieldWrapperProps {
   bottomLabel?: string;
   subLabel?: string;
   secondLabel?: JSX.Element;
-  children: ChildrenType;
+  children: any;
 }
 
 const FieldWrapper = ({
@@ -30,7 +29,7 @@ const FieldWrapper = ({
 }: FieldWrapperProps) => {
   return (
     <Container
-      tabIndex={0}
+      tabIndex={-1}
       onBlur={handleBlur}
       className={className}
       padding={padding || "0"}

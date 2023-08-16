@@ -7,6 +7,21 @@ export enum FormObjectType {
   ISOLATED_WATER_BODY = "ISOLATED_WATER_BODY",
   EARTH_DAM = "EARTH_DAM",
   WATER_EXCESS_CULVERT = "WATER_EXCESS_CULVERT",
+  HYDRO_POWER_PLANT = "HYDRO_POWER_PLAWNT",
+  FISH_PASS = "FISH_PASS"
+}
+
+export enum RequestObjectType {
+  RIVER = "RIVER",
+  CANAL = "CANAL",
+  INTERMEDIATE_WATER_BODY = "INTERMEDIATE_WATER_BODY",
+  TERRITORIAL_WATER_BODY = "TERRITORIAL_WATER_BODY",
+  NATURAL_LAKE = "NATURAL_LAKE",
+  PONDED_LAKE = "PONDED_LAKE",
+  POND = "POND",
+  ISOLATED_WATER_BODY = "ISOLATED_WATER_BODY",
+  EARTH_DAM = "EARTH_DAM",
+  WATER_EXCESS_CULVERT = "WATER_EXCESS_CULVERT",
   HYDRO_POWER_PLANT = "HYDRO_POWER_PLANT",
   FISH_PASS = "FISH_PASS"
 }
@@ -102,13 +117,14 @@ export enum Resources {
   MY_REQUESTS = "requests/my",
   DELETED_REQUESTS = "requests/deleted",
   UPLOAD = "upload",
-  SEARCH = "search"
+  SEARCH = "objects/search"
 }
 
 export enum Populations {
   SOURCE = "source",
   ROLE = "role",
-  CAN_EDIT = "canEdit"
+  CAN_EDIT = "canEdit",
+  OBJECTS = "objects"
 }
 
 export enum SortFields {
@@ -273,4 +289,17 @@ export enum FormDataFields {
 export enum ServerErrorCodes {
   NOT_FOUND = "404",
   NO_PERMISSION = "401"
+}
+
+export enum DeliveryTypes {
+  EMAIL = "EMAIL",
+  REGULAR_MAIL = "REGULAR_MAIL",
+  WITHDRAW = "WITHDRAW"
+}
+
+export enum PurposeTypes {
+  TERRITORIAL_PLANNING_DOCUMENT = "TERRITORIAL_PLANNING_DOCUMENT",
+  TECHNICAL_PROJECT = "TECHNICAL_PROJECT",
+  SCIENTIFIC_INVESTIGATION = "SCIENTIFIC_INVESTIGATION",
+  OTHER = "OTHER"
 }

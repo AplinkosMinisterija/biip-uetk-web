@@ -10,15 +10,9 @@ export interface TableStatusRowItemProps {
 const TableStatusRowItem = ({ info }: TableStatusRowItemProps) => {
   return (
     <Container>
-      {info.map((item, index) => {
+      {info.map((item) => {
         if (item.label) {
-          return (
-            <StatusTag
-              key={`status-tag-${index}`}
-              label={item.label}
-              color={item.color}
-            />
-          );
+          return <StatusTag label={item.label} color={item.color} />;
         }
 
         return null;

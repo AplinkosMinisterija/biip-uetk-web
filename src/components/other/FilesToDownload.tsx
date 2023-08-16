@@ -12,7 +12,7 @@ const FilesToDownload = ({ url, showFileName }: FilesToDownloadProps) => {
 
   return (
     <>
-      {showFileName && <FileName>{url.replace(/^.*[\\\/]/, "")}</FileName>}
+      {showFileName && <FileName>{url.replace(/^.*[/]/, "")}</FileName>}
 
       <Container
         onClick={(e) => {
