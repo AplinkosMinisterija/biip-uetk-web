@@ -317,7 +317,7 @@ class Api {
   request = async (id: string): Promise<Request> =>
     await this.getOne({
       resource: Resources.REQUESTS,
-      populate: [Resources.GEOM, Resources.CAN_EDIT],
+      populate: [Resources.GEOM, Populations.CAN_EDIT, Populations.OBJECTS],
       id
     });
 

@@ -108,7 +108,8 @@ export enum Resources {
 export enum Populations {
   SOURCE = "source",
   ROLE = "role",
-  CAN_EDIT = "canEdit"
+  CAN_EDIT = "canEdit",
+  OBJECTS = "objects"
 }
 
 export enum SortFields {

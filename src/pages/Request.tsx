@@ -30,6 +30,7 @@ import {
   deliveryTypeLabels,
   formHistoryLabels,
   formLabels,
+  formObjectTypeLabels,
   inputLabels,
   pageTitles,
   purposeTypeLabels
@@ -153,7 +154,15 @@ const RequestPage = () => {
   const initialValues: RequestProps = {
     notifyEmail:
       request?.notifyEmail || currentProfile?.email || userEmail || "",
-    objects: request?.objects || [],
+    objects: !!request?.objects
+      ? request.objects.map((object) => ({
+          properties: {
+            ...object,
+            cadastral_id: object?.cadastralId,
+            category: formObjectTypeLabels[object?.category]
+          }
+        }))
+      : [],
     geom: request?.geom || undefined,
     agreeWithConditions: disabled || false,
     delivery: request?.delivery || DeliveryTypes.EMAIL,

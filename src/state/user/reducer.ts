@@ -21,8 +21,7 @@ export const UserReducer = createSlice({
       return {
         ...state,
         userData: { ...userData },
-        loggedIn: loggedIn,
-        error: ""
+        loggedIn: loggedIn
       };
     }
   }

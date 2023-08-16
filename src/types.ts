@@ -187,7 +187,7 @@ export interface Form {
 export interface Request {
   id?: string;
   notifyEmail?: string;
-  objects?: { properties: { cadastral_id: string } }[];
+  objects?: { cadastralId: string; category: string }[];
   status?: StatusTypes;
   delivery?: DeliveryTypes;
   purpose?: PurposeTypes;
