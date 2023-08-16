@@ -61,7 +61,6 @@ import {
   fishPassTypeLabels,
   formHistoryLabels,
   formLabels,
-  formObjectLabelsToType,
   formObjectTypeLabels,
   formProviderTypeLabels,
   formTypeLabels,
@@ -710,14 +709,13 @@ const FormPage = () => {
         value={value}
         error={error}
         onChange={(value) =>
-          handleChange(
-            `${value?.properties?.name}, ${value?.properties?.cadastral_id}`
-          )
+          handleChange(`${value?.name}, ${value?.cadastral_id}`)
         }
-        getOptionValue={(option) => option?.properties?.cadastral_id}
+        getOptionValue={(option) => option?.cadastralId}
         getInputLabel={(option) => option}
         getOptionLabel={(option) => {
-          return `${option?.properties?.name}, ${option?.properties?.cadastral_id}, ${option?.properties?.category}`;
+          const { name, cadastralId, categoryTranslate } = option;
+          return `${name}, ${cadastralId}, ${categoryTranslate}`;
         }}
         loadOptions={(input: string, page: number | string) =>
           getLocationList(input, page)
@@ -1232,23 +1230,17 @@ const FormPage = () => {
                   disabled={disabled}
                   error={errors.objectName}
                   onChange={(value) => {
-                    handleChange("objectName", value?.properties?.name);
-                    handleChange(
-                      "objectType",
-                      formObjectLabelsToType[value?.properties?.category]
-                    );
-                    handleChange(
-                      "cadastralId",
-                      value?.properties?.cadastral_id
-                    );
+                    handleChange("objectName", value?.name);
+                    handleChange("objectType", value?.category);
+                    handleChange("cadastralId", value?.cadastralId);
                   }}
-                  getOptionValue={(option) => option?.properties?.cadastral_id}
+                  getOptionValue={(option) => option?.cadastralId}
                   getInputLabel={() =>
                     `${values?.objectName}, ${values?.cadastralId}`
                   }
                   getOptionLabel={(option) => {
-                    const { name, cadastral_id, category } = option?.properties;
-                    return `${name}, ${cadastral_id}, ${category}`;
+                    const { name, cadastralId, categoryTranslate } = option;
+                    return `${name}, ${cadastralId}, ${categoryTranslate}`;
                   }}
                   loadOptions={(input: string, page: number | string) =>
                     getLocationList(input, page)

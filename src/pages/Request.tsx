@@ -30,7 +30,6 @@ import {
   deliveryTypeLabels,
   formHistoryLabels,
   formLabels,
-  formObjectTypeLabels,
   inputLabels,
   pageTitles,
   purposeTypeLabels
@@ -40,7 +39,7 @@ import { validateRequest } from "../utils/validation";
 export interface RequestProps {
   id?: string;
   notifyEmail: string;
-  objects: { properties: { cadastral_id: string } }[];
+  objects: { cadastralId: string; category: string }[];
   status?: StatusTypes;
   delivery: DeliveryTypes;
   purpose: PurposeTypes;
@@ -76,7 +75,7 @@ const RequestPage = () => {
   const title = isNew(id) ? pageTitles.newRequest : pageTitles.request(id!);
 
   const { data: request, isLoading } = useQuery(
-    ["form", id],
+    ["request", id],
     () => api.request(id!),
     {
       onError: () => {
@@ -138,7 +137,7 @@ const RequestPage = () => {
       objects: objects.map((item) => {
         return {
           type: "CADASTRAL_ID",
-          id: item?.properties?.cadastral_id
+          id: item?.cadastralId
         };
       }),
       data: { unverified, extended }
@@ -154,15 +153,7 @@ const RequestPage = () => {
   const initialValues: RequestProps = {
     notifyEmail:
       request?.notifyEmail || currentProfile?.email || userEmail || "",
-    objects: !!request?.objects
-      ? request.objects.map((object) => ({
-          properties: {
-            ...object,
-            cadastral_id: object?.cadastralId,
-            category: formObjectTypeLabels[object?.category]
-          }
-        }))
-      : [],
+    objects: request?.objects || [],
     geom: request?.geom || undefined,
     agreeWithConditions: disabled || false,
     delivery: request?.delivery || DeliveryTypes.EMAIL,
@@ -234,13 +225,14 @@ const RequestPage = () => {
                   disabled={disabled}
                   label={inputLabels.objects}
                   values={values.objects}
-                  getOptionValue={(option) => option?.properties?.cadastral_id}
+                  getOptionValue={(option) => option?.cadastralId}
                   error={errors.objectName}
                   onChange={(value) => {
                     handleChange("objects", value);
                   }}
                   getOptionLabel={(option) => {
-                    return `${option?.properties?.name}, ${option?.properties?.cadastral_id}, ${option?.properties?.category}`;
+                    const { name, cadastralId, categoryTranslate } = option;
+                    return `${name}, ${cadastralId}, ${categoryTranslate}`;
                   }}
                   loadOptions={(input: string, page: number | string) =>
                     getLocationList(input, page)
