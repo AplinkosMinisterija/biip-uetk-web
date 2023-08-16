@@ -381,6 +381,8 @@ export const requestStatusLabels = {
 export const formObjectTypeLabels = {
   [FormObjectType.CANAL]: "Kanalas",
   [FormObjectType.EARTH_DAM]: "Žemių užtvanka",
+  [FormObjectType.INTERMEDIATE_WATER_BODY]: "Tarpinis vandens telkinys",
+  [FormObjectType.TERRITORIAL_WATER_BODY]: "Teritorinis vandens telkinys",
   [FormObjectType.FISH_PASS]: "Žuvų perlaida",
   [FormObjectType.HYDRO_POWER_PLANT]: "Hidroelektrinė",
   [FormObjectType.ISOLATED_WATER_BODY]:
