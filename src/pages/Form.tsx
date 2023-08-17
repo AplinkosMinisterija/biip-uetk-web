@@ -1179,6 +1179,7 @@ const FormPage = () => {
                   <SelectField
                     label={inputLabels.objectType}
                     value={values.objectType}
+                    disabled={mainFieldsDisabled}
                     options={formObjectTypes}
                     getOptionLabel={(option) => formObjectTypeLabels[option]}
                     error={errors.objectType}
