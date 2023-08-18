@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { device } from "../../styles";
 import { Url } from "../../utils/constants";
 import Button from "../buttons/Button";
+import { ErrorMessage } from "../other/ErrorMessage";
 import Icon from "../other/Icons";
 
 export interface MapProps {
@@ -12,6 +13,7 @@ export interface MapProps {
   error?: string;
   queryString?: string;
   value?: string;
+  showError?: boolean;
 }
 
 const DrawMap = ({
@@ -20,7 +22,8 @@ const DrawMap = ({
   error,
   onClose,
   queryString = "",
-  value
+  value,
+  showError = true
 }: MapProps) => {
   const [showModal, setShowModal] = useState(false);
   const iframeRef = useRef<any>(null);
@@ -84,7 +87,7 @@ const DrawMap = ({
           />
         </InnerContainer>
       </Container>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {showError && <ErrorMessage error={error} />}
     </>
   );
 };
@@ -180,12 +183,6 @@ const StyledIconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const ErrorMessage = styled.label`
-  position: relative;
-  color: ${({ theme }) => theme.colors.error};
-  font-size: 1.4rem;
 `;
 
 export default DrawMap;

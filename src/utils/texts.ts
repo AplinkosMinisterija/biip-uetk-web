@@ -163,7 +163,7 @@ export const pageTitles = {
   newRequest: "Naujas prašymas",
   excerpt: (id: string) => `Prašymas nr. ${id}`,
   profile: "Profilis",
-  newForm: "Naujas Duomenų teikimas",
+  newForm: "Naujas duomenų teikimas",
   updateForm: "Atnaujinti Duomenų teikimą",
   inviteTenantUser: "Pakviesti darbuotoją",
   updateTenantUser: "Atnaujinti darbuotoją",
@@ -375,7 +375,8 @@ export const requestStatusLabels = {
   [StatusTypes.SUBMITTED]: "Pateiktas pakartotinai ",
   [StatusTypes.RETURNED]: "Grąžintas taisymui",
   [StatusTypes.REJECTED]: "Atmestas",
-  [StatusTypes.APPROVED]: "Patvirtintas"
+  [StatusTypes.APPROVED]: "Patvirtintas",
+  [HistoryTypes.FILE_GENERATED]: "Išrašas paruoštas"
 };
 
 export const formObjectTypeLabels = {

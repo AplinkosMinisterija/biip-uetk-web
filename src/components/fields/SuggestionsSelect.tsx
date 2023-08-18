@@ -105,7 +105,6 @@ const SuggestionsSelect = ({
         selectedValue={value}
       />
       <OptionsContainer
-        hideNoOptions={true}
         values={suggestions}
         getOptionLabel={getOptionLabel}
         showSelect={showSelect}

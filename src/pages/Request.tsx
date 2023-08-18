@@ -10,6 +10,7 @@ import AsyncMultiSelect from "../components/fields/AsyncMultiSelect";
 import SelectField from "../components/fields/SelectField";
 import TextField from "../components/fields/TextField";
 import Map from "../components/map/DrawMap";
+import { ErrorMessage } from "../components/other/ErrorMessage";
 import { GeneratedFileComponent } from "../components/other/GeneratedFileComponent";
 import LoaderComponent from "../components/other/LoaderComponent";
 import TermsAndConditions from "../components/other/TermsAndConditions";
@@ -28,11 +29,11 @@ import { deliveryTypesOptions, purposeTypesOptions } from "../utils/options";
 import { slugs } from "../utils/routes";
 import {
   deliveryTypeLabels,
-  formHistoryLabels,
   formLabels,
   inputLabels,
   pageTitles,
-  purposeTypeLabels
+  purposeTypeLabels,
+  requestStatusLabels
 } from "../utils/texts";
 import { validateRequest } from "../utils/validation";
 
@@ -226,7 +227,7 @@ const RequestPage = () => {
                   label={inputLabels.objects}
                   values={values.objects}
                   getOptionValue={(option) => option?.cadastralId}
-                  error={errors.objectName}
+                  error={errors.objects}
                   onChange={(value) => {
                     handleChange("objects", value);
                   }}
@@ -237,6 +238,8 @@ const RequestPage = () => {
                   loadOptions={(input: string, page: number | string) =>
                     getLocationList(input, page)
                   }
+                  placeholder={"Visi objektai"}
+                  showError={false}
                 />
 
                 <Map
@@ -245,7 +248,9 @@ const RequestPage = () => {
                   onSave={(data) => handleChange("geom", data)}
                   value={values?.geom}
                   height={"300px"}
+                  showError={false}
                 />
+                <ErrorMessage error="Prašome nurodyti, ar pageidaujate pasirinkti vietą iš žemėlapio ar objektus iš pateiktų objektų sąrašo" />
               </MapContainer>
             </SimpleContainer>
 
@@ -267,7 +272,7 @@ const RequestPage = () => {
             )}
             <FormHistoryContainer
               name={`historyRequests-${id}`}
-              formHistoryLabels={formHistoryLabels}
+              formHistoryLabels={requestStatusLabels}
               endpoint={Api.getRequestHistory}
             />
           </ColumnTwo>
