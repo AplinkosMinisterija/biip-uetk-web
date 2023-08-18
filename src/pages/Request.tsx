@@ -250,7 +250,9 @@ const RequestPage = () => {
                   height={"300px"}
                   showError={false}
                 />
-                <ErrorMessage error="Prašome nurodyti, ar pageidaujate pasirinkti vietą iš žemėlapio ar objektus iš pateiktų objektų sąrašo" />
+                {errors?.geom && errors.objects && (
+                  <ErrorMessage error="Prašome nurodyti, ar pageidaujate pasirinkti vietą iš žemėlapio ar objektus iš pateiktų objektų sąrašo" />
+                )}
               </MapContainer>
             </SimpleContainer>
 

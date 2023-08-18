@@ -164,7 +164,7 @@ export const pageTitles = {
   excerpt: (id: string) => `Prašymas nr. ${id}`,
   profile: "Profilis",
   newForm: "Naujas duomenų teikimas",
-  updateForm: "Atnaujinti Duomenų teikimą",
+  updateForm: "Atnaujinti duomenų teikimą",
   inviteTenantUser: "Pakviesti darbuotoją",
   updateTenantUser: "Atnaujinti darbuotoją",
   forms: "Duomenų teikimai",
