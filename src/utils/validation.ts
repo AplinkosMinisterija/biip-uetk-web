@@ -215,14 +215,38 @@ export const loginSchema = Yup.object().shape({
   password: Yup.string().required(validationTexts.requireText)
 });
 
-export const validateRequest = Yup.object().shape({
-  delivery: Yup.string().required(validationTexts.requireText).nullable(),
-  purpose: Yup.string().required(validationTexts.requireText).nullable(),
-  agreeWithConditions: Yup.boolean()
-    .required(validationTexts.requireSelect)
-    .oneOf([true], validationTexts.requireSelect),
-  notifyEmail: Yup.string()
-    .email(validationTexts.badEmailFormat)
-    .required(validationTexts.requireText)
-    .nullable()
-});
+export const validateRequest = Yup.object().shape(
+  {
+    delivery: Yup.string().required(validationTexts.requireText).nullable(),
+    purpose: Yup.string().required(validationTexts.requireText).nullable(),
+    agreeWithConditions: Yup.boolean()
+      .required(validationTexts.requireSelect)
+      .oneOf([true], validationTexts.requireSelect),
+    notifyEmail: Yup.string()
+      .email(validationTexts.badEmailFormat)
+      .required(validationTexts.requireText)
+      .nullable(),
+    objects: Yup.array()
+      .when(["geom", "objects"], {
+        is: (geom, objects) => {
+          return isEmpty(geom) && isEmpty(objects);
+        },
+        then: Yup.array().min(1, validationTexts.requireSelect)
+      })
+      .nullable(),
+    geom: Yup.object()
+      .when(["geom", "objects"], {
+        is: (geom, objects) => {
+          return isEmpty(geom) && isEmpty(objects);
+        },
+        then: Yup.object().required(validationTexts.requireSelect).nullable()
+      })
+      .nullable()
+  },
+  [
+    ["geom", "objects"],
+    ["objects", "geom"],
+    ["geom", "geom"],
+    ["objects", "objects"]
+  ]
+);

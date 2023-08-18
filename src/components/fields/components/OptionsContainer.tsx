@@ -13,10 +13,8 @@ export interface OptionsContainerProps {
   values?: any[];
   disabled?: boolean;
   getOptionLabel: (option: any) => string;
-  handleScroll?: (option: any) => any;
   loading?: boolean;
   showSelect: boolean;
-  hideNoOptions?: boolean;
   observerRef?: any;
   handleClick: (option: any) => any;
 }
@@ -24,21 +22,13 @@ export interface OptionsContainerProps {
 const OptionsContainer = ({
   values = [],
   disabled = false,
-  hideNoOptions = false,
   getOptionLabel,
   handleClick,
-  handleScroll,
   showSelect,
   loading,
   observerRef
 }: OptionsContainerProps) => {
-  if (!showSelect || disabled) {
-    return <></>;
-  }
-
-  if (isEmpty(values) && hideNoOptions) {
-    return <></>;
-  }
+  const display = showSelect && !disabled;
 
   const renderOptions = () => {
     if (isEmpty(values))
@@ -63,28 +53,23 @@ const OptionsContainer = ({
           );
         })}
         {loading && <LoaderComponent />}
-        {observerRef && <div ref={observerRef} />}
       </>
     );
   };
-
   return (
-    <OptionContainer
-      onClick={(e) => e.stopPropagation()}
-      className="optionContainer"
-      onScroll={handleScroll}
-    >
+    <OptionContainer display={display}>
       {renderOptions()}
+      {observerRef && <ObserverRef display={display} ref={observerRef} />}
     </OptionContainer>
   );
 };
 
-const OptionContainer = styled.div`
+const OptionContainer = styled.div<{ display: boolean }>`
+  display: ${({ display }) => (display ? "block" : "none")};
   position: absolute;
-  z-index: 9;
+  z-index: 29;
   width: 100%;
   padding: 10px 0px;
-  display: block;
   max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -114,6 +99,10 @@ const Option = styled.div`
   &:hover {
     background: #f3f3f7 0% 0% no-repeat padding-box;
   }
+`;
+
+const ObserverRef = styled.div<{ display: boolean }>`
+  display: ${({ display }) => (display ? "block" : "none")};
 `;
 
 export default OptionsContainer;

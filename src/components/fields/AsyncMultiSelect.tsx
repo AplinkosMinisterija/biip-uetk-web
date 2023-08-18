@@ -45,6 +45,8 @@ const AsyncMultiSelect = ({
   hasBorder,
   showError = true,
   editable = true,
+
+  placeholder,
   className,
   left,
   right,
@@ -69,6 +71,7 @@ const AsyncMultiSelect = ({
     handleToggleSelect,
     input,
     showSelect,
+    observerRef,
     handleBlur,
     handleClick
   } = useAsyncSelectData({
@@ -84,9 +87,11 @@ const AsyncMultiSelect = ({
       onClick={handleToggleSelect}
       label={label}
       error={error}
+      showError={showError}
       handleBlur={handleBlur}
     >
       <MultiTextField
+        placeholder={placeholder}
         values={values}
         onRemove={({ index }) => {
           handleRemove(index, onChange, values);
@@ -101,6 +106,7 @@ const AsyncMultiSelect = ({
         values={filterSelectedOptions(suggestions, values, getOptionValue)}
         getOptionLabel={getOptionLabel}
         loading={loading}
+        observerRef={observerRef}
         showSelect={showSelect}
         handleClick={handleClick}
       />
