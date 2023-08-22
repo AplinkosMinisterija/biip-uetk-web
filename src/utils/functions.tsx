@@ -10,7 +10,8 @@ import {
   FormObjectType,
   FormProviderType,
   RolesTypes,
-  StatusTypes
+  StatusTypes,
+  SubPoolTypes
 } from "./constants";
 import { validationTexts } from "./texts";
 
@@ -56,6 +57,7 @@ export const bytesToMb = (bytes: number) => {
 
 export const formObjectTypes = Object.keys(FormObjectType);
 export const formProviderTypes = Object.keys(FormProviderType);
+export const subPoolTypes = Object.keys(SubPoolTypes);
 
 export const canShowResponseDate = (status) => {
   return [
