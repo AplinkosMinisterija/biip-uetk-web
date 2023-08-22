@@ -10,6 +10,7 @@ import {
   RolesTypes,
   ServerErrors,
   StatusTypes,
+  SubPoolTypes,
   Units,
   WaterExcessCulvertType
 } from "./constants";
@@ -23,8 +24,8 @@ export const emptyStateLabels = {
 
 export const emptyStateUrlLabels = {
   form: "naują  duomenų teikimą",
-  user: "naują naudotoją.",
-  request: "naują prašymą."
+  user: "naują naudotoją",
+  request: "naują prašymą"
 };
 
 export const url = {
@@ -364,7 +365,7 @@ export const roleLabels = {
 
 export const formStatusLabels = {
   [StatusTypes.CREATED]: "Pateikta",
-  [StatusTypes.SUBMITTED]: "Pateikta pakartotinai ",
+  [StatusTypes.SUBMITTED]: "Pateikta pakartotinai",
   [StatusTypes.RETURNED]: "Grąžinta taisymui",
   [StatusTypes.REJECTED]: "Atmesta",
   [StatusTypes.APPROVED]: "Patvirtinta"
@@ -372,7 +373,7 @@ export const formStatusLabels = {
 
 export const requestStatusLabels = {
   [StatusTypes.CREATED]: "Pateiktas",
-  [StatusTypes.SUBMITTED]: "Pateiktas pakartotinai ",
+  [StatusTypes.SUBMITTED]: "Pateiktas pakartotinai",
   [StatusTypes.RETURNED]: "Grąžintas taisymui",
   [StatusTypes.REJECTED]: "Atmestas",
   [StatusTypes.APPROVED]: "Patvirtintas",
@@ -485,15 +486,15 @@ export const descriptions = {
     "Jūsų nurodytu el. paštu išsiuntėme prisijungimo instrukciją",
   biipDescription: "Biologinės įvairovės informacinė platforma",
   passwordChangedDescription:
-    "  Jūsų slaptažodis sėkmingai pakeistas. Galite prisijungti prie paskyros",
+    "Jūsų slaptažodis sėkmingai pakeistas. Galite prisijungti prie paskyros",
   passwordCreatedDescription:
-    "  Jūsų slaptažodis sėkmingai sukurtas. Galite prisijungti prie paskyros",
+    "Jūsų slaptažodis sėkmingai sukurtas. Galite prisijungti prie paskyros",
   resetPasswordDescription:
     "Naujas slaptažodis neturi sutapti su senuoju slaptažodžiu",
   tableNotFound: "Atsiprašome nieko neradome pagal pasirinktus filtrus",
   footerTitle: "© Lietuvos Respublikos aplinkos ministerija, 2013-2022",
   footerDescription:
-    "  Duomenys apie įmonę kaupiami ir saugomi Juridinių asmenų registre. Įmonės kodas: 188602370 | Adresas: A. Jakšto g. 4, 01105 Vilnius Telefonas: 8 706 63661 | El. paštas: info@am.lt"
+    "Duomenys apie įmonę kaupiami ir saugomi Juridinių asmenų registre. Įmonės kodas: 188602370 | Adresas: A. Jakšto g. 4, 01105 Vilnius Telefonas: 8 706 63661 | El. paštas: info@am.lt"
 };
 
 export const deleteTitles = {
@@ -543,4 +544,20 @@ export const purposeTypeLabels = {
   [PurposeTypes.TECHNICAL_PROJECT]: "Techniniam projektui",
   [PurposeTypes.SCIENTIFIC_INVESTIGATION]: "Moksliniam tyrimui",
   [PurposeTypes.OTHER]: "Kiti tikslai"
+};
+
+export const subPoolTypeLabels = {
+  [SubPoolTypes.LT1100]: "Nemuno mažųjų intakų (su Nemunu) upių pabaseinis",
+  [SubPoolTypes.LT1111]: "Merkio upės pabaseinis",
+  [SubPoolTypes.LT1120]: "Neries mažųjų intakų (su Nerimi) upių pabaseinis ",
+  [SubPoolTypes.LT1121]: "Žeimenos upės pabaseinis",
+  [SubPoolTypes.LT1122]: "Šventosios upės pabaseinis",
+  [SubPoolTypes.LT1130]: "Nevėžio upės pabaseinis",
+  [SubPoolTypes.LT1140]: "Dubysos upės pabaseinis",
+  [SubPoolTypes.LT1150]: "Šešupės upės pabaseinis",
+  [SubPoolTypes.LT1160]: "Jūros upės pabaseinis",
+  [SubPoolTypes.LT1170]: "Minijos upės pabaseinis",
+  [SubPoolTypes.LT3400]: "Lielupės upės mažųjų intakų pabaseinis",
+  [SubPoolTypes.LT3410]: "Mūšos upės pabaseinis",
+  [SubPoolTypes.LT3420]: "Nemunėlio upės pabaseinis"
 };

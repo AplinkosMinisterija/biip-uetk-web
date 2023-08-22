@@ -11,6 +11,22 @@ export enum FormObjectType {
   FISH_PASS = "FISH_PASS"
 }
 
+export enum SubPoolTypes {
+  LT1100 = "LT1100",
+  LT1111 = "LT1111",
+  LT1120 = "LT1120",
+  LT1121 = "LT1121",
+  LT1122 = "LT1122",
+  LT1130 = "LT1130",
+  LT1140 = "LT1140",
+  LT1150 = "LT1150",
+  LT1160 = "LT1160",
+  LT1170 = "LT1170",
+  LT3400 = "LT3400",
+  LT3410 = "LT3410",
+  LT3420 = "LT3420"
+}
+
 export enum RequestObjectType {
   RIVER = "RIVER",
   CANAL = "CANAL",
@@ -174,61 +190,6 @@ export enum TableItemWidth {
   SMALL = "40px",
   LARGE = "30px"
 }
-
-export const subPoolOptions = [
-  {
-    code: "LT1100",
-    label: "Nemuno mažųjų intakų (su Nemunu) upių pabaseinis"
-  },
-  {
-    code: "LT1111",
-    label: "Merkio upės pabaseinis"
-  },
-  {
-    code: "LT1120",
-    label: "Neries mažųjų intakų (su Nerimi) upių pabaseinis "
-  },
-  {
-    code: "LT1121",
-    label: "Žeimenos upės pabaseinis"
-  },
-  {
-    code: "LT1122",
-    label: "Šventosios upės pabaseinis"
-  },
-  {
-    code: "LT1130",
-    label: "Nevėžio upės pabaseinis"
-  },
-  {
-    code: "LT1140",
-    label: "Dubysos upės pabaseinis"
-  },
-  {
-    code: "LT1150",
-    label: "Šešupės upės pabaseinis"
-  },
-  {
-    code: "LT1160",
-    label: "Jūros upės pabaseinis"
-  },
-  {
-    code: "LT1170",
-    label: "Minijos upės pabaseinis "
-  },
-  {
-    code: "LT3400",
-    label: "Lielupės upės mažųjų intakų pabaseinis "
-  },
-  {
-    code: "LT3410",
-    label: "Mūšos upės pabaseinis"
-  },
-  {
-    code: "LT3420",
-    label: "Nemunėlio upės pabaseinis"
-  }
-];
 
 export enum FormDataFields {
   poolArea = "poolArea",

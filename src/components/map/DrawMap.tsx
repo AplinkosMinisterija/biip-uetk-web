@@ -155,7 +155,7 @@ const StyledIframe = styled.iframe<{
 const StyledButton = styled(Button)<{ popup: boolean }>`
   position: absolute;
   z-index: 10;
-  top: 10px;
+  top: ${({ popup }) => (popup ? 28 : 10)}px;
   right: ${({ popup }) => (popup ? 28 : 11)}px;
   min-width: 28px;
 

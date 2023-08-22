@@ -8,6 +8,7 @@ import { useAppSelector } from "../state/hooks";
 import { device } from "../styles";
 import { User } from "../types";
 import { handleAlert, handleSuccess } from "../utils/functions";
+import { useGetCurrentProfile } from "../utils/hooks";
 import { handleGetCurrentUser } from "../utils/loginFunctions";
 import { formLabels, inputLabels, pageTitles } from "../utils/texts";
 import { validateProfileForm } from "../utils/validation";
@@ -21,6 +22,7 @@ export interface UserProps {
 
 const Profile = () => {
   const user: User = useAppSelector((state) => state?.user?.userData);
+  const currentProfile = useGetCurrentProfile();
   const updateForm = useMutation(
     (values: UserProps) => api.updateProfile(user?.id!, values),
     {
@@ -38,7 +40,7 @@ const Profile = () => {
   const initialProfileValues: UserProps = {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
-    email: user?.email || "",
+    email: currentProfile?.email || user?.email || "",
     phone: user?.phone || ""
   };
 

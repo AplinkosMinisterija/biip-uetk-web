@@ -44,7 +44,6 @@ import {
   FormType,
   HydroPowerPlantType,
   Resources,
-  subPoolOptions,
   WaterExcessCulvertType
 } from "../utils/constants";
 import {
@@ -53,7 +52,8 @@ import {
   getLocationList,
   handleAlert,
   isMapEditAttribute,
-  isNew
+  isNew,
+  subPoolTypes
 } from "../utils/functions";
 import { slugs } from "../utils/routes";
 import {
@@ -67,6 +67,7 @@ import {
   hydroPowerPlantTypeLabels,
   inputLabels,
   pageTitles,
+  subPoolTypeLabels,
   waterExcessCulvertTypeLabels
 } from "../utils/texts";
 import { validateForm } from "../utils/validation";
@@ -162,9 +163,10 @@ const FormPage = () => {
   };
 
   const fields = {
-    poolArea: (value, error, handleChange) => (
+    poolArea: (value, error, handleChange, showError = true) => (
       <NumericTextField
         label={inputLabels.poolArea}
+        showError={showError}
         value={value}
         error={error}
         name="poolArea"
@@ -173,8 +175,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    waterVolume: (value, error, handleChange) => (
+    waterVolume: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.waterVolume}
         value={value}
         error={error}
@@ -185,8 +188,9 @@ const FormPage = () => {
       />
     ),
 
-    waterLevelAltitude: (value, error, handleChange) => (
+    waterLevelAltitude: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.waterLevelAltitude}
         value={value}
         error={error}
@@ -196,8 +200,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    maxWaterDepth: (value, error, handleChange) => (
+    maxWaterDepth: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.maxWaterDepth}
         value={value}
         error={error}
@@ -207,8 +212,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    avgWaterDepth: (value, error, handleChange) => (
+    avgWaterDepth: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.avgWaterDepth}
         value={value}
         error={error}
@@ -218,8 +224,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    maxWaterDepthNPL: (value, error, handleChange) => (
+    maxWaterDepthNPL: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.maxWaterDepthNPL}
         value={value}
         error={error}
@@ -229,8 +236,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    avgWaterDepthNPL: (value, error, handleChange) => (
+    avgWaterDepthNPL: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.avgWaterDepthNPL}
         value={value}
         error={error}
@@ -240,8 +248,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    usefulWaterVolume: (value, error, handleChange) => (
+    usefulWaterVolume: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.usefulWaterVolume}
         value={value}
         error={error}
@@ -251,8 +260,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    distanceFromRiverMouth: (value, error, handleChange) => (
+    distanceFromRiverMouth: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.distanceFromRiverMouth}
         value={value}
         error={error}
@@ -262,8 +272,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    pondHeight: (value, error, handleChange) => (
+    pondHeight: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.pondHeight}
         value={value}
         error={error}
@@ -272,8 +283,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    maxPondHeight: (value, error, handleChange) => (
+    maxPondHeight: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.maxPondHeight}
         value={value}
         error={error}
@@ -282,8 +294,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    normalPondLevelNPL: (value, error, handleChange) => (
+    normalPondLevelNPL: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.normalPondLevelNPL}
         value={value}
         error={error}
@@ -293,8 +306,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    constructionYear: (value, error, handleChange) => (
+    constructionYear: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.constructionYear}
         value={value}
         error={error}
@@ -303,8 +317,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    earthDamWidth: (value, error, handleChange) => (
+    earthDamWidth: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.earthDamWidth}
         value={value}
         error={error}
@@ -313,8 +328,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    earthDamLength: (value, error, handleChange) => (
+    earthDamLength: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.earthDamLength}
         value={value}
         error={error}
@@ -323,8 +339,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    environmentalDebit: (value, error, handleChange) => (
+    environmentalDebit: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.environmentalDebit}
         value={value}
         error={error}
@@ -333,8 +350,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    fishPassDebit: (value, error, handleChange) => (
+    fishPassDebit: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.fishPassDebit}
         value={value}
         error={error}
@@ -344,8 +362,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    fishPassProjectDebit: (value, error, handleChange) => (
+    fishPassProjectDebit: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.fishPassProjectDebit}
         value={value}
         error={error}
@@ -355,8 +374,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    minDebit: (value, error, handleChange) => (
+    minDebit: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.minDebit}
         value={value}
         error={error}
@@ -368,8 +388,9 @@ const FormPage = () => {
       />
     ),
 
-    maxDebit: (value, error, handleChange) => (
+    maxDebit: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.maxDebit}
         value={value}
         error={error}
@@ -380,8 +401,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    qvid: (value, error, handleChange) => (
+    qvid: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.qvid}
         value={value}
         error={error}
@@ -391,8 +413,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    q95: (value, error, handleChange) => (
+    q95: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.q95}
         value={value}
         error={error}
@@ -402,8 +425,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    q1: (value, error, handleChange) => (
+    q1: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.q1}
         value={value}
         error={error}
@@ -413,8 +437,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    q5: (value, error, handleChange) => (
+    q5: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.q5}
         value={value}
         error={error}
@@ -424,8 +449,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    avgPerennialDebit95: (value, error, handleChange) => (
+    avgPerennialDebit95: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={formLabels.avgPerennialDebit95}
         value={value}
         error={error}
@@ -435,8 +461,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    power: (value, error, handleChange) => (
+    power: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.power}
         value={value}
         wholeNumber={true}
@@ -447,8 +474,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    maxPressureHeight: (value, error, handleChange) => (
+    maxPressureHeight: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.maxPressureHeight}
         value={value}
         error={error}
@@ -458,8 +486,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    maxPondPressureHeight: (value, error, handleChange) => (
+    maxPondPressureHeight: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.maxPondPressureHeight}
         value={value}
         error={error}
@@ -470,8 +499,9 @@ const FormPage = () => {
       />
     ),
 
-    type: (value, error, handleChange, options, labels) => (
+    type: (value, error, handleChange, showError = true, options, labels) => (
       <SelectField
+        showError={showError}
         label={inputLabels.type}
         value={value}
         error={error}
@@ -482,40 +512,45 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    pondedRiver: (value, error, handleChange) => (
+    pondedRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        showError={showError}
         label={inputLabels.pondedRiver}
         value={value}
         error={error}
         handleChange={handleChange}
       />
     ),
-    olderWaterBody: (value, error, handleChange) => (
+    olderWaterBody: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        showError={showError}
         label={inputLabels.olderWaterBody}
         value={value}
         error={error}
         handleChange={handleChange}
       />
     ),
-    river: (value, error, handleChange) => (
+    river: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        showError={showError}
         label={inputLabels.river}
         value={value}
         error={error}
         handleChange={handleChange}
       />
     ),
-    lake: (value, error, handleChange) => (
+    lake: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        showError={showError}
         label={inputLabels.lake}
         value={value}
         error={error}
         handleChange={handleChange}
       />
     ),
-    riverLength: (value, error, handleChange) => (
+    riverLength: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.riverLength}
         value={value}
         error={error}
@@ -524,8 +559,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    name: (value, error, handleChange) => (
+    name: (value, error, handleChange, showError = true) => (
       <TextField
+        showError={showError}
         label={inputLabels.name}
         value={value}
         error={error}
@@ -534,8 +570,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    cadastralId: (value, error, handleChange) => (
+    cadastralId: (value, error, handleChange, showError = true) => (
       <TextField
+        showError={showError}
         label={inputLabels.cadastralId}
         value={value}
         error={error}
@@ -544,8 +581,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    hydrostaticId: (value, error, handleChange) => (
+    hydrostaticId: (value, error, handleChange, showError = true) => (
       <TextField
+        showError={showError}
         label={inputLabels.hydrostaticId}
         value={value}
         error={error}
@@ -554,8 +592,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    inflowOrder: (value, error, handleChange) => (
+    inflowOrder: (value, error, handleChange, showError = true) => (
       <TextField
+        showError={showError}
         label={inputLabels.inflowOrder}
         value={value}
         error={error}
@@ -564,8 +603,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    otherData: (value, error, handleChange) => (
+    otherData: (value, error, handleChange, showError = true) => (
       <TextField
+        showError={showError}
         label={inputLabels.otherData}
         value={value}
         error={error}
@@ -574,8 +614,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    avgDebitQGrid: (value, error, handleChange) => (
+    avgDebitQGrid: (value, error, handleChange, showError = true) => (
       <TextField
+        showError={showError}
         label={inputLabels.avgDebitQGrid}
         value={value}
         error={error}
@@ -584,21 +625,22 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    subPool: (value, error, handleChange) => (
+    subPool: (value, error, handleChange, showError = true) => (
       <SelectField
+        showError={showError}
         label={inputLabels.subPool}
         value={value}
         error={error}
         name="subPool"
-        options={subPoolOptions}
+        options={subPoolTypes}
         onChange={(value) => handleChange(value)}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={(option) => subPoolTypeLabels[option]}
         disabled={disabled}
       />
     ),
-
-    category: (value, error, handleChange) => (
+    category: (value, error, handleChange, showError = true) => (
       <SelectField
+        showError={showError}
         label={inputLabels.category}
         value={value}
         options={formObjectTypes}
@@ -609,8 +651,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    olderRiverBank: (value, error, handleChange) => (
+    olderRiverBank: (value, error, handleChange, showError = true) => (
       <TextField
+        showError={showError}
         label={inputLabels.olderRiverBank}
         value={value}
         error={error}
@@ -619,16 +662,18 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    olderRiver: (value, error, handleChange) => (
+    olderRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        showError={showError}
         label={inputLabels.olderRiver}
         value={value}
         error={error}
         handleChange={handleChange}
       />
     ),
-    surfaceArea: (value, error, handleChange) => (
+    surfaceArea: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.surfaceArea}
         value={value}
         error={error}
@@ -638,8 +683,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    lakeLength: (value, error, handleChange) => (
+    lakeLength: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.lakeLength}
         value={value}
         error={error}
@@ -649,8 +695,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    lakeNumberInSquare: (value, error, handleChange) => (
+    lakeNumberInSquare: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.lakeNumberInSquare}
         value={value}
         error={error}
@@ -659,8 +706,9 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    lakeSquareNumber: (value, error, handleChange) => (
+    lakeSquareNumber: (value, error, handleChange, showError = true) => (
       <NumericTextField
+        showError={showError}
         label={inputLabels.lakeSquareNumber}
         value={value}
         error={error}
@@ -669,9 +717,10 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    lakeWidth: (value, error, handleChange) => (
+    lakeWidth: (value, error, handleChange, showError = true) => (
       <NumericTextField
         label={inputLabels.lakeWidth}
+        showError={showError}
         value={value}
         error={error}
         name="lakeWidth"
@@ -680,9 +729,10 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    bankLineLength: (value, error, handleChange) => (
+    bankLineLength: (value, error, handleChange, showError = true) => (
       <NumericTextField
         label={inputLabels.bankLineLength}
+        showError={showError}
         value={value}
         error={error}
         name="bankLineLength"
@@ -691,9 +741,10 @@ const FormPage = () => {
         disabled={disabled}
       />
     ),
-    directRiver: (value, error, handleChange) => (
+    directRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
         label={inputLabels.directRiver}
+        showError={showError}
         value={value}
         error={error}
         handleChange={handleChange}
@@ -701,15 +752,24 @@ const FormPage = () => {
     )
   };
 
-  const RenderWaterBodyField = ({ value, error, handleChange, label }) => {
+  const RenderWaterBodyField = ({
+    value,
+    error,
+    handleChange,
+    showError,
+    label
+  }) => {
     return (
       <AsyncSelectField
         label={label}
         disabled={disabled}
+        showError={showError}
         value={value}
         error={error}
         onChange={(value) =>
-          handleChange(`${value?.name}, ${value?.cadastral_id}`)
+          handleChange(
+            `${value?.name}, ${value?.cadastralId}, ${value?.categoryTranslate}`
+          )
         }
         getOptionValue={(option) => option?.cadastralId}
         getInputLabel={(option) => option}
@@ -917,6 +977,7 @@ const FormPage = () => {
               data?.type,
               errors?.data?.type,
               (value) => handleChange("data.type", value),
+              true,
               options,
               labels
             )}
@@ -978,6 +1039,7 @@ const FormPage = () => {
               data?.type,
               errors?.data?.type,
               (value) => handleChange("data.type", value),
+              true,
               options,
               labels
             )}
@@ -1008,6 +1070,7 @@ const FormPage = () => {
             data?.type,
             errors?.data?.type,
             (value) => handleChange("data.type", value),
+            true,
             options,
             labels
           )}
@@ -1199,6 +1262,9 @@ const FormPage = () => {
                   disabled={mainFieldsDisabled}
                   onChange={(e) => {
                     handleChange("type", e);
+                    handleChange("objectName", "");
+                    handleChange("objectType", "");
+                    handleChange("cadastralId", "");
                     handleChange("data", {});
                     handleChange("editFields", [
                       { attribute: undefined, value: "" }
@@ -1235,7 +1301,9 @@ const FormPage = () => {
                   }}
                   getOptionValue={(option) => option?.cadastralId}
                   getInputLabel={() =>
-                    `${values?.objectName}, ${values?.cadastralId}`
+                    `${values?.objectName}, ${values?.cadastralId}, ${
+                      formObjectTypeLabels[values?.objectType!]
+                    }`
                   }
                   getOptionLabel={(option) => {
                     const { name, cadastralId, categoryTranslate } = option;
@@ -1333,6 +1401,7 @@ const FormPage = () => {
                                   `editFields.${index}.value`,
                                   value
                                 ),
+                              false,
                               options,
                               labels
                             )}
