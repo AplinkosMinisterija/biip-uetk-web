@@ -29,6 +29,7 @@ export interface GetAllResponse<T> {
 
 interface TableList<T = any> {
   filter?: T;
+  query?: any;
   page?: number | string;
   id?: string;
   pageSize?: string;
@@ -206,9 +207,10 @@ class Api {
     });
   };
 
-  getLocations = async ({ search, page }: TableList): Promise<Request> =>
+  getLocations = async ({ search, page, query }: TableList): Promise<Request> =>
     await this.getAll({
       resource: Resources.SEARCH,
+      query,
       search,
       page
     });

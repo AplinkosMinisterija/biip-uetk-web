@@ -145,8 +145,12 @@ export const handleDateRestriction = (filter: FilterConfig, values: any) => {
   }
 };
 
-export const getLocationList = async (input: string, page: number | string) => {
-  return await api.getLocations({ search: input, page });
+export const getLocationList = async (
+  input: string,
+  page: number | string,
+  query: any
+) => {
+  return await api.getLocations({ search: input, page, query });
 };
 
 export const isMapEditAttribute = (attribute) =>
