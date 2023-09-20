@@ -18,7 +18,7 @@ const FileDownloadContainer = ({ url, showFileName }: FileDownloadProps) => {
             e.stopPropagation();
           }}
         >
-          <DownloadContainer href={url} download>
+          <DownloadContainer target={"_blank"} href={url} download>
             {buttonsTitles.download}
             <StyledIcon name={"download"} />
           </DownloadContainer>
