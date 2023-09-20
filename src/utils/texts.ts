@@ -24,7 +24,7 @@ export const emptyStateLabels = {
 export const emptyStateUrlLabels = {
   form: "naują  duomenų teikimą",
   user: "naują naudotoją",
-  request: "naują duomenų teikimą"
+  request: "naują duomenų gavimą"
 };
 
 export const url = {
