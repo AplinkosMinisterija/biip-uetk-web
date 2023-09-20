@@ -18,14 +18,13 @@ import {
 export const emptyStateLabels = {
   form: "Jūs neturite pateikę duomenų teikimų. Sukurkite ",
   user: "Jūs neturite Naudotojų. Sukurkite ",
-  request: "Jūs neturite pateikę prašymų. Pateikite ",
-  excerpt: "Jūs neturite pateikę išrašų prašymų Pateikite "
+  request: "Jūs neturite pateikę duomenų gavimo. Pateikite "
 };
 
 export const emptyStateUrlLabels = {
   form: "naują  duomenų teikimą",
   user: "naują naudotoją",
-  request: "naują prašymą"
+  request: "naują duomenų gavimą"
 };
 
 export const url = {
@@ -159,10 +158,10 @@ export const formTableLabels = {
 };
 
 export const pageTitles = {
-  request: (id: string) => `Prašymo nr. ${id}`,
-  requests: "Prašymai",
-  newRequest: "Naujas prašymas",
-  excerpt: (id: string) => `Prašymas nr. ${id}`,
+  request: (id: string) => `Duomenų teikimo nr. ${id}`,
+  requests: "Duomenų gavimas",
+  newRequest: "Naujas duomenų gavimass",
+  excerpt: (id: string) => `Duomenų gavimo nr. ${id}`,
   profile: "Profilis",
   newForm: "Naujas duomenų teikimas",
   updateForm: "Atnaujinti duomenų teikimą",
@@ -176,7 +175,7 @@ export const pageTitles = {
 
 export const menuLabels = {
   forms: "Duomenų teikimas",
-  requests: "Prašymai",
+  requests: "Duomenų gavimas",
   profile: "Profilis",
   tenantUsers: "Įmonės darbuotojai",
   myProfile: "MANO PASKYRA"
@@ -187,8 +186,7 @@ export const buttonsTitles = {
   forgotPassword: "Pamiršau slaptažodį",
   login: "Prisijungti",
   eLogin: "Prisijungti per el. valdžios vartus",
-  fillOutRequest: "Pildyti prašymą",
-  newExcerpt: "Naujas prašymas",
+  newExcerpt: "Naujas duomenų gavimas",
   inviteTenantUser: "Pakviesti darbuotoją",
   columns: "Stulpeliai",
   addNew: "+ Pridėti naują",
@@ -235,7 +233,7 @@ export const formLabels = {
   photos: "Nuotraukos",
   profileInfo: "Profilio informacija",
   additionalInfo: "Papildoma informacija",
-  contactInfo: "Prašymo teikėjo kontaktinė informacija",
+  contactInfo: "Duomenų gavimo teikėjo kontaktinė informacija",
   documents: "Dokumentai",
   infoAboutObject: "Informacija apie objektą",
   infoAboutUser: "Informacija apie naudotoją",
@@ -474,10 +472,6 @@ export const validationTexts = {
 };
 
 export const descriptions = {
-  getDataAboutPlaces:
-    "Norėdami matyti tikslų radaviečių žemėlapį, pateikite prašymą gauti duomenis.",
-  getMoreDataAboutPlaces:
-    "Norėdami matyti daugiau radaviečių žemėlapyje, pateikite prašymą gauti duomenis.",
   mainDescription:
     "Elektroninių paslaugų sistema teikianti ir gaunanti duomenis bei informaciją apie vandens telkinius.",
   forgotPasswordDescription:
