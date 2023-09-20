@@ -46,7 +46,6 @@ export interface RequestProps {
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
-  unverified?: boolean;
   extended?: boolean;
   geom: any;
   agreeWithConditions: boolean;
@@ -62,7 +61,6 @@ export interface RequestPayload {
   canEdit?: boolean;
   canValidate?: boolean;
   data?: {
-    unverified?: boolean;
     extended?: boolean;
   };
   geom: any;
@@ -131,8 +129,7 @@ const RequestPage = () => {
   );
 
   const handleSubmit = async (values: RequestProps) => {
-    const { agreeWithConditions, unverified, extended, objects, ...rest } =
-      values;
+    const { agreeWithConditions, extended, objects, ...rest } = values;
     const params: RequestPayload = {
       ...rest,
       objects: objects.map((item) => {
@@ -141,7 +138,7 @@ const RequestPage = () => {
           id: item?.cadastralId
         };
       }),
-      data: { unverified, extended }
+      data: { extended }
     };
 
     if (isNew(id)) {
@@ -159,7 +156,6 @@ const RequestPage = () => {
     agreeWithConditions: disabled || false,
     delivery: request?.delivery || DeliveryTypes.EMAIL,
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    unverified: request?.data?.unverified || false,
     extended: request?.data?.extended || false
   };
 
@@ -205,12 +201,6 @@ const RequestPage = () => {
                 />
               </Row>
               <Row columns={1}>
-                <SingleCheckBox
-                  disabled={disabled}
-                  label={inputLabels.receiveUnverifiedData}
-                  value={values.unverified}
-                  onChange={(value) => handleChange(`unverified`, value)}
-                />
                 <SingleCheckBox
                   disabled={disabled}
                   label={inputLabels.extended}
