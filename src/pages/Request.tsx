@@ -236,7 +236,7 @@ const RequestPage = () => {
                     return `${name}, ${cadastralId}, ${categoryTranslate}`;
                   }}
                   loadOptions={(input: string, page: number | string) =>
-                    getLocationList(input, page)
+                    getLocationList(input, page, {})
                   }
                   placeholder={"Visi objektai"}
                   showError={false}

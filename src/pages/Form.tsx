@@ -515,7 +515,9 @@ const FormPage = () => {
     pondedRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
         showError={showError}
+        name={"pondedRiver"}
         label={inputLabels.pondedRiver}
+        query={{ category: { $in: [FormObjectType.RIVER] } }}
         value={value}
         error={error}
         handleChange={handleChange}
@@ -523,8 +525,10 @@ const FormPage = () => {
     ),
     olderWaterBody: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        name={"olderWaterBody"}
         showError={showError}
         label={inputLabels.olderWaterBody}
+        query={{}}
         value={value}
         error={error}
         handleChange={handleChange}
@@ -532,17 +536,21 @@ const FormPage = () => {
     ),
     river: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        name={"river"}
         showError={showError}
         label={inputLabels.river}
+        query={{ category: { $in: [FormObjectType.RIVER] } }}
         value={value}
         error={error}
         handleChange={handleChange}
       />
     ),
-    lake: (value, error, handleChange, showError = true) => (
+    pond: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        name={"pond"}
         showError={showError}
-        label={inputLabels.lake}
+        label={inputLabels.pond}
+        query={{ category: { $in: [FormObjectType.POND] } }}
         value={value}
         error={error}
         handleChange={handleChange}
@@ -644,7 +652,9 @@ const FormPage = () => {
         label={inputLabels.category}
         value={value}
         options={formObjectTypes}
-        getOptionLabel={(option) => formObjectTypeLabels[option]}
+        getOptionLabel={(option) => {
+          return formObjectTypeLabels[option];
+        }}
         error={error}
         name="category"
         onChange={(value) => handleChange(value)}
@@ -664,6 +674,8 @@ const FormPage = () => {
     ),
     olderRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        name={"olderRiver"}
+        query={{ category: { $in: [FormObjectType.RIVER] } }}
         showError={showError}
         label={inputLabels.olderRiver}
         value={value}
@@ -743,6 +755,8 @@ const FormPage = () => {
     ),
     directRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
+        name={"directRiver"}
+        query={{ category: { $in: [FormObjectType.RIVER] } }}
         label={inputLabels.directRiver}
         showError={showError}
         value={value}
@@ -757,10 +771,13 @@ const FormPage = () => {
     error,
     handleChange,
     showError,
-    label
+    label,
+    query,
+    name
   }) => {
     return (
       <AsyncSelectField
+        name={name}
         label={label}
         disabled={disabled}
         showError={showError}
@@ -778,7 +795,7 @@ const FormPage = () => {
           return `${name}, ${cadastralId}, ${categoryTranslate}`;
         }}
         loadOptions={(input: string, page: number | string) =>
-          getLocationList(input, page)
+          getLocationList(input, page, query)
         }
       />
     );
@@ -1231,7 +1248,6 @@ const FormPage = () => {
       FormType.REMOVE === values.type
         ? formLabels.deregistration
         : formLabels.otherInfo;
-
     return (
       <Container>
         <ColumnOne>
@@ -1244,7 +1260,9 @@ const FormPage = () => {
                     value={values.objectType}
                     disabled={mainFieldsDisabled}
                     options={formObjectTypes}
-                    getOptionLabel={(option) => formObjectTypeLabels[option]}
+                    getOptionLabel={(option) => {
+                      return formObjectTypeLabels[option];
+                    }}
                     error={errors.objectType}
                     name="objectType"
                     onChange={(firstName) => {
@@ -1310,7 +1328,7 @@ const FormPage = () => {
                     return `${name}, ${cadastralId}, ${categoryTranslate}`;
                   }}
                   loadOptions={(input: string, page: number | string) =>
-                    getLocationList(input, page)
+                    getLocationList(input, page, {})
                   }
                 />
               )}
@@ -1328,10 +1346,10 @@ const FormPage = () => {
                   )}
                 </Row>
                 <Row repeat={1}>
-                  {fields.lake(
-                    values?.data?.lake,
-                    errors?.data?.lake,
-                    (value) => handleChange("data.lake", value)
+                  {fields.pond(
+                    values?.data?.pond,
+                    errors?.data?.pond,
+                    (value) => handleChange("data.pond", value)
                   )}
                 </Row>
                 <Row repeat={3}>

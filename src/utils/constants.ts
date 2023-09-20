@@ -7,7 +7,7 @@ export enum FormObjectType {
   ISOLATED_WATER_BODY = "ISOLATED_WATER_BODY",
   EARTH_DAM = "EARTH_DAM",
   WATER_EXCESS_CULVERT = "WATER_EXCESS_CULVERT",
-  HYDRO_POWER_PLANT = "HYDRO_POWER_PLAWNT",
+  HYDRO_POWER_PLANT = "HYDRO_POWER_PLANT",
   FISH_PASS = "FISH_PASS"
 }
 
@@ -210,7 +210,7 @@ export enum FormDataFields {
   earthDamWidth = "earthDamWidth",
   earthDamLength = "earthDamLength",
   river = "river",
-  lake = "lake",
+  pond = "pond",
   environmentalDebit = "environmentalDebit",
   fishPassDebit = "fishPassDebit",
   minDebit = "minDebit",
