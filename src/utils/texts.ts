@@ -9,7 +9,6 @@ import {
   PurposeTypes,
   RolesTypes,
   ServerErrors,
-  StatusTypes,
   SubPoolTypes,
   Units,
   WaterExcessCulvertType
@@ -362,19 +361,19 @@ export const roleLabels = {
 };
 
 export const formStatusLabels = {
-  [StatusTypes.CREATED]: "Pateikta",
-  [StatusTypes.SUBMITTED]: "Pateikta pakartotinai",
-  [StatusTypes.RETURNED]: "Grąžinta taisymui",
-  [StatusTypes.REJECTED]: "Atmesta",
-  [StatusTypes.APPROVED]: "Patvirtinta"
+  [HistoryTypes.CREATED]: "Pateikta",
+  [HistoryTypes.UPDATED]: "Pateikta pakartotinai",
+  [HistoryTypes.RETURNED]: "Grąžinta taisymui",
+  [HistoryTypes.REJECTED]: "Atmesta",
+  [HistoryTypes.APPROVED]: "Patvirtinta"
 };
 
 export const requestStatusLabels = {
-  [StatusTypes.CREATED]: "Pateiktas",
-  [StatusTypes.SUBMITTED]: "Pateiktas pakartotinai",
-  [StatusTypes.RETURNED]: "Grąžintas taisymui",
-  [StatusTypes.REJECTED]: "Atmestas",
-  [StatusTypes.APPROVED]: "Patvirtintas",
+  [HistoryTypes.CREATED]: "Pateiktas",
+  [HistoryTypes.UPDATED]: "Pateiktas pakartotinai",
+  [HistoryTypes.RETURNED]: "Grąžintas taisymui",
+  [HistoryTypes.REJECTED]: "Atmestas",
+  [HistoryTypes.APPROVED]: "Patvirtintas",
   [HistoryTypes.FILE_GENERATED]: "Išrašas paruoštas"
 };
 

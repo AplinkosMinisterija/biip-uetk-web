@@ -96,6 +96,8 @@ const FormHistoryContainer = ({
         {map(suggestions, (history: FormHistory, index: number) => {
           const hasIcon = !!iconsByHistoryType[history.type];
 
+          console.log(history.type, "history", formHistoryLabels);
+
           return (
             <Row key={`formHistory-${index}`}>
               <StyledAvatar
