@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import * as Texts from "../../utils/texts";
+import { buttonsTitles } from "../../utils/texts";
 import Icon from "./Icons";
 
 export interface FilesToDownloadProps {
@@ -19,8 +19,8 @@ const FilesToDownload = ({ url, showFileName }: FilesToDownloadProps) => {
           e.stopPropagation();
         }}
       >
-        <DownloadContainer href={url} download>
-          {Texts.buttonsTitles.download}
+        <DownloadContainer target={"_blank"} href={url} download>
+          {buttonsTitles.download}
           <StyledIcon name={"download"} />
         </DownloadContainer>
       </Container>

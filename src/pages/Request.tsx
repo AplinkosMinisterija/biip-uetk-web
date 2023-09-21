@@ -1,4 +1,4 @@
-import { isEqual } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -152,7 +152,7 @@ const RequestPage = () => {
     notifyEmail:
       request?.notifyEmail || currentProfile?.email || userEmail || "",
     objects: request?.objects || [],
-    geom: request?.geom || undefined,
+    geom: !isEmpty(request?.geom) ? request?.geom : undefined,
     agreeWithConditions: disabled || false,
     delivery: request?.delivery || DeliveryTypes.EMAIL,
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
