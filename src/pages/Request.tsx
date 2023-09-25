@@ -23,13 +23,12 @@ import {
   ColumnTwo,
   Container
 } from "../styles/GenericStyledComponents";
-import { DeliveryTypes, PurposeTypes, StatusTypes } from "../utils/constants";
+import { PurposeTypes, StatusTypes } from "../utils/constants";
 import { getLocationList, handleAlert, isNew } from "../utils/functions";
 import { useGetCurrentProfile } from "../utils/hooks";
-import { deliveryTypesOptions, purposeTypesOptions } from "../utils/options";
+import { purposeTypesOptions } from "../utils/options";
 import { slugs } from "../utils/routes";
 import {
-  deliveryTypeLabels,
   formLabels,
   inputLabels,
   pageTitles,

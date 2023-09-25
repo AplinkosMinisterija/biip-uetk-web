@@ -1,9 +1,5 @@
 import { FilterInputTypes } from "../../components/other/DynamicFilter/Filter";
-import {
-  getDeliveryTypes,
-  getPurposeTypes,
-  getRequestStatusTypes
-} from "../../utils/options";
+import { getPurposeTypes, getRequestStatusTypes } from "../../utils/options";
 import { formFiltersLabels } from "../../utils/texts";
 
 export const filterConfig = {
@@ -17,12 +13,7 @@ export const filterConfig = {
     key: "createdTo",
     inputType: FilterInputTypes.date
   },
-  delivery: {
-    label: formFiltersLabels.type,
-    key: "delivery",
-    inputType: FilterInputTypes.multiselect,
-    options: getDeliveryTypes()
-  },
+
   purpose: {
     label: formFiltersLabels.objectType,
     key: "purpose",
