@@ -30,7 +30,6 @@ export const filterConfig = {
 
 export const rowConfig = [
   ["createdFrom", "createdTo"],
-  ["delivery"],
   ["purpose"],
   ["status"]
 ];

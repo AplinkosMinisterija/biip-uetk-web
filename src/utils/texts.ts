@@ -1,5 +1,4 @@
 import {
-  DeliveryTypes,
   FishPassType,
   FormObjectType,
   FormProviderType,
@@ -72,12 +71,7 @@ export const requestLabels = {
     desktopOrder: 0,
     show: true
   },
-  delivery: {
-    label: "Išrašo pristatymo būdas",
-    mobileOrder: 1,
-    desktopOrder: 1,
-    show: true
-  },
+
   purpose: {
     label: "Duomenų gavimo tikslas",
     mobileOrder: 2,
@@ -253,7 +247,6 @@ export const inputLabels = {
   attribute: "Atributas",
   receiveUnverifiedData: "Gauti nepatikrintus duomenis automatiškai",
   extended: "Noriu gauti išplėstinius objektų duomenis",
-  requestDeliveryType: "Išrašo pristatymo būdas",
   dataReceivingPurpose: "Duomenų gavimo tikslas",
   noData: "Nėra duomenų",
   chooseOption: "Pasirinkite",
@@ -523,12 +516,6 @@ export const formHistoryLabels = {
   [HistoryTypes.RETURNED]: "Grąžinta taisyti",
   [HistoryTypes.APPROVED]: "Priimta",
   [HistoryTypes.DELETED]: "Ištrinta"
-};
-
-export const deliveryTypeLabels = {
-  [DeliveryTypes.EMAIL]: "El. paštu",
-  [DeliveryTypes.REGULAR_MAIL]: "Įprastiniu paštu",
-  [DeliveryTypes.WITHDRAW]: "Atsiimti"
 };
 
 export const purposeTypeLabels = {
