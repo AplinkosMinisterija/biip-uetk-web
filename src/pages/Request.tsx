@@ -8,6 +8,7 @@ import FormHistoryContainer from "../components/containers/FormHistoryContainer"
 import SimpleContainer from "../components/containers/SimpleContainer";
 import AsyncMultiSelect from "../components/fields/AsyncMultiSelect";
 import SelectField from "../components/fields/SelectField";
+import TextAreaField from "../components/fields/TextAreaField";
 import TextField from "../components/fields/TextField";
 import Map from "../components/map/DrawMap";
 import { ErrorMessage } from "../components/other/ErrorMessage";
@@ -42,7 +43,7 @@ export interface RequestProps {
   notifyEmail: string;
   objects: { cadastralId: string; category: string }[];
   status?: StatusTypes;
-  delivery: DeliveryTypes;
+  purposeValue: string;
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
@@ -56,7 +57,7 @@ export interface RequestPayload {
   notifyEmail: string;
   objects: { type: string; id: string }[];
   status?: StatusTypes;
-  delivery: DeliveryTypes;
+  purposeValue: string;
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
@@ -154,7 +155,7 @@ const RequestPage = () => {
     objects: request?.objects || [],
     geom: !isEmpty(request?.geom) ? request?.geom : undefined,
     agreeWithConditions: disabled || false,
-    delivery: request?.delivery || DeliveryTypes.EMAIL,
+    purposeValue: request?.purposeValue || "",
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
     extended: request?.data?.extended || false
   };
@@ -179,26 +180,29 @@ const RequestPage = () => {
               <Row>
                 <SelectField
                   disabled={disabled}
-                  label={inputLabels.requestDeliveryType}
-                  value={values.delivery}
-                  error={errors.delivery}
-                  name={"delivery"}
-                  onChange={(e) => handleChange("delivery", e)}
-                  options={deliveryTypesOptions}
-                  getOptionLabel={(e) => deliveryTypeLabels[e]}
-                />
-                <SelectField
-                  disabled={disabled}
                   label={inputLabels.dataReceivingPurpose}
                   value={values.purpose}
                   error={errors.dataReceivingPurpose}
                   name={"purpose"}
-                  onChange={(e) => handleChange("purpose", e)}
+                  onChange={(e) => {
+                    handleChange("purpose", e);
+                    handleChange("purposeValue", "");
+                  }}
                   options={purposeTypesOptions}
                   getOptionLabel={(e) => {
                     return purposeTypeLabels[e];
                   }}
                 />
+                {isEqual(values.purpose, PurposeTypes.OTHER) && (
+                  <TextAreaField
+                    label={"Kita"}
+                    disabled={disabled}
+                    value={values.purposeValue}
+                    error={errors?.purposeValue}
+                    rows={1}
+                    onChange={(e: string) => handleChange("purposeValue", e)}
+                  />
+                )}
               </Row>
               <Row columns={1}>
                 <SingleCheckBox

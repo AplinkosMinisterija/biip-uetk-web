@@ -189,7 +189,7 @@ export interface Request {
   notifyEmail?: string;
   objects?: { cadastralId: string; category: string }[];
   status?: StatusTypes;
-  delivery?: DeliveryTypes;
+  purposeValue?: string;
   purpose?: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
