@@ -1,6 +1,5 @@
 import { map } from "lodash";
 import {
-  DeliveryTypes,
   FormObjectType,
   FormType,
   PurposeTypes,
@@ -8,7 +7,6 @@ import {
   StatusTypes
 } from "./constants";
 import {
-  deliveryTypeLabels,
   formObjectTypeLabels,
   formStatusLabels,
   formTypeLabels,
@@ -17,20 +15,12 @@ import {
   roleLabels
 } from "./texts";
 
-export const deliveryTypesOptions = Object.keys(DeliveryTypes);
-
 export const purposeTypesOptions = Object.keys(PurposeTypes);
 
 export const getPurposeTypes = () =>
   map(PurposeTypes, (Status) => ({
     id: Status,
     label: purposeTypeLabels[Status]
-  }));
-
-export const getDeliveryTypes = () =>
-  map(DeliveryTypes, (Status) => ({
-    id: Status,
-    label: deliveryTypeLabels[Status]
   }));
 
 export const getFormStatusTypes = () =>

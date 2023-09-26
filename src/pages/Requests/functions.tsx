@@ -6,11 +6,7 @@ import { Request, RequestFilters, RequestFiltersProps } from "../../types";
 import { colorsByStatus } from "../../utils/constants";
 import { formatDate, formatDateFrom, formatDateTo } from "../../utils/format";
 import { canShowResponseDate } from "../../utils/functions";
-import {
-  deliveryTypeLabels,
-  purposeTypeLabels,
-  requestStatusLabels
-} from "../../utils/texts";
+import { purposeTypeLabels, requestStatusLabels } from "../../utils/texts";
 
 export const mapRequestFilters = (filters: RequestFilters) => {
   let params: RequestFiltersProps = {};
@@ -26,9 +22,6 @@ export const mapRequestFilters = (filters: RequestFilters) => {
         })
       });
 
-    !isEmpty(filters?.delivery) &&
-      (params.delivery = { $in: filters?.delivery!?.map((state) => state.id) });
-
     !isEmpty(filters?.purpose) &&
       (params.purpose = { $in: filters?.purpose!?.map((state) => state.id) });
 
@@ -43,7 +36,6 @@ export const mapRequests = (requests: Request[]): TableRow[] =>
     return {
       tableId: `#${request.id}`,
       id: request.id,
-      delivery: deliveryTypeLabels[request.delivery!],
       purpose: purposeTypeLabels[request.purpose!],
       status: (
         <TableStatusRowItem

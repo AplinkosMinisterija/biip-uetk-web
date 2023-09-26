@@ -1,5 +1,4 @@
 import {
-  DeliveryTypes,
   FormDataFields,
   FormObjectType,
   FormProviderType,
@@ -151,14 +150,12 @@ export interface RequestFilters {
   createdFrom?: string;
   createdTo?: string;
   status?: { id: StatusTypes; label: string }[];
-  delivery?: { id: DeliveryTypes; label: string }[];
   purpose?: { id: PurposeTypes; label: string }[];
 }
 
 export interface RequestFiltersProps {
   status?: { $in: StatusTypes[] };
   createdAt?: { $gte?: Date; $lt?: Date };
-  delivery?: { $in: DeliveryTypes[] };
   purpose?: { $in: PurposeTypes[] };
 }
 
@@ -189,7 +186,7 @@ export interface Request {
   notifyEmail?: string;
   objects?: { cadastralId: string; category: string }[];
   status?: StatusTypes;
-  delivery?: DeliveryTypes;
+  purposeValue?: string;
   purpose?: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;

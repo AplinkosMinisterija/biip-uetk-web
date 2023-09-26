@@ -1,5 +1,4 @@
 import {
-  DeliveryTypes,
   FishPassType,
   FormObjectType,
   FormProviderType,
@@ -9,7 +8,6 @@ import {
   PurposeTypes,
   RolesTypes,
   ServerErrors,
-  StatusTypes,
   SubPoolTypes,
   Units,
   WaterExcessCulvertType
@@ -73,12 +71,7 @@ export const requestLabels = {
     desktopOrder: 0,
     show: true
   },
-  delivery: {
-    label: "Išrašo pristatymo būdas",
-    mobileOrder: 1,
-    desktopOrder: 1,
-    show: true
-  },
+
   purpose: {
     label: "Duomenų gavimo tikslas",
     mobileOrder: 2,
@@ -254,7 +247,6 @@ export const inputLabels = {
   attribute: "Atributas",
   receiveUnverifiedData: "Gauti nepatikrintus duomenis automatiškai",
   extended: "Noriu gauti išplėstinius objektų duomenis",
-  requestDeliveryType: "Išrašo pristatymo būdas",
   dataReceivingPurpose: "Duomenų gavimo tikslas",
   noData: "Nėra duomenų",
   chooseOption: "Pasirinkite",
@@ -362,19 +354,19 @@ export const roleLabels = {
 };
 
 export const formStatusLabels = {
-  [StatusTypes.CREATED]: "Pateikta",
-  [StatusTypes.SUBMITTED]: "Pateikta pakartotinai",
-  [StatusTypes.RETURNED]: "Grąžinta taisymui",
-  [StatusTypes.REJECTED]: "Atmesta",
-  [StatusTypes.APPROVED]: "Patvirtinta"
+  [HistoryTypes.CREATED]: "Pateikta",
+  [HistoryTypes.UPDATED]: "Pateikta pakartotinai",
+  [HistoryTypes.RETURNED]: "Grąžinta taisymui",
+  [HistoryTypes.REJECTED]: "Atmesta",
+  [HistoryTypes.APPROVED]: "Patvirtinta"
 };
 
 export const requestStatusLabels = {
-  [StatusTypes.CREATED]: "Pateiktas",
-  [StatusTypes.SUBMITTED]: "Pateiktas pakartotinai",
-  [StatusTypes.RETURNED]: "Grąžintas taisymui",
-  [StatusTypes.REJECTED]: "Atmestas",
-  [StatusTypes.APPROVED]: "Patvirtintas",
+  [HistoryTypes.CREATED]: "Pateiktas",
+  [HistoryTypes.UPDATED]: "Pateiktas pakartotinai",
+  [HistoryTypes.RETURNED]: "Grąžintas taisymui",
+  [HistoryTypes.REJECTED]: "Atmestas",
+  [HistoryTypes.APPROVED]: "Patvirtintas",
   [HistoryTypes.FILE_GENERATED]: "Išrašas paruoštas"
 };
 
@@ -524,12 +516,6 @@ export const formHistoryLabels = {
   [HistoryTypes.RETURNED]: "Grąžinta taisyti",
   [HistoryTypes.APPROVED]: "Priimta",
   [HistoryTypes.DELETED]: "Ištrinta"
-};
-
-export const deliveryTypeLabels = {
-  [DeliveryTypes.EMAIL]: "El. paštu",
-  [DeliveryTypes.REGULAR_MAIL]: "Įprastiniu paštu",
-  [DeliveryTypes.WITHDRAW]: "Atsiimti"
 };
 
 export const purposeTypeLabels = {

@@ -252,12 +252,6 @@ export enum ServerErrorCodes {
   NO_PERMISSION = "401"
 }
 
-export enum DeliveryTypes {
-  EMAIL = "EMAIL",
-  REGULAR_MAIL = "REGULAR_MAIL",
-  WITHDRAW = "WITHDRAW"
-}
-
 export enum PurposeTypes {
   TERRITORIAL_PLANNING_DOCUMENT = "TERRITORIAL_PLANNING_DOCUMENT",
   TECHNICAL_PROJECT = "TECHNICAL_PROJECT",

@@ -1,4 +1,4 @@
-import { isEqual } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import FormHistoryContainer from "../components/containers/FormHistoryContainer"
 import SimpleContainer from "../components/containers/SimpleContainer";
 import AsyncMultiSelect from "../components/fields/AsyncMultiSelect";
 import SelectField from "../components/fields/SelectField";
+import TextAreaField from "../components/fields/TextAreaField";
 import TextField from "../components/fields/TextField";
 import Map from "../components/map/DrawMap";
 import { ErrorMessage } from "../components/other/ErrorMessage";
@@ -22,13 +23,12 @@ import {
   ColumnTwo,
   Container
 } from "../styles/GenericStyledComponents";
-import { DeliveryTypes, PurposeTypes, StatusTypes } from "../utils/constants";
+import { PurposeTypes, StatusTypes } from "../utils/constants";
 import { getLocationList, handleAlert, isNew } from "../utils/functions";
 import { useGetCurrentProfile } from "../utils/hooks";
-import { deliveryTypesOptions, purposeTypesOptions } from "../utils/options";
+import { purposeTypesOptions } from "../utils/options";
 import { slugs } from "../utils/routes";
 import {
-  deliveryTypeLabels,
   formLabels,
   inputLabels,
   pageTitles,
@@ -42,11 +42,10 @@ export interface RequestProps {
   notifyEmail: string;
   objects: { cadastralId: string; category: string }[];
   status?: StatusTypes;
-  delivery: DeliveryTypes;
+  purposeValue: string;
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
-  unverified?: boolean;
   extended?: boolean;
   geom: any;
   agreeWithConditions: boolean;
@@ -57,12 +56,11 @@ export interface RequestPayload {
   notifyEmail: string;
   objects: { type: string; id: string }[];
   status?: StatusTypes;
-  delivery: DeliveryTypes;
+  purposeValue: string;
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
   data?: {
-    unverified?: boolean;
     extended?: boolean;
   };
   geom: any;
@@ -131,8 +129,7 @@ const RequestPage = () => {
   );
 
   const handleSubmit = async (values: RequestProps) => {
-    const { agreeWithConditions, unverified, extended, objects, ...rest } =
-      values;
+    const { agreeWithConditions, extended, objects, ...rest } = values;
     const params: RequestPayload = {
       ...rest,
       objects: objects.map((item) => {
@@ -141,7 +138,7 @@ const RequestPage = () => {
           id: item?.cadastralId
         };
       }),
-      data: { unverified, extended }
+      data: { extended }
     };
 
     if (isNew(id)) {
@@ -155,11 +152,10 @@ const RequestPage = () => {
     notifyEmail:
       request?.notifyEmail || currentProfile?.email || userEmail || "",
     objects: request?.objects || [],
-    geom: request?.geom || undefined,
+    geom: !isEmpty(request?.geom) ? request?.geom : undefined,
     agreeWithConditions: disabled || false,
-    delivery: request?.delivery || DeliveryTypes.EMAIL,
+    purposeValue: request?.purposeValue || "",
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    unverified: request?.data?.unverified || false,
     extended: request?.data?.extended || false
   };
 
@@ -183,34 +179,31 @@ const RequestPage = () => {
               <Row>
                 <SelectField
                   disabled={disabled}
-                  label={inputLabels.requestDeliveryType}
-                  value={values.delivery}
-                  error={errors.delivery}
-                  name={"delivery"}
-                  onChange={(e) => handleChange("delivery", e)}
-                  options={deliveryTypesOptions}
-                  getOptionLabel={(e) => deliveryTypeLabels[e]}
-                />
-                <SelectField
-                  disabled={disabled}
                   label={inputLabels.dataReceivingPurpose}
                   value={values.purpose}
                   error={errors.dataReceivingPurpose}
                   name={"purpose"}
-                  onChange={(e) => handleChange("purpose", e)}
+                  onChange={(e) => {
+                    handleChange("purpose", e);
+                    handleChange("purposeValue", "");
+                  }}
                   options={purposeTypesOptions}
                   getOptionLabel={(e) => {
                     return purposeTypeLabels[e];
                   }}
                 />
+                {isEqual(values.purpose, PurposeTypes.OTHER) && (
+                  <TextAreaField
+                    label={"Kita"}
+                    disabled={disabled}
+                    value={values.purposeValue}
+                    error={errors?.purposeValue}
+                    rows={1}
+                    onChange={(e: string) => handleChange("purposeValue", e)}
+                  />
+                )}
               </Row>
               <Row columns={1}>
-                <SingleCheckBox
-                  disabled={disabled}
-                  label={inputLabels.receiveUnverifiedData}
-                  value={values.unverified}
-                  onChange={(value) => handleChange(`unverified`, value)}
-                />
                 <SingleCheckBox
                   disabled={disabled}
                   label={inputLabels.extended}

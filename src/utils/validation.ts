@@ -4,7 +4,8 @@ import {
   FormDataFields,
   FormObjectType,
   FormProviderType,
-  FormType
+  FormType,
+  PurposeTypes
 } from "./constants";
 import {
   availableMimeTypes,
@@ -217,8 +218,15 @@ export const loginSchema = Yup.object().shape({
 
 export const validateRequest = Yup.object().shape(
   {
-    delivery: Yup.string().required(validationTexts.requireText).nullable(),
     purpose: Yup.string().required(validationTexts.requireText).nullable(),
+    purposeValue: Yup.string()
+      .when(["purpose"], {
+        is: (purpose) => {
+          return isEqual(purpose, PurposeTypes.OTHER);
+        },
+        then: Yup.string().required(validationTexts.requireText)
+      })
+      .nullable(),
     agreeWithConditions: Yup.boolean()
       .required(validationTexts.requireSelect)
       .oneOf([true], validationTexts.requireSelect),
