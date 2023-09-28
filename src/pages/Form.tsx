@@ -103,7 +103,7 @@ const FormPage = () => {
   };
 
   const mapQueryString = getMapQueryString(disabled);
-  const title = isNew(id) ? pageTitles.newForm : pageTitles.updateForm;
+  const title = isNew(id) ? pageTitles.newForm : pageTitles.form(id!);
 
   const typeOptions = {
     [FormObjectType.WATER_EXCESS_CULVERT]: Object.keys(WaterExcessCulvertType),

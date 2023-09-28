@@ -48,6 +48,7 @@ export const mapFormFilters = (filters: FormFilters): FormFiltersProps => {
 export const mapForms = (forms: Form[]): TableRow[] =>
   forms.map((form: Form) => {
     return {
+      tableId: `#${form.id}`,
       id: form.id,
       name: `${form.objectName}`,
       providedBy: form.providedBy,
