@@ -105,6 +105,12 @@ export const requestLabels = {
 };
 
 export const formTableLabels = {
+  tableId: {
+    label: "Id",
+    mobileOrder: 0,
+    desktopOrder: 0,
+    show: true
+  },
   name: {
     label: "Objekto Pavadinimas",
     mobileOrder: 1,
@@ -151,13 +157,13 @@ export const formTableLabels = {
 };
 
 export const pageTitles = {
-  request: (id: string) => `Duomenų teikimo nr. ${id}`,
+  request: (id: string) => `Duomenų gavimo nr. ${id}`,
   requests: "Duomenų gavimai",
   newRequest: "Naujas duomenų gavimass",
-  excerpt: (id: string) => `Duomenų gavimo nr. ${id}`,
+  form: (id: string) => `Duomenų teikimo nr. ${id}`,
   profile: "Profilis",
   newForm: "Naujas duomenų teikimas",
-  updateForm: "Atnaujinti duomenų teikimą",
+  updateForm: "Duomenų teikimą",
   inviteTenantUser: "Pakviesti darbuotoją",
   updateTenantUser: "Atnaujinti darbuotoją",
   forms: "Duomenų teikimai",
