@@ -68,7 +68,7 @@ const requestDataTypes = ["false", "true"];
 
 const requestDataTypeLabels = {
   false: "Pagrindiniai duomenys (.pdf)",
-  true: "Išplėtsiniai duomenys (.pdf)"
+  true: "Išplėstiniai duomenys (.pdf)"
 };
 
 const RequestPage = () => {
