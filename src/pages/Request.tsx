@@ -91,21 +91,21 @@ const RequestPage = () => {
 
   const disabled = !isNew(id) && !request?.canEdit;
 
-  const getMapQueryString = (disabled = false) => {
-    const queryString = `?`;
-    const param = new URLSearchParams();
+  // const getMapQueryString = (disabled = false) => {
+  //   const queryString = `?`;
+  //   const param = new URLSearchParams();
 
-    if (disabled) {
-      param.append("preview", "true");
-      return queryString + param;
-    }
+  //   if (disabled) {
+  //     param.append("preview", "true");
+  //     return queryString + param;
+  //   }
 
-    param.append("types[]", "polygon");
-    param.append("multi", "true");
-    return queryString + param;
-  };
+  //   param.append("types[]", "polygon");
+  //   param.append("multi", "true");
+  //   return queryString + param;
+  // };
 
-  const mapQueryString = getMapQueryString(disabled);
+  // const mapQueryString = getMapQueryString(disabled);
 
   const createRequest = useMutation(
     (values: RequestPayload) => api.createRequests(values),

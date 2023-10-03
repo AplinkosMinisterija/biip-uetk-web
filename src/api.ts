@@ -309,7 +309,7 @@ class Api {
   }: TableList<FormFiltersProps>): Promise<GetAllResponse<Request>> =>
     await this.getAll({
       resource: Resources.REQUESTS,
-      populate: [Resources.CREATED_BY],
+      populate: [Resources.CREATED_BY, Populations.OBJECTS],
       sort: [SortFields.CREATED_AT],
       page,
       filter,
