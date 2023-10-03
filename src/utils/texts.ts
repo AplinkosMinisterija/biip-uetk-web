@@ -71,6 +71,12 @@ export const requestLabels = {
     desktopOrder: 0,
     show: true
   },
+  objects: {
+    label: "Objektai",
+    mobileOrder: 1,
+    desktopOrder: 1,
+    show: true
+  },
 
   purpose: {
     label: "Duomenų gavimo tikslas",

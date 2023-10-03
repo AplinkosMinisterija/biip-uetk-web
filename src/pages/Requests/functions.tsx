@@ -1,6 +1,7 @@
 import { isEmpty } from "lodash";
 import TableStatusRowItem from "../../components/fields/TableStatusRowItem";
 import FilesToDownload from "../../components/other/FilesToDownload";
+import TableMaxWidthItem from "../../components/other/TableMaxWIdthItem";
 import { TableRow } from "../../components/tables/table";
 import { Request, RequestFilters, RequestFiltersProps } from "../../types";
 import { colorsByStatus } from "../../utils/constants";
@@ -33,8 +34,10 @@ export const mapRequestFilters = (filters: RequestFilters) => {
 
 export const mapRequests = (requests: Request[]): TableRow[] =>
   requests.map((request: Request) => {
+    const objects = request.objects?.map((object) => object.name);
     return {
       tableId: `#${request.id}`,
+      objects: <TableMaxWidthItem items={objects!} />,
       id: request.id,
       purpose: purposeTypeLabels[request.purpose!],
       status: (
