@@ -184,7 +184,12 @@ export interface Form {
 export interface Request {
   id?: string;
   notifyEmail?: string;
-  objects?: { cadastralId: string; category: string }[];
+  objects?: {
+    cadastralId: string;
+    category: string;
+    name: string;
+    type: string;
+  }[];
   status?: StatusTypes;
   purposeValue?: string;
   purpose?: PurposeTypes;

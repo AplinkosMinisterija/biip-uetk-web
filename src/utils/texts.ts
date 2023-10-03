@@ -71,6 +71,12 @@ export const requestLabels = {
     desktopOrder: 0,
     show: true
   },
+  objects: {
+    label: "Objektai",
+    mobileOrder: 1,
+    desktopOrder: 1,
+    show: true
+  },
 
   purpose: {
     label: "Duomenų gavimo tikslas",
@@ -159,7 +165,7 @@ export const formTableLabels = {
 export const pageTitles = {
   request: (id: string) => `Duomenų gavimo nr. ${id}`,
   requests: "Duomenų gavimai",
-  newRequest: "Naujas duomenų gavimass",
+  newRequest: "Naujas duomenų gavimas",
   form: (id: string) => `Duomenų teikimo nr. ${id}`,
   profile: "Profilis",
   newForm: "Naujas duomenų teikimas",

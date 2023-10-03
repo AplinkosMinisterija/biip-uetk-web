@@ -1,4 +1,4 @@
-import { isEmpty, isEqual } from "lodash";
+import { isEqual } from "lodash";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -10,8 +10,6 @@ import AsyncMultiSelect from "../components/fields/AsyncMultiSelect";
 import SelectField from "../components/fields/SelectField";
 import TextAreaField from "../components/fields/TextAreaField";
 import TextField from "../components/fields/TextField";
-import Map from "../components/map/DrawMap";
-import { ErrorMessage } from "../components/other/ErrorMessage";
 import { GeneratedFileComponent } from "../components/other/GeneratedFileComponent";
 import LoaderComponent from "../components/other/LoaderComponent";
 import TermsAndConditions from "../components/other/TermsAndConditions";
@@ -46,8 +44,8 @@ export interface RequestProps {
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
-  extended?: boolean;
-  geom: any;
+  extended?: any;
+  geom?: any;
   agreeWithConditions: boolean;
 }
 
@@ -61,10 +59,17 @@ export interface RequestPayload {
   canEdit?: boolean;
   canValidate?: boolean;
   data?: {
-    extended?: boolean;
+    extended?: any;
   };
-  geom: any;
+  geom?: any;
 }
+
+const requestDataTypes = ["false", "true"];
+
+const requestDataTypeLabels = {
+  false: "Pagrindiniai duomenys (.pdf)",
+  true: "Išplėstiniai duomenys (.pdf)"
+};
 
 const RequestPage = () => {
   const navigate = useNavigate();
@@ -86,21 +91,21 @@ const RequestPage = () => {
 
   const disabled = !isNew(id) && !request?.canEdit;
 
-  const getMapQueryString = (disabled = false) => {
-    const queryString = `?`;
-    const param = new URLSearchParams();
+  // const getMapQueryString = (disabled = false) => {
+  //   const queryString = `?`;
+  //   const param = new URLSearchParams();
 
-    if (disabled) {
-      param.append("preview", "true");
-      return queryString + param;
-    }
+  //   if (disabled) {
+  //     param.append("preview", "true");
+  //     return queryString + param;
+  //   }
 
-    param.append("types[]", "polygon");
-    param.append("multi", "true");
-    return queryString + param;
-  };
+  //   param.append("types[]", "polygon");
+  //   param.append("multi", "true");
+  //   return queryString + param;
+  // };
 
-  const mapQueryString = getMapQueryString(disabled);
+  // const mapQueryString = getMapQueryString(disabled);
 
   const createRequest = useMutation(
     (values: RequestPayload) => api.createRequests(values),
@@ -138,7 +143,7 @@ const RequestPage = () => {
           id: item?.cadastralId
         };
       }),
-      data: { extended }
+      data: { extended: extended === "true" }
     };
 
     if (isNew(id)) {
@@ -152,11 +157,11 @@ const RequestPage = () => {
     notifyEmail:
       request?.notifyEmail || currentProfile?.email || userEmail || "",
     objects: request?.objects || [],
-    geom: !isEmpty(request?.geom) ? request?.geom : undefined,
+    //geom: !isEmpty(request?.geom) ? request?.geom : undefined,
     agreeWithConditions: disabled || false,
     purposeValue: request?.purposeValue || "",
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    extended: request?.data?.extended || false
+    extended: request?.data?.extended?.toString() || "false"
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
@@ -176,7 +181,7 @@ const RequestPage = () => {
                 error={errors?.notifyEmail}
                 onChange={(email) => handleChange("notifyEmail", email)}
               />
-              <Row>
+              <Row columns={2}>
                 <SelectField
                   disabled={disabled}
                   label={inputLabels.dataReceivingPurpose}
@@ -192,6 +197,7 @@ const RequestPage = () => {
                     return purposeTypeLabels[e];
                   }}
                 />
+
                 {isEqual(values.purpose, PurposeTypes.OTHER) && (
                   <TextAreaField
                     label={"Kita"}
@@ -202,13 +208,19 @@ const RequestPage = () => {
                     onChange={(e: string) => handleChange("purposeValue", e)}
                   />
                 )}
-              </Row>
-              <Row columns={1}>
-                <SingleCheckBox
+                <SelectField
                   disabled={disabled}
-                  label={inputLabels.extended}
+                  label={inputLabels.dataReceivingPurpose}
                   value={values.extended}
-                  onChange={(value) => handleChange(`extended`, value)}
+                  error={errors.extended}
+                  name={"extended"}
+                  onChange={(e) => {
+                    handleChange(`extended`, e?.toString());
+                  }}
+                  options={requestDataTypes}
+                  getOptionLabel={(e) => {
+                    return requestDataTypeLabels[e];
+                  }}
                 />
               </Row>
             </SimpleContainer>
@@ -235,7 +247,7 @@ const RequestPage = () => {
                   showError={false}
                 />
 
-                <Map
+                {/* <Map
                   queryString={mapQueryString}
                   error={errors?.geom}
                   onSave={(data) => handleChange("geom", data)}
@@ -245,7 +257,7 @@ const RequestPage = () => {
                 />
                 {errors?.geom && errors.objects && (
                   <ErrorMessage error="Prašome nurodyti, ar pageidaujate pasirinkti vietą iš žemėlapio ar objektus iš pateiktų objektų sąrašo" />
-                )}
+                )} */}
               </MapContainer>
             </SimpleContainer>
 
