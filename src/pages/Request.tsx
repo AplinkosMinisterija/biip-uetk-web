@@ -208,9 +208,11 @@ const RequestPage = () => {
                     onChange={(e: string) => handleChange("purposeValue", e)}
                   />
                 )}
+              </Row>
+              <Row columns={2}>
                 <SelectField
                   disabled={disabled}
-                  label={inputLabels.dataReceivingPurpose}
+                  label={inputLabels.requestType}
                   value={values.extended}
                   error={errors.extended}
                   name={"extended"}

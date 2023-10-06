@@ -254,6 +254,7 @@ export const formLabels = {
   springDebit1: "Pavasario potvynio (lietaus poplūdžio) 1 % debitas"
 };
 export const inputLabels = {
+  requestType: "Išrašo duomenų tipas",
   generating: "Išrašas kuriamas",
   hydrostaticId: "Hidrostatinio unikalus identifikatorius",
   attribute: "Atributas",
