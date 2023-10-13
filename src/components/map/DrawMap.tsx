@@ -75,6 +75,7 @@ const DrawMap = ({
             </StyledIconContainer>
           </StyledButton>
           <StyledIframe
+            allow="geolocation *"
             ref={iframeRef}
             src={src}
             width={"100%"}
