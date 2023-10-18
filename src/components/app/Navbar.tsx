@@ -66,7 +66,7 @@ const Header = styled.div`
   min-height: 65px;
   width: 100%;
   border-bottom: 1px solid #cdd5df;
-  padding: 20px;
+  padding: 10px;
 `;
 
 const InnerContainer = styled.div`
