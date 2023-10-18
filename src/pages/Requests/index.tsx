@@ -1,7 +1,7 @@
 import Table from "../../components/tables/table";
 import PageWrapper from "../../components/wrappers/PageWrapper";
 import { slugs } from "../../utils/routes";
-import { pageTitles } from "../../utils/texts";
+import { descriptions, pageTitles } from "../../utils/texts";
 import { useData } from "./hooks/useData";
 
 const Requests = () => {
@@ -16,7 +16,11 @@ const Requests = () => {
   } = useData();
 
   return (
-    <PageWrapper title={pageTitles.requests} buttonInfo={buttonInfo}>
+    <PageWrapper
+      title={pageTitles.requests}
+      description={descriptions.requests}
+      buttonInfo={buttonInfo}
+    >
       <Table
         loading={loading}
         filterInfo={filterInfo}

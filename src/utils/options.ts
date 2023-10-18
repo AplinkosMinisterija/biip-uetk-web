@@ -7,11 +7,11 @@ import {
   StatusTypes
 } from "./constants";
 import {
+  formHistoryStatusLabels,
   formObjectTypeLabels,
-  formStatusLabels,
   formTypeLabels,
   purposeTypeLabels,
-  requestStatusLabels,
+  requestHistoryStatusLabels,
   roleLabels
 } from "./texts";
 
@@ -26,13 +26,13 @@ export const getPurposeTypes = () =>
 export const getFormStatusTypes = () =>
   map(StatusTypes, (Status) => ({
     id: Status,
-    label: formStatusLabels[Status]
+    label: formHistoryStatusLabels[Status]
   }));
 
 export const getRequestStatusTypes = () =>
   map(StatusTypes, (Status) => ({
     id: Status,
-    label: requestStatusLabels[Status]
+    label: requestHistoryStatusLabels[Status]
   }));
 
 export const getFormSTypes = () =>

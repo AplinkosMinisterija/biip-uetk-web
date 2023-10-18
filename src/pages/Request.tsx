@@ -31,7 +31,7 @@ import {
   inputLabels,
   pageTitles,
   purposeTypeLabels,
-  requestStatusLabels
+  requestHistoryStatusLabels
 } from "../utils/texts";
 import { validateRequest } from "../utils/validation";
 
@@ -227,7 +227,7 @@ const RequestPage = () => {
               </Row>
             </SimpleContainer>
 
-            <SimpleContainer title={formLabels.map}>
+            <SimpleContainer>
               <MapContainer>
                 <AsyncMultiSelect
                   disabled={disabled}
@@ -281,7 +281,7 @@ const RequestPage = () => {
             )}
             <FormHistoryContainer
               name={`historyRequests-${id}`}
-              formHistoryLabels={requestStatusLabels}
+              formHistoryLabels={requestHistoryStatusLabels}
               endpoint={Api.getRequestHistory}
             />
           </ColumnTwo>

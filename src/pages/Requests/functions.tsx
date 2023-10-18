@@ -35,6 +35,7 @@ export const mapRequestFilters = (filters: RequestFilters) => {
 export const mapRequests = (requests: Request[]): TableRow[] =>
   requests.map((request: Request) => {
     const objects = request.objects?.map((object) => object.name);
+
     return {
       tableId: `#${request.id}`,
       objects: <TableMaxWidthItem items={objects!} />,

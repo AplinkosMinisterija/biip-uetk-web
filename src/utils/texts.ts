@@ -8,6 +8,7 @@ import {
   PurposeTypes,
   RolesTypes,
   ServerErrors,
+  StatusTypes,
   SubPoolTypes,
   Units,
   WaterExcessCulvertType
@@ -366,7 +367,7 @@ export const roleLabels = {
   [RolesTypes.USER]: "Naudotojas"
 };
 
-export const formStatusLabels = {
+export const formHistoryStatusLabels = {
   [HistoryTypes.CREATED]: "Pateikta",
   [HistoryTypes.UPDATED]: "Pateikta pakartotinai",
   [HistoryTypes.RETURNED]: "Grąžinta taisymui",
@@ -374,13 +375,29 @@ export const formStatusLabels = {
   [HistoryTypes.APPROVED]: "Patvirtinta"
 };
 
-export const requestStatusLabels = {
+export const formStatusLabels = {
+  [StatusTypes.CREATED]: "Pateikta",
+  [StatusTypes.SUBMITTED]: "Pateikta pakartotinai",
+  [StatusTypes.RETURNED]: "Grąžinta taisymui",
+  [StatusTypes.REJECTED]: "Atmesta",
+  [StatusTypes.APPROVED]: "Patvirtinta"
+};
+
+export const requestHistoryStatusLabels = {
   [HistoryTypes.CREATED]: "Pateiktas",
   [HistoryTypes.UPDATED]: "Pateiktas pakartotinai",
   [HistoryTypes.RETURNED]: "Grąžintas taisymui",
   [HistoryTypes.REJECTED]: "Atmestas",
   [HistoryTypes.APPROVED]: "Patvirtintas",
   [HistoryTypes.FILE_GENERATED]: "Išrašas paruoštas"
+};
+
+export const requestStatusLabels = {
+  [StatusTypes.CREATED]: "Pateiktas",
+  [StatusTypes.SUBMITTED]: "Pateiktas pakartotinai",
+  [StatusTypes.RETURNED]: "Grąžintas taisymui",
+  [StatusTypes.REJECTED]: "Atmestas",
+  [StatusTypes.APPROVED]: "Patvirtintas"
 };
 
 export const formObjectTypeLabels = {
@@ -477,8 +494,12 @@ export const validationTexts = {
 };
 
 export const descriptions = {
+  forms:
+    "Duomenų ir informacijos teikimas Lietuvos Respublikos upių, ežerų ir tvenkinių kadastro objektų tikslinimui ar naujų objektų registravimui.",
+  requests:
+    "Informacijos apie Lietuvos Respublikos upių, ežerų ir tvenkinių kadastro objektus gavimas.",
   mainDescription:
-    "Elektroninių paslaugų sistema teikianti ir gaunanti duomenis bei informaciją apie vandens telkinius.",
+    "Elektroninių paslaugų sistema teikianti ir gaunanti duomenis bei informaciją apie paviršinius vandens telkinius.",
   forgotPasswordDescription:
     "Jeigu pamiršote slaptažodį, įrašykite savo el. pašto adresą ir mes padėsime jį atkurti",
   instructionSentDescription:

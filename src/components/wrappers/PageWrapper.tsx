@@ -6,6 +6,7 @@ import Button, { ButtonColors } from "../buttons/Button";
 interface PageWrapperProps {
   children: JSX.Element;
   title: string;
+  description?: string;
   buttonInfo: ButtonInfo;
   back?: boolean;
 }
@@ -16,13 +17,21 @@ export interface ButtonInfo {
   label: string;
 }
 
-const PageWrapper = ({ children, title, buttonInfo }: PageWrapperProps) => {
+const PageWrapper = ({
+  children,
+  title,
+  buttonInfo,
+  description
+}: PageWrapperProps) => {
   const navigate = useNavigate();
   const { url, label, loading } = buttonInfo;
   return (
     <Container>
       <Row>
-        <Title>{title}</Title>
+        <Column>
+          <Title>{title}</Title>
+          <Description>{description}</Description>
+        </Column>
         <Button
           onClick={() => {
             navigate(url);
@@ -49,7 +58,7 @@ const Container = styled.div`
 const Title = styled.div`
   font-size: 3.2rem;
   font-weight: bold;
-  letter-spacing: 0px;
+  line-height: 30px;
   color: #121926;
   opacity: 1;
 
@@ -60,7 +69,6 @@ const Title = styled.div`
 
 const Row = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
   margin: 22px 0px;
   @media ${device.mobileL} {
@@ -68,4 +76,16 @@ const Row = styled.div`
     gap: 16px;
   }
 `;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const Description = styled.div`
+  max-width: 600px;
+  font-size: 1.4rem;
+`;
+
 export default PageWrapper;
