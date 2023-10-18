@@ -6,7 +6,7 @@ const AppLogo = () => {
   const navigate = useNavigate();
   return (
     <LogoContainer onClick={() => navigate("/")}>
-      <Icon width="180px" height="40px" name="logo" />
+      <Icon width="220px" height="39.54px" name="logo" />
     </LogoContainer>
   );
 };

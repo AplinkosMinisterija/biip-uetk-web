@@ -1,7 +1,7 @@
 import Table from "../../components/tables/table";
 import PageWrapper from "../../components/wrappers/PageWrapper";
 import { slugs } from "../../utils/routes";
-import { pageTitles } from "../../utils/texts";
+import { descriptions, pageTitles } from "../../utils/texts";
 import { useData } from "./hooks/useData";
 
 const Forms = () => {
@@ -16,7 +16,11 @@ const Forms = () => {
   } = useData();
 
   return (
-    <PageWrapper title={pageTitles.forms} buttonInfo={buttonInfo}>
+    <PageWrapper
+      title={pageTitles.forms}
+      buttonInfo={buttonInfo}
+      description={descriptions.forms}
+    >
       <Table
         loading={loading}
         filterInfo={filterInfo}

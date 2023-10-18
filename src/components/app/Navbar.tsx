@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { externalRoutes } from "../../utils/routes";
 import ProfilesDropdown from "../other/ProfilesDropdown";
@@ -6,6 +6,7 @@ import AppLogo from "./AppLogo";
 
 const Menu = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <Header>
@@ -14,6 +15,7 @@ const Menu = () => {
         <TabContainer>
           {externalRoutes.map((route, index) => (
             <Tab
+              isActive={location.pathname.includes(route.slug)}
               key={`menu-${index}`}
               onClick={() =>
                 route.internal
@@ -34,9 +36,14 @@ const Menu = () => {
 
 export default Menu;
 
-const Tab = styled.div`
+const Tab = styled.div<{ isActive: boolean }>`
   font-size: 1.6rem;
+  background-color: ${({ isActive }) => isActive && "#ECF6FF"};
+  padding: 12px;
+  border-radius: 50px;
+
   color: #121926;
+  text-shadow: 0px 0px 0px #000;
   cursor: pointer;
   display: flex;
   align-items: center;
