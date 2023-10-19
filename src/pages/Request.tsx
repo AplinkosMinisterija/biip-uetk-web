@@ -231,7 +231,7 @@ const RequestPage = () => {
               <MapContainer>
                 <AsyncMultiSelect
                   disabled={disabled}
-                  label={inputLabels.objects}
+                  label={inputLabels.objectNameOrCode}
                   values={values.objects}
                   getOptionValue={(option) => option?.cadastralId}
                   error={errors.objects}
@@ -245,7 +245,6 @@ const RequestPage = () => {
                   loadOptions={(input: string, page: number | string) =>
                     getLocationList(input, page, {})
                   }
-                  placeholder={"Visi objektai"}
                   showError={false}
                 />
 
