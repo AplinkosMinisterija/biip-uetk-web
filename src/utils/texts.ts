@@ -302,7 +302,7 @@ export const inputLabels = {
   providerType: "Duomenų teikėjo statusas objekto atžvilgiu",
   formType: "Teikiami duomenys dėl",
   objectName: "Pavadinimas",
-  objects: "Objektai",
+  objects: "UETK objektai",
   objectNameOrCode: "Pavadinimas arba kodas",
   agreeWithConditions: "Su duomenų teikimo sąlygomis susipažinau ir sutinku.",
   providedByFullName: "Teikėjo Vardas, Pavardė / Įmonės pavadinimas",
