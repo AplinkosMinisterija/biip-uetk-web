@@ -149,7 +149,7 @@ class Api {
     );
   };
 
-  update = async ({ resource, id, params }: UpdateOne) => {
+  patch = async ({ resource, id, params }: UpdateOne) => {
     return this.errorWrapper(() =>
       this.AuthApiAxios.patch(`/${resource}/${id}`, params)
     );
@@ -160,13 +160,13 @@ class Api {
       this.AuthApiAxios.delete(`/${resource}/${id}`)
     );
   };
-  create = async ({ resource, params }: Create) => {
+  post = async ({ resource, params }: Create) => {
     return this.errorWrapper(() =>
       this.AuthApiAxios.post(`/${resource}`, params)
     );
   };
 
-  checkAuth = async (): Promise<User> => {
+  getUserInfo = async (): Promise<User> => {
     return this.errorWrapper(() => this.AuthApiAxios.get("/users/me"));
   };
 
@@ -288,14 +288,14 @@ class Api {
     });
 
   createForm = async (params: any): Promise<Form> => {
-    return await this.create({
+    return await this.post({
       resource: Resources.FORMS,
       params
     });
   };
 
   updateForm = async (id: string, params: any): Promise<Form> => {
-    return await this.update({
+    return await this.patch({
       resource: Resources.FORMS,
       params,
       id
@@ -324,14 +324,14 @@ class Api {
     });
 
   createRequests = async (params: any): Promise<Request> => {
-    return await this.create({
+    return await this.post({
       resource: Resources.REQUESTS,
       params
     });
   };
 
   updaterRequest = async (id: string, params: any): Promise<Request> => {
-    return await this.update({
+    return await this.patch({
       resource: Resources.REQUESTS,
       params,
       id
@@ -360,14 +360,14 @@ class Api {
     });
 
   createTenantUser = async (params: any): Promise<User> => {
-    return await this.create({
+    return await this.post({
       resource: Resources.USERS,
       params
     });
   };
 
   updateTenantUser = async (params: any, id?: string): Promise<User> => {
-    return await this.update({
+    return await this.patch({
       resource: Resources.USERS,
       params,
       id
@@ -381,7 +381,7 @@ class Api {
     });
 
   updateProfile = async (id: string, params: any): Promise<User> =>
-    await this.update({
+    await this.patch({
       resource: Resources.USERS,
       params,
       id

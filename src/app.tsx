@@ -21,11 +21,7 @@ import { Login } from "./pages/Login";
 import { useAppSelector } from "./state/hooks";
 import { ProfileId } from "./types";
 import { ServerErrorCodes } from "./utils/constants";
-import {
-  useCheckAuthMutation,
-  useEGatesSign,
-  useFilteredRoutes
-} from "./utils/hooks";
+import { useEGatesSign, useFilteredRoutes, useUserInfo } from "./utils/hooks";
 import { handleUpdateTokens } from "./utils/loginFunctions";
 import { slugs } from "./utils/routes";
 
@@ -48,6 +44,8 @@ function App() {
   const navigate = useNavigate();
   const routes = useFilteredRoutes();
   const navigateRef = useRef(navigate);
+
+  console.log("wur");
 
   const isInvalidProfile =
     !profiles?.map((profile) => profile?.id?.toString()).includes(profileId) &&
@@ -76,34 +74,32 @@ function App() {
   const { mutateAsync: eGateSignsMutation, isLoading: eGatesSignLoading } =
     useEGatesSign();
 
-  const { mutateAsync: checkAuthMutation } = useCheckAuthMutation();
+  const { isLoading: userInfoLoading } = useUserInfo();
 
   const eGatesLoginMutation = useMutation(
     (ticket: string) => api.eGatesLogin({ ticket }),
     {
       onSuccess: (data) => {
         handleUpdateTokens(data);
-        checkAuthMutation();
       },
       retry: false
     }
   );
 
-  const isLoading =
-    initialLoading ||
-    [
-      eGatesLoginMutation.isLoading,
-      eGatesSignLoading,
-      updateTokensMutation.isLoading
-    ].some((loading) => loading);
+  const isLoading = [
+    userInfoLoading,
+    initialLoading,
+    eGatesLoginMutation.isLoading,
+    eGatesSignLoading,
+    updateTokensMutation.isLoading
+  ].some((loading) => loading);
 
   useEffect(() => {
     (async () => {
       await shouldUpdateTokens();
-      await checkAuthMutation();
       setInitialLoading(false);
     })();
-  }, [location.pathname, checkAuthMutation, shouldUpdateTokens]);
+  }, [location.pathname, shouldUpdateTokens]);
 
   const eGatesLoginMutationMutateAsync = eGatesLoginMutation.mutateAsync;
 

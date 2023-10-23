@@ -1,5 +1,6 @@
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components";
+import Cookies from "universal-cookie";
 import api from "../api";
 import SimpleContainer from "../components/containers/SimpleContainer";
 import TextField from "../components/fields/TextField";
@@ -9,8 +10,12 @@ import { device } from "../styles";
 import { User } from "../types";
 import { handleAlert, handleSuccess } from "../utils/functions";
 import { useGetCurrentProfile } from "../utils/hooks";
-import { handleGetCurrentUser } from "../utils/loginFunctions";
-import { formLabels, inputLabels, pageTitles } from "../utils/texts";
+import {
+  formLabels,
+  inputLabels,
+  pageTitles,
+  validationTexts
+} from "../utils/texts";
 import { validateProfileForm } from "../utils/validation";
 
 export interface UserProps {
@@ -19,24 +24,25 @@ export interface UserProps {
   email?: string;
   phone?: string;
 }
-
+const cookies = new Cookies();
 const Profile = () => {
   const user: User = useAppSelector((state) => state?.user?.userData);
   const currentProfile = useGetCurrentProfile();
+  const token = cookies.get("token");
+  const queryClient = useQueryClient();
   const updateForm = useMutation(
     (values: UserProps) => api.updateProfile(user?.id!, values),
     {
       onError: () => {
         handleAlert();
       },
-      onSuccess: () => {
-        handleGetCurrentUser();
-        handleSuccess(formLabels.profileUpdated);
+      onSuccess: async () => {
+        await queryClient.invalidateQueries([token]);
+        handleSuccess(validationTexts.profileUpdated);
       },
       retry: false
     }
   );
-
   const initialProfileValues: UserProps = {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",

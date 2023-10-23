@@ -233,7 +233,6 @@ export const formLabels = {
   name: "Pavadinimas",
   description: "Aprašymas",
   gallery: "Galerija",
-  profileUpdated: "Profilis atnaujintas",
   mainPhoto: "Pagrindinė nuotrauka",
   map: "Žemėlapis",
   photos: "Nuotraukos",
@@ -470,6 +469,7 @@ export const formTypeLabels = {
 
 export const validationTexts = {
   formFillError: "Neteisingai užpildyta forma",
+  profileUpdated: "Profilis atnaujintas",
   requireMap: "Privalote pasirinkti vietą žemėlapyje",
   requirePhotos: "Privalote įkelti nuotrauką",
   requireSpeciesType: "Privalote pasirinkti bent vieną rūšių tipą",

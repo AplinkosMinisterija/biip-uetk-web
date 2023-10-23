@@ -7,7 +7,7 @@ import PasswordField from "../components/fields/PasswordField";
 import TextField from "../components/fields/TextField";
 import Icon from "../components/other/Icons";
 import { handleAlert } from "../utils/functions";
-import { useCheckAuthMutation, useEGatesSign } from "../utils/hooks";
+import { useEGatesSign, useUserInfo } from "../utils/hooks";
 import { handleUpdateTokens } from "../utils/loginFunctions";
 import { buttonsTitles, inputLabels, validationTexts } from "../utils/texts";
 import { loginSchema } from "../utils/validation";
@@ -28,6 +28,7 @@ export const Login = () => {
     const params = { email, password };
     await loginMutation.mutateAsync(params);
   };
+  const { isLoading: userInfoLoading } = useUserInfo();
 
   const loginMutation = useMutation((params: LoginProps) => api.login(params), {
     onError: ({ response }: any) => {
@@ -41,7 +42,6 @@ export const Login = () => {
     },
     onSuccess: (data) => {
       handleUpdateTokens(data);
-      checkAuthMutation();
     },
     retry: false
   });
@@ -49,10 +49,7 @@ export const Login = () => {
   const { mutateAsync: eGatesMutation, isLoading: eGatesSignLoading } =
     useEGatesSign();
 
-  const { mutateAsync: checkAuthMutation, isLoading: checkAuthLoading } =
-    useCheckAuthMutation();
-
-  const loading = [loginMutation.isLoading, checkAuthLoading].some(
+  const loading = [loginMutation.isLoading, userInfoLoading].some(
     (loading) => loading
   );
 
