@@ -231,7 +231,8 @@ const RequestPage = () => {
               <MapContainer>
                 <AsyncMultiSelect
                   disabled={disabled}
-                  label={inputLabels.objectNameOrCode}
+                  label={inputLabels.objects}
+                  placeholder={inputLabels.objectNameOrCode}
                   values={values.objects}
                   getOptionValue={(option) => option?.cadastralId}
                   error={errors.objects}

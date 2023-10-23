@@ -1,5 +1,4 @@
 import Cookies from "universal-cookie";
-import api from "../api";
 import { UserReducerProps } from "../state/user/reducer";
 import { Profile, ProfileId } from "../types";
 
@@ -68,13 +67,10 @@ export const handleUpdateTokens = (data: UpdateTokenProps) => {
 export const handleSelectProfile = (profileId: ProfileId) => {
   if (cookies.get("profileId")?.toString() === profileId?.toString()) return;
 
-  cookies.set("profileId", `${profileId}`, { path: "/" });
+  cookies.set("profileId", `${profileId}`, {
+    path: "/",
+    expires: new Date(new Date().getTime() + 60 * 60 * 24 * 1000 * 30)
+  });
 
   window.location.reload();
-};
-
-export const handleGetCurrentUser = async () => {
-  if (!cookies.get("token")) return emptyUser;
-
-  return { userData: await api.checkAuth(), loggedIn: true };
 };

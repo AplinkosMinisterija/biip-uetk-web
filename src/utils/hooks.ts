@@ -1,17 +1,13 @@
 import { isEqual } from "lodash";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import Cookies from "universal-cookie";
 import api from "../api";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
-import { actions, UserReducerProps } from "../state/user/reducer";
+import { actions } from "../state/user/reducer";
+import { User } from "../types";
 import { ServerErrorCodes } from "./constants";
 import { handleAlert, handleIsTenantUser } from "./functions";
-import {
-  clearCookies,
-  emptyUser,
-  handleGetCurrentUser,
-  handleSetProfile
-} from "./loginFunctions";
+import { clearCookies, emptyUser, handleSetProfile } from "./loginFunctions";
 import { filteredRoutes } from "./routes";
 
 const cookies = new Cookies();
@@ -47,10 +43,11 @@ export const useEGatesSign = () => {
   return { isLoading, mutateAsync };
 };
 
-export const useCheckAuthMutation = () => {
+export const useUserInfo = () => {
   const dispatch = useAppDispatch();
+  const token = cookies.get("token");
 
-  const { mutateAsync, isLoading } = useMutation(handleGetCurrentUser, {
+  const { isLoading } = useQuery([token], () => api.getUserInfo(), {
     onError: ({ response }: any) => {
       if (isEqual(response.status, ServerErrorCodes.NO_PERMISSION)) {
         clearCookies();
@@ -59,18 +56,19 @@ export const useCheckAuthMutation = () => {
         return;
       }
 
-      handleAlert();
+      return handleAlert();
     },
-    onSuccess: (data: UserReducerProps) => {
+    onSuccess: (data: User) => {
       if (data) {
-        handleSetProfile(data?.userData?.profiles);
-        dispatch(actions.setUser(data));
+        handleSetProfile(data.profiles);
+        dispatch(actions.setUser({ userData: data, loggedIn: true }));
       }
     },
-    retry: 5
+    retry: false,
+    enabled: !!token
   });
 
-  return { isLoading, mutateAsync };
+  return { isLoading };
 };
 
 export const useLogoutMutation = () => {

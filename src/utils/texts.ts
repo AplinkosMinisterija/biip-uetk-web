@@ -233,7 +233,6 @@ export const formLabels = {
   name: "Pavadinimas",
   description: "Aprašymas",
   gallery: "Galerija",
-  profileUpdated: "Profilis atnaujintas",
   mainPhoto: "Pagrindinė nuotrauka",
   map: "Žemėlapis",
   photos: "Nuotraukos",
@@ -302,7 +301,7 @@ export const inputLabels = {
   providerType: "Duomenų teikėjo statusas objekto atžvilgiu",
   formType: "Teikiami duomenys dėl",
   objectName: "Pavadinimas",
-  objects: "Objektai",
+  objects: "UETK objektai",
   objectNameOrCode: "Pavadinimas arba kodas",
   agreeWithConditions: "Su duomenų teikimo sąlygomis susipažinau ir sutinku.",
   providedByFullName: "Teikėjo Vardas, Pavardė / Įmonės pavadinimas",
@@ -470,6 +469,7 @@ export const formTypeLabels = {
 
 export const validationTexts = {
   formFillError: "Neteisingai užpildyta forma",
+  profileUpdated: "Profilis atnaujintas",
   requireMap: "Privalote pasirinkti vietą žemėlapyje",
   requirePhotos: "Privalote įkelti nuotrauką",
   requireSpeciesType: "Privalote pasirinkti bent vieną rūšių tipą",
