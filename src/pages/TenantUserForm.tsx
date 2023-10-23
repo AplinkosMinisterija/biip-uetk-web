@@ -11,7 +11,7 @@ import { useAppSelector } from "../state/hooks";
 import { device } from "../styles";
 import { DeleteInfoProps, User } from "../types";
 import { RolesTypes } from "../utils/constants";
-import { handleAlert, isNew } from "../utils/functions";
+import { handleErrorFromServerToast, isNew } from "../utils/functions";
 import { getRolesTypes } from "../utils/options";
 import { slugs } from "../utils/routes";
 import {
@@ -38,7 +38,7 @@ const TenantUserForm = () => {
     (values: User) => api.createTenantUser(values),
     {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       onSuccess: () => {
         navigate(slugs.tenantUsers);
@@ -51,7 +51,7 @@ const TenantUserForm = () => {
     (values: User) => api.updateTenantUser(values, id),
     {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       onSuccess: () => {
         navigate(slugs.tenantUsers);
@@ -84,7 +84,7 @@ const TenantUserForm = () => {
 
   const removeUser = useMutation(() => api.deleteTenantUser(id!), {
     onError: () => {
-      handleAlert();
+      handleErrorFromServerToast();
     },
     onSuccess: () => {
       navigate(slugs.tenantUsers);

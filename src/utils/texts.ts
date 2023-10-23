@@ -183,6 +183,7 @@ export const menuLabels = {
   forms: "Duomenų teikimas",
   requests: "Duomenų gavimas",
   profile: "Profilis",
+  tenant: "Įmonė",
   tenantUsers: "Įmonės darbuotojai",
   myProfile: "MANO PASKYRA"
 };
@@ -226,6 +227,7 @@ export const buttonsTitles = {
 };
 
 export const formLabels = {
+  infoAboutTenant: "Informacija apie įmonę",
   selectProfile: "Pasirinkite paskyrą",
   login: "Prisijungti",
   history: "Istorija",
@@ -468,6 +470,7 @@ export const formTypeLabels = {
 };
 
 export const validationTexts = {
+  tenantUpdated: "Įmonė atnaujinta",
   formFillError: "Neteisingai užpildyta forma",
   profileUpdated: "Profilis atnaujintas",
   requireMap: "Privalote pasirinkti vietą žemėlapyje",

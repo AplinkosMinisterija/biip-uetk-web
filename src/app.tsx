@@ -21,7 +21,18 @@ import { Login } from "./pages/Login";
 import { useAppSelector } from "./state/hooks";
 import { ProfileId } from "./types";
 import { ServerErrorCodes } from "./utils/constants";
-import { useEGatesSign, useFilteredRoutes, useUserInfo } from "./utils/hooks";
+import {
+  isProfileFullyCompleted,
+  isTenantFullyCompleted
+} from "./utils/functions";
+import {
+  useEGatesSign,
+  useFilteredRoutes,
+  useGetCurrentProfile,
+  useIsTenantOwner,
+  useTenantInfoMutation,
+  useUserInfo
+} from "./utils/hooks";
 import { handleUpdateTokens } from "./utils/loginFunctions";
 import { slugs } from "./utils/routes";
 
@@ -38,17 +49,26 @@ function App() {
   const profiles = useAppSelector((state) => state.user.userData.profiles);
   const [searchParams] = useSearchParams();
   const { ticket, eGates } = Object.fromEntries([...Array.from(searchParams)]);
-  const profileId: ProfileId = cookies.get("profileId");
   const [initialLoading, setInitialLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const routes = useFilteredRoutes();
   const navigateRef = useRef(navigate);
-
-  console.log("wur");
+  const user = useAppSelector((state) => state.user.userData);
+  const tenant = useAppSelector((state) => state.tenant);
+  const currentProfile = useGetCurrentProfile();
+  const isTenantOwner = useIsTenantOwner();
+  const profileId = currentProfile?.id!;
+  const publicSlugs = [slugs.profiles, slugs.login];
+  const isPublicSlugs = publicSlugs.includes(location.pathname);
 
   const isInvalidProfile =
-    !profiles?.map((profile) => profile?.id?.toString()).includes(profileId) &&
+    profileId &&
+    !profiles
+      ?.map((profile) => {
+        return profile?.id;
+      })
+      .includes(profileId) &&
     loggedIn;
 
   const updateTokensMutation = useMutation(api.refreshToken, {
@@ -75,6 +95,7 @@ function App() {
     useEGatesSign();
 
   const { isLoading: userInfoLoading } = useUserInfo();
+  const { isFetching: tenantInfoLoading } = useTenantInfoMutation();
 
   const eGatesLoginMutation = useMutation(
     (ticket: string) => api.eGatesLogin({ ticket }),
@@ -86,9 +107,31 @@ function App() {
     }
   );
 
+  useEffect(() => {
+    if (userInfoLoading || tenantInfoLoading || isPublicSlugs) return;
+
+    if (profileId && !isProfileFullyCompleted(user)) {
+      return navigate(slugs.profile);
+    }
+    if (isTenantOwner && !isTenantFullyCompleted(tenant)) {
+      return navigate(slugs.tenant);
+    }
+  }, [
+    location.pathname,
+    navigate,
+    profileId,
+    isPublicSlugs,
+    isTenantOwner,
+    userInfoLoading,
+    tenantInfoLoading,
+    user,
+    tenant
+  ]);
+
   const isLoading = [
     userInfoLoading,
     initialLoading,
+    tenantInfoLoading,
     eGatesLoginMutation.isLoading,
     eGatesSignLoading,
     updateTokensMutation.isLoading
@@ -133,7 +176,7 @@ function App() {
   }, [profileId, loggedIn, isInvalidProfile]);
 
   const getDefaultRoute = () => {
-    if (!loggedIn) return "/login";
+    if (!loggedIn) return slugs.login;
 
     if (!profileId) return slugs.profiles;
 

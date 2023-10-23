@@ -15,7 +15,7 @@ import {
   BiSearchAlt2,
   BiWater
 } from "react-icons/bi";
-import { BsLayersHalf, BsLink45Deg } from "react-icons/bs";
+import { BsFillBuildingFill, BsLayersHalf, BsLink45Deg } from "react-icons/bs";
 import { CgMathMinus, CgMathPlus } from "react-icons/cg";
 import { FaTrash } from "react-icons/fa";
 import { FiClock, FiDownload, FiPhone, FiUser, FiUsers } from "react-icons/fi";
@@ -186,6 +186,8 @@ const Icon = ({ name, className, color, width, height }: IconProps) => {
       return <HiOutlineArrowNarrowLeft className={className} />;
     case "splitView":
       return <MdSplitscreen className={className} />;
+    case "tenant":
+      return <BsFillBuildingFill className={className} />;
     case "picture":
       return <AiFillPicture className={className} />;
     case "remove":

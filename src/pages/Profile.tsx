@@ -1,15 +1,17 @@
 import { useMutation, useQueryClient } from "react-query";
-import styled from "styled-components";
 import Cookies from "universal-cookie";
 import api from "../api";
 import SimpleContainer from "../components/containers/SimpleContainer";
 import TextField from "../components/fields/TextField";
 import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
 import { useAppSelector } from "../state/hooks";
-import { device } from "../styles";
+import { Grid } from "../styles/GenericStyledComponents";
 import { User } from "../types";
-import { handleAlert, handleSuccess } from "../utils/functions";
-import { useGetCurrentProfile } from "../utils/hooks";
+import {
+  handleErrorFromServerToast,
+  handleSuccessToast,
+  isProfileFullyCompleted
+} from "../utils/functions";
 import {
   formLabels,
   inputLabels,
@@ -27,18 +29,17 @@ export interface UserProps {
 const cookies = new Cookies();
 const Profile = () => {
   const user: User = useAppSelector((state) => state?.user?.userData);
-  const currentProfile = useGetCurrentProfile();
   const token = cookies.get("token");
   const queryClient = useQueryClient();
   const updateForm = useMutation(
     (values: UserProps) => api.updateProfile(user?.id!, values),
     {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries([token]);
-        handleSuccess(validationTexts.profileUpdated);
+        handleSuccessToast(validationTexts.profileUpdated);
       },
       retry: false
     }
@@ -46,7 +47,7 @@ const Profile = () => {
   const initialProfileValues: UserProps = {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
-    email: currentProfile?.email || user?.email || "",
+    email: user?.email || "",
     phone: user?.phone || ""
   };
 
@@ -58,40 +59,38 @@ const Profile = () => {
     return (
       <>
         <SimpleContainer title={formLabels.profileInfo}>
-          <>
-            <Row>
-              <TextField
-                label={inputLabels.firstName}
-                value={values.firstName}
-                error={errors.firstName}
-                disabled={true}
-                name="firstName"
-                onChange={(firstName) => handleChange("firstName", firstName)}
-              />
-              <TextField
-                label={inputLabels.lastName}
-                disabled={true}
-                name="lastName"
-                value={values.lastName}
-                error={errors.lastName}
-                onChange={(lastName) => handleChange("lastName", lastName)}
-              />
-              <TextField
-                label={inputLabels.phone}
-                value={values.phone}
-                error={errors.phone}
-                name="phone"
-                onChange={(phone) => handleChange("phone", phone)}
-              />
-              <TextField
-                label={inputLabels.email}
-                name="email"
-                value={values.email}
-                error={errors.email}
-                onChange={(email) => handleChange("email", email)}
-              />
-            </Row>
-          </>
+          <Grid>
+            <TextField
+              label={inputLabels.firstName}
+              value={values.firstName}
+              error={errors.firstName}
+              disabled={true}
+              name="firstName"
+              onChange={(firstName) => handleChange("firstName", firstName)}
+            />
+            <TextField
+              label={inputLabels.lastName}
+              disabled={true}
+              name="lastName"
+              value={values.lastName}
+              error={errors.lastName}
+              onChange={(lastName) => handleChange("lastName", lastName)}
+            />
+            <TextField
+              label={inputLabels.phone}
+              value={values.phone}
+              error={errors.phone}
+              name="phone"
+              onChange={(phone) => handleChange("phone", phone)}
+            />
+            <TextField
+              label={inputLabels.email}
+              name="email"
+              value={values.email}
+              error={errors.email}
+              onChange={(email) => handleChange("email", email)}
+            />
+          </Grid>
         </SimpleContainer>
       </>
     );
@@ -100,6 +99,8 @@ const Profile = () => {
   return (
     <FormPageWrapper
       back={false}
+      twoColumn={true}
+      validateOnMount={!isProfileFullyCompleted(user)}
       title={pageTitles.updateProfile}
       initialValues={initialProfileValues}
       onSubmit={updateForm.mutateAsync}
@@ -108,15 +109,5 @@ const Profile = () => {
     />
   );
 };
-
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-
-  @media ${device.mobileL} {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
 
 export default Profile;

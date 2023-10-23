@@ -33,6 +33,14 @@ export interface User {
   profiles?: Profile[];
 }
 
+export interface Tenant {
+  id?: string;
+  name?: string;
+  code?: string;
+  email?: string;
+  phone?: string;
+}
+
 export type ProfileId = "freelancer" | "expert" | string;
 
 export interface Profile {

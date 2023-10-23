@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { TableData, TableRow } from "../components/tables/table";
-import { handleAlert } from "../utils/functions";
+import { handleErrorFromServerToast } from "../utils/functions";
 import type { AppDispatch, RootState } from "./store";
 
 interface TableDataProp {
@@ -26,7 +26,7 @@ export const useTableData = ({
 
   const { isLoading } = useQuery([name, dependencyArray], () => endpoint(), {
     onError: () => {
-      handleAlert();
+      handleErrorFromServerToast();
     },
     onSuccess: (list) => {
       setTableData({

@@ -17,7 +17,8 @@ export const slugToIcon = {
   [slugs.requests]: "description",
   [slugs.forms]: "campaign",
   [slugs.profile]: "person",
-  [slugs.tenantUsers]: "group"
+  [slugs.tenantUsers]: "group",
+  [slugs.tenant]: "tenant"
 };
 
 const ProfilesDropdown = () => {

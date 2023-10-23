@@ -2,7 +2,7 @@ import { map } from "lodash";
 import { useRef } from "react";
 import styled from "styled-components";
 import { device } from "../../styles";
-import { bytesToMb, handleAlert } from "../../utils/functions";
+import { bytesToMb, handleErrorFromServerToast } from "../../utils/functions";
 import { inputLabels } from "../../utils/texts";
 import { validateFileSizes, validateFileTypes } from "../../utils/validation";
 import Icon from "../other/Icons";
@@ -52,9 +52,10 @@ const DragAndDropUploadField = ({
 
   const handleSetFiles = (currentFiles: File[]) => {
     const isValidFileTypes = validateFileTypes(currentFiles);
-    if (!isValidFileTypes) return handleAlert("badFileTypes");
+    if (!isValidFileTypes) return handleErrorFromServerToast("badFileTypes");
     const isValidFileSizes = validateFileSizes(currentFiles);
-    if (!isValidFileSizes) return handleAlert("fileSizesExceeded");
+    if (!isValidFileSizes)
+      return handleErrorFromServerToast("fileSizesExceeded");
 
     onUpload && onUpload(currentFiles);
   };

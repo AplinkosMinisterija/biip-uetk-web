@@ -6,7 +6,7 @@ import Button from "../components/buttons/Button";
 import PasswordField from "../components/fields/PasswordField";
 import TextField from "../components/fields/TextField";
 import Icon from "../components/other/Icons";
-import { handleAlert } from "../utils/functions";
+import { handleErrorFromServerToast } from "../utils/functions";
 import { useEGatesSign, useUserInfo } from "../utils/hooks";
 import { handleUpdateTokens } from "../utils/loginFunctions";
 import { buttonsTitles, inputLabels, validationTexts } from "../utils/texts";
@@ -38,7 +38,7 @@ export const Login = () => {
         return setErrors({ password: text });
       }
 
-      handleAlert();
+      handleErrorFromServerToast();
     },
     onSuccess: (data) => {
       handleUpdateTokens(data);

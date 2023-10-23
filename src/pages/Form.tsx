@@ -50,7 +50,7 @@ import {
   formObjectTypes,
   formProviderTypes,
   getLocationList,
-  handleAlert,
+  handleErrorFromServerToast,
   isMapEditAttribute,
   isNew,
   subPoolTypes
@@ -120,7 +120,7 @@ const FormPage = () => {
     (values: FormPayload) => api.createForm(values),
     {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       onSuccess: () => {
         navigate(slugs.forms);
@@ -133,7 +133,7 @@ const FormPage = () => {
     (values: FormPayload) => api.updateForm(id!, values),
     {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       onSuccess: () => {
         navigate(slugs.forms);

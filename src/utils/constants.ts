@@ -133,7 +133,8 @@ export enum Resources {
   MY_REQUESTS = "requests/my",
   DELETED_REQUESTS = "requests/deleted",
   UPLOAD = "upload",
-  SEARCH = "objects/search"
+  SEARCH = "objects/search",
+  TENANTS = "tenants"
 }
 
 export enum Populations {

@@ -258,3 +258,13 @@ export const validateRequest = Yup.object().shape(
     ["objects", "objects"]
   ]
 );
+
+export const validateUpdateTenantForm = Yup.object().shape({
+  phone: Yup.string()
+    .required(validationTexts.requireText)
+    .trim()
+    .matches(/^(86|\+3706)\d{7}$/, validationTexts.badPhoneFormat),
+  email: Yup.string()
+    .email(validationTexts.badEmailFormat)
+    .required(validationTexts.requireText)
+});

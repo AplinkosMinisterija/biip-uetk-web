@@ -6,6 +6,7 @@ import ProfilePage from "../pages/Profile";
 import Profiles from "../pages/Profiles";
 import RequestPage from "../pages/Request";
 import Requests from "../pages/Requests";
+import TenantForm from "../pages/Tenant";
 import TenantUserForm from "../pages/TenantUserForm";
 import TenantUsers from "../pages/TenantUsers";
 import { Profile } from "../types";
@@ -15,6 +16,8 @@ import { menuLabels, url } from "./texts";
 export const slugs = {
   profile: "/profilis",
   profiles: "/profiliai",
+  login: "/login",
+  tenant: "/imone",
   forms: "/duomenu-teikimas",
   formMy: "/duomenu-teikimas/mano",
   newForm: "/duomenu-teikimas/naujas",
@@ -77,6 +80,13 @@ const routes = [
     component: <TenantUsers />
   },
   {
+    label: menuLabels.tenant,
+    slug: slugs.tenant,
+    dropDown: true,
+    tenantOwner: true,
+    component: <TenantForm />
+  },
+  {
     slug: slugs.tenantUser(":id"),
     tenantOwner: true,
     component: <TenantUserForm />
@@ -99,7 +109,7 @@ export const filteredRoutes = (profile?: Profile): any =>
   routes.filter((route) => {
     if (!route?.slug) return false;
     if (route.tenantOwner) {
-      return handleIsTenantOwner(profile?.role);
+      return handleIsTenantOwner(profile);
     }
     if (route.tenantOwner) {
       return handleIsTenantUser(profile);
