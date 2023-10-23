@@ -3,10 +3,11 @@ import { useMutation, useQuery } from "react-query";
 import Cookies from "universal-cookie";
 import api from "../api";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
-import { actions } from "../state/user/reducer";
-import { User } from "../types";
+import { actions as userActions } from "../state/user/reducer";
+import { actions as tenantActions } from "../state/tenant/reducer";
+import { Tenant, User } from "../types";
 import { ServerErrorCodes } from "./constants";
-import { handleAlert, handleIsTenantUser } from "./functions";
+import { handleErrorFromServerToast, handleIsTenantOwner, handleIsTenantUser } from "./functions";
 import { clearCookies, emptyUser, handleSetProfile } from "./loginFunctions";
 import { filteredRoutes } from "./routes";
 
@@ -29,10 +30,14 @@ export const useIsTenantUser = () => {
   return handleIsTenantUser(useGetCurrentProfile());
 };
 
+export const useIsTenantOwner = () => {
+  return handleIsTenantOwner(useGetCurrentProfile());
+};
+
 export const useEGatesSign = () => {
   const { mutateAsync, isLoading } = useMutation(api.eGatesSign, {
     onError: () => {
-      handleAlert();
+      handleErrorFromServerToast();
     },
     onSuccess: ({ url }) => {
       window.location.replace(url);
@@ -43,6 +48,29 @@ export const useEGatesSign = () => {
   return { isLoading, mutateAsync };
 };
 
+export const useTenantInfoMutation = () => {
+  const dispatch = useAppDispatch();
+  const loggedIn = useAppSelector((state) => state?.user?.loggedIn);
+  const profileId = cookies.get("profileId");
+
+  const { isFetching } = useQuery(
+    ["tenant", loggedIn, profileId],
+    () => api.getTenantInfo(profileId),
+    {
+      onError: () => {
+        handleErrorFromServerToast();
+      },
+      onSuccess: ({ name, code, phone, email, id }: Tenant) => {
+        dispatch(tenantActions.setTenant({ id, name, code, phone, email }));
+      },
+      retry: false,
+      enabled: loggedIn && !isNaN(profileId)
+    }
+  );
+
+  return { isFetching };
+};
+
 export const useUserInfo = () => {
   const dispatch = useAppDispatch();
   const token = cookies.get("token");
@@ -51,17 +79,17 @@ export const useUserInfo = () => {
     onError: ({ response }: any) => {
       if (isEqual(response.status, ServerErrorCodes.NO_PERMISSION)) {
         clearCookies();
-        dispatch(actions.setUser(emptyUser));
+        dispatch(userActions.setUser(emptyUser));
 
         return;
       }
 
-      return handleAlert();
+      return handleErrorFromServerToast();
     },
     onSuccess: (data: User) => {
       if (data) {
         handleSetProfile(data.profiles);
-        dispatch(actions.setUser({ userData: data, loggedIn: true }));
+        dispatch(userActions.setUser({ userData: data, loggedIn: true }));
       }
     },
     retry: false,
@@ -76,11 +104,11 @@ export const useLogoutMutation = () => {
 
   const { mutateAsync } = useMutation(() => api.logout(), {
     onError: () => {
-      handleAlert();
+      handleErrorFromServerToast();
     },
     onSuccess: () => {
       clearCookies();
-      dispatch(actions.setUser(emptyUser));
+      dispatch(userActions.setUser(emptyUser));
     }
   });
 

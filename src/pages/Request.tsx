@@ -22,7 +22,11 @@ import {
   Container
 } from "../styles/GenericStyledComponents";
 import { PurposeTypes, StatusTypes } from "../utils/constants";
-import { getLocationList, handleAlert, isNew } from "../utils/functions";
+import {
+  getLocationList,
+  handleErrorFromServerToast,
+  isNew
+} from "../utils/functions";
 import { useGetCurrentProfile } from "../utils/hooks";
 import { purposeTypesOptions } from "../utils/options";
 import { slugs } from "../utils/routes";
@@ -111,7 +115,7 @@ const RequestPage = () => {
     (values: RequestPayload) => api.createRequests(values),
     {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       onSuccess: () => {
         navigate(slugs.requests);
@@ -124,7 +128,7 @@ const RequestPage = () => {
     (values: RequestPayload) => api.updaterRequest(id!, values),
     {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       onSuccess: () => {
         navigate(slugs.requests);

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { default as api, default as Api } from "../api";
 import { FilterConfig } from "../components/other/DynamicFilter/Filter";
 import { device } from "../styles";
-import { Columns, Profile } from "../types";
+import { Columns, Profile, Tenant, User } from "../types";
 import {
   FormDataFields,
   FormObjectType,
@@ -15,7 +15,7 @@ import {
 } from "./constants";
 import { validationTexts } from "./texts";
 
-export const handleAlert = (responseError?: string) => {
+export const handleErrorFromServerToast = (responseError?: string) => {
   toast.error(
     validationTexts[responseError as keyof typeof validationTexts] ||
       validationTexts.error,
@@ -29,7 +29,7 @@ export const handleAlert = (responseError?: string) => {
   );
 };
 
-export const handleSuccess = (message: string) => {
+export const handleSuccessToast = (message: string) => {
   toast.success(message, {
     position: "top-center",
     autoClose: 5000,
@@ -118,8 +118,8 @@ export const getUserList = async () => {
 
 export const handleIsTenantUser = (profile?: Profile) => !!profile?.role;
 
-export const handleIsTenantOwner = (role?: RolesTypes) =>
-  role === RolesTypes.ADMIN;
+export const handleIsTenantOwner = (profile?: Profile) =>
+  profile?.role === RolesTypes.ADMIN;
 
 export const handleNavigate = (
   slug: string,
@@ -192,3 +192,9 @@ export const availableMimeTypes = [
   "image/jpeg",
   "application/pdf"
 ];
+
+export const isProfileFullyCompleted = (user: User) =>
+  [user.email, user.phone].every((userProp) => !!userProp);
+
+export const isTenantFullyCompleted = (tenant: Tenant) =>
+  [tenant.email, tenant.phone].every((userProp) => !!userProp);

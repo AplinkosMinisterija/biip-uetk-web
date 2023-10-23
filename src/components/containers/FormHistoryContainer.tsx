@@ -8,7 +8,7 @@ import { FormHistory } from "../../types";
 import { intersectionObserverConfig } from "../../utils/configs";
 import { HistoryTypes } from "../../utils/constants";
 import { formatDateAndTime } from "../../utils/format";
-import { handleAlert } from "../../utils/functions";
+import { handleErrorFromServerToast } from "../../utils/functions";
 import { formLabels } from "../../utils/texts";
 import { ButtonColors } from "../buttons/Button";
 import Avatar from "../other/Avatar";
@@ -58,7 +58,7 @@ const FormHistoryContainer = ({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery([name], ({ pageParam }) => fetchData(pageParam), {
       onError: () => {
-        handleAlert();
+        handleErrorFromServerToast();
       },
       getNextPageParam: (lastPage) => lastPage.page,
       cacheTime: 60000

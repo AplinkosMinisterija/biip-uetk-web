@@ -1,7 +1,14 @@
 import Axios, { AxiosInstance, AxiosResponse } from "axios";
 import { isEmpty } from "lodash";
 import Cookies from "universal-cookie";
-import { Form, FormFiltersProps, Request, User, UserFilters } from "./types";
+import {
+  Form,
+  FormFiltersProps,
+  Request,
+  Tenant,
+  User,
+  UserFilters
+} from "./types";
 import { Populations, Resources, SortFields } from "./utils/constants";
 const cookies = new Cookies();
 
@@ -404,6 +411,19 @@ class Api {
   getMapToken = async () =>
     await this.getOne({
       resource: Resources.MAPS_AUTH
+    });
+
+  getTenantInfo = async (id: string) =>
+    await this.getOne({
+      resource: Resources.TENANTS,
+      id
+    });
+
+  updateTenant = async (id: string, params: any): Promise<Tenant> =>
+    await this.patch({
+      resource: Resources.TENANTS,
+      params,
+      id
     });
 }
 
