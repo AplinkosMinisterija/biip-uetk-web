@@ -41,7 +41,7 @@ const ProfilesDropdown = () => {
       <Select onClick={() => setShowSelect(!showSelect)}>
         <SelectContainer>
           <Name>{currentProfile?.name || "-"}</Name>
-          <Email>{currentProfile?.email || user?.email}</Email>
+          <Email>{user?.email}</Email>
         </SelectContainer>
         <DropdownIcon name="miniArrowDown" />
       </Select>
@@ -62,7 +62,7 @@ const ProfilesDropdown = () => {
               >
                 <div>
                   <Name>{profile?.name || "-"}</Name>
-                  <Email>{profile?.email || user?.email}</Email>
+                  <Email>{user?.email}</Email>
                 </div>
                 {selected && <SelectedIcon name="active" />}
               </ProfileContainer>

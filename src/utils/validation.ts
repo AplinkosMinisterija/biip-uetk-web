@@ -79,7 +79,7 @@ export const validateForm = Yup.object().shape({
     )
   }),
 
-  data: Yup.lazy((values, ctx) => {
+  data: Yup.lazy((_, ctx) => {
     const { objectType, type } = ctx.parent;
 
     if (!isEqual(type, FormType.NEW)) return Yup.mixed().notRequired();

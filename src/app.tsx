@@ -109,7 +109,6 @@ function App() {
 
   useEffect(() => {
     if (userInfoLoading || tenantInfoLoading || isPublicSlugs) return;
-
     if (profileId && !isProfileFullyCompleted(user)) {
       return navigate(slugs.profile);
     }

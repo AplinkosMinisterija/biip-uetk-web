@@ -307,12 +307,12 @@ const Icon = ({ name, className, color, width, height }: IconProps) => {
               y2="0.09"
               gradientUnits="objectBoundingBox"
             >
-              <stop offset="0" stop-color="#8fcea5" />
-              <stop offset="0.26" stop-color="#8ccda8" />
-              <stop offset="0.47" stop-color="#82cdb2" />
-              <stop offset="0.67" stop-color="#72cbc3" />
-              <stop offset="0.85" stop-color="#5cc9da" />
-              <stop offset="1" stop-color="#44c8f5" />
+              <stop offset="0" stopColor="#8fcea5" />
+              <stop offset="0.26" stopColor="#8ccda8" />
+              <stop offset="0.47" stopColor="#82cdb2" />
+              <stop offset="0.67" stopColor="#72cbc3" />
+              <stop offset="0.85" stopColor="#5cc9da" />
+              <stop offset="1" stopColor="#44c8f5" />
             </linearGradient>
           </defs>
           <g

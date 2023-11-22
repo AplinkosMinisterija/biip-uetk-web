@@ -1,13 +1,15 @@
-import { isEqual } from "lodash";
 import { useMutation, useQuery } from "react-query";
 import Cookies from "universal-cookie";
 import api from "../api";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
-import { actions as userActions } from "../state/user/reducer";
 import { actions as tenantActions } from "../state/tenant/reducer";
+import { actions as userActions } from "../state/user/reducer";
 import { Tenant, User } from "../types";
-import { ServerErrorCodes } from "./constants";
-import { handleErrorFromServerToast, handleIsTenantOwner, handleIsTenantUser } from "./functions";
+import {
+  handleErrorFromServerToast,
+  handleIsTenantOwner,
+  handleIsTenantUser
+} from "./functions";
 import { clearCookies, emptyUser, handleSetProfile } from "./loginFunctions";
 import { filteredRoutes } from "./routes";
 
@@ -76,15 +78,9 @@ export const useUserInfo = () => {
   const token = cookies.get("token");
 
   const { isLoading } = useQuery([token], () => api.getUserInfo(), {
-    onError: ({ response }: any) => {
-      if (isEqual(response.status, ServerErrorCodes.NO_PERMISSION)) {
-        clearCookies();
-        dispatch(userActions.setUser(emptyUser));
-
-        return;
-      }
-
-      return handleErrorFromServerToast();
+    onError: () => {
+      clearCookies();
+      dispatch(userActions.setUser(emptyUser));
     },
     onSuccess: (data: User) => {
       if (data) {
