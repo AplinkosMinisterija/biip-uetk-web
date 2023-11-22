@@ -1,11 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Columns } from "../../types";
 import { handleToggleColumns } from "../../utils/functions";
-import {
-  formTableLabels,
-  requestLabels,
-  tenantUsersLabels
-} from "../../utils/texts";
+import { tenantUsersLabels } from "../../utils/texts";
 
 interface ColumnsState {
   form: Columns;
@@ -14,9 +10,9 @@ interface ColumnsState {
 }
 
 const initialState: ColumnsState = {
-  form: formTableLabels,
+  form: {},
   tenantUser: tenantUsersLabels,
-  request: requestLabels
+  request: {}
 };
 
 export const TableColumns = createSlice({
@@ -31,6 +27,12 @@ export const TableColumns = createSlice({
     },
     toggleRequestColumns: (state, action) => {
       handleToggleColumns(state.request, action.payload);
+    },
+    handleSetFormColumns: (state, action) => {
+      return { ...state, form: action.payload };
+    },
+    handleSetRequestColumns: (state, action) => {
+      return { ...state, request: action.payload };
     }
   }
 });

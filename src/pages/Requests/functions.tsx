@@ -36,6 +36,8 @@ export const mapRequests = (requests: Request[]): TableRow[] =>
   requests.map((request: Request) => {
     const objects = request.objects?.map((object) => object.name);
 
+    const createdBy = `${request.createdBy.firstName} ${request.createdBy.lastName}`;
+
     return {
       tableId: `#${request.id}`,
       objects: <TableMaxWidthItem items={objects!} />,
@@ -52,7 +54,7 @@ export const mapRequests = (requests: Request[]): TableRow[] =>
         />
       ),
       createdAt: formatDate(new Date(request?.createdAt!)),
-
+      createdBy,
       generatedFile: <FilesToDownload url={request.generatedFile} />,
       respondedAt:
         canShowResponseDate(request?.status) &&

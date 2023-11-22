@@ -211,5 +211,6 @@ export interface Request {
   agreeWithConditions?: boolean;
   respondedAt?: Date;
   createdAt?: Date;
+  createdBy: User;
   generatedFile?: any;
 }

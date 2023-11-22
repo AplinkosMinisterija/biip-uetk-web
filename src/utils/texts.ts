@@ -65,7 +65,11 @@ export const tenantUsersLabels = {
   role: { label: "Teisė", show: true }
 };
 
-export const requestLabels = {
+export const requestLabels = ({
+  showCreatedBy
+}: {
+  showCreatedBy: boolean;
+}) => ({
   tableId: {
     label: "Id",
     mobileOrder: 0,
@@ -78,7 +82,6 @@ export const requestLabels = {
     desktopOrder: 1,
     show: true
   },
-
   purpose: {
     label: "Duomenų gavimo tikslas",
     mobileOrder: 2,
@@ -91,6 +94,12 @@ export const requestLabels = {
     desktopOrder: 5,
     show: true
   },
+  createdBy: {
+    label: "Sukūrė",
+    mobileOrder: 7,
+    desktopOrder: 8,
+    show: showCreatedBy
+  },
   status: {
     label: "Būsena",
     mobileOrder: 2,
@@ -99,19 +108,23 @@ export const requestLabels = {
   },
   respondedAt: {
     label: "Atsakymo data",
-    mobileOrder: 8,
-    desktopOrder: 8,
+    mobileOrder: 9,
+    desktopOrder: 9,
     show: true
   },
   generatedFile: {
     label: "",
-    mobileOrder: 9,
-    desktopOrder: 9,
+    mobileOrder: 10,
+    desktopOrder: 10,
     show: true
   }
-};
+});
 
-export const formTableLabels = {
+export const formTableLabels = ({
+  showProvidedBy
+}: {
+  showProvidedBy: boolean;
+}) => ({
   tableId: {
     label: "Id",
     mobileOrder: 0,
@@ -140,7 +153,7 @@ export const formTableLabels = {
     label: "Pateikė",
     mobileOrder: 5,
     desktopOrder: 4,
-    show: true
+    show: showProvidedBy
   },
   createdAt: {
     label: "Duomenų įvedimo data",
@@ -161,7 +174,7 @@ export const formTableLabels = {
     desktopOrder: 8,
     show: true
   }
-};
+});
 
 export const pageTitles = {
   request: (id: string) => `Duomenų gavimo nr. ${id}`,
