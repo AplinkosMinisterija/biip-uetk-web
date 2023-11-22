@@ -23,8 +23,6 @@ const TenantForm = () => {
   const loggedIn = useAppSelector((state) => state?.user?.loggedIn);
   const queryClient = useQueryClient();
 
-  console.log(tenant, "tenant");
-
   const updateUser = useMutation(
     (values: TenantProps) => api.updateTenant(tenant?.id!, values),
     {

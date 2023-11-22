@@ -1,4 +1,5 @@
 import { isEmpty } from "lodash";
+import { useEffect } from "react";
 import Api from "../../../api";
 import { ColumnButtonProps } from "../../../components/other/ColumnButton";
 import { DynamicFilterProps } from "../../../components/other/DynamicFilter";
@@ -11,11 +12,13 @@ import {
   useGenericTablePageHooks,
   useTableData
 } from "../../../state/hooks";
+import { useIsTenantUser } from "../../../utils/hooks";
 import { slugs } from "../../../utils/routes";
 import {
   buttonsTitles,
   emptyStateLabels,
-  emptyStateUrlLabels
+  emptyStateUrlLabels,
+  requestLabels
 } from "../../../utils/texts";
 import { filterConfig, rowConfig } from "../config";
 import { mapRequestFilters, mapRequests } from "../functions";
@@ -24,6 +27,14 @@ export const useData = () => {
   const { dispatch, navigate, page } = useGenericTablePageHooks();
   const filters = useAppSelector((state) => state.filters.requestFilters);
   const columns = useAppSelector((state) => state.columns.request);
+  const isTenantUser = useIsTenantUser();
+  useEffect(() => {
+    dispatch(
+      columnActions.handleSetRequestColumns(
+        requestLabels({ showCreatedBy: isTenantUser })
+      )
+    );
+  }, [isTenantUser, dispatch]);
 
   const { tableData, loading } = useTableData({
     endpoint: () =>
