@@ -151,6 +151,7 @@ const InnerContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 4px;
+  width: 100%;
 `;
 
 const StyledCloseIcon = styled(Icon)`
