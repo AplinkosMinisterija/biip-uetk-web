@@ -177,10 +177,10 @@ export const formTableLabels = ({
 });
 
 export const pageTitles = {
-  request: (id: string) => `Duomenų gavimo nr. ${id}`,
+  request: (id: string) => `Duomenų gavimo Nr. ${id}`,
   requests: "Duomenų gavimai",
   newRequest: "Naujas duomenų gavimas",
-  form: (id: string) => `Duomenų teikimo nr. ${id}`,
+  form: (id: string) => `Duomenų teikimo Nr. ${id}`,
   profile: "Profilis",
   newForm: "Naujas duomenų teikimas",
   updateForm: "Duomenų teikimą",
