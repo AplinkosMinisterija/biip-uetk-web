@@ -1,7 +1,7 @@
 {
   "name": "biip-uetk",
   "version": "0.1.0",
-  "proxy": "https://dev.internalapi.biip.lt/uetk",
+  "proxy": "https://dev-internalapi.biip.lt/uetk",
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@reduxjs/toolkit": "^1.8.1",
