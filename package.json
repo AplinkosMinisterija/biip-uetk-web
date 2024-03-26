@@ -1,7 +1,6 @@
 {
   "name": "biip-uetk",
   "version": "0.1.0",
-  "proxy": "https://dev-uetk.biip.lt",
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@reduxjs/toolkit": "^1.8.1",
@@ -49,13 +48,12 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "export PORT=8080 && react-scripts start",
-    "start-win": "set PORT=8080 && react-scripts start",
+    "test": "vitest",
+    "start": "vite --port 8080",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:sarif": "set SARIF_ESLINT_EMBED=true && yarn run lint --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "lint:sarif": "set SARIF_ESLINT_EMBED=true && yarn run lint --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif"
   },
   "eslintConfig": {
     "extends": [
@@ -82,9 +80,11 @@
     "@types/react-google-recaptcha": "^2.1.5",
     "@types/secure-random-password": "^0.2.1",
     "@types/styled-components": "^5.1.25",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "vite": "^5.2.6"
   },
   "engines": {
     "node": ">=20.0.0 <21.0.0"

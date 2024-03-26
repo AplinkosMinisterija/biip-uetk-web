@@ -184,7 +184,7 @@ export const useGetSortedColumns = (columns: Columns) => {
   return sortedColumns;
 };
 
-export const getPublicUrl = (url: string) => `${process.env.PUBLIC_URL}/${url}`;
+export const getPublicUrl = (url: string) => `/${url}`;
 
 export const availableMimeTypes = [
   "image/png",
