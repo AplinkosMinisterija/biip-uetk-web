@@ -18,5 +18,8 @@ export default () => {
       },
     },
     assetsInclude: ['**/*.png'],
+    build: {
+      outDir: 'build'
+    }
   });
 };
