@@ -99,7 +99,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   options={filter.options || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
                   getOptionLabel={(option) =>
-                    !!optionLabel ? optionLabel(option) : option.label
+                    optionLabel ? optionLabel(option) : option.label
                   }
                 />
               </InputWrapper>
@@ -118,7 +118,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   options={filter.options || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
                   getOptionLabel={(option) =>
-                    !!optionLabel ? optionLabel(option) : option.label
+                    optionLabel ? optionLabel(option) : option.label
                   }
                 />
               </InputWrapper>
@@ -136,7 +136,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   value={values[filter.key]}
                   onChange={(value) => setFieldValue(filter.key, value)}
                   getOptionLabel={(option) =>
-                    !!optionLabel ? optionLabel(option) : option.name
+                    optionLabel ? optionLabel(option) : option.name
                   }
                   loadOptions={(input, page) => filter.api(input, page)}
                 />
@@ -155,10 +155,10 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
                   values={values[filter.key] || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
                   getOptionLabel={(option) =>
-                    !!optionLabel ? optionLabel(option) : option.name
+                    optionLabel ? optionLabel(option) : option.name
                   }
                   getOptionValue={(option) =>
-                    !!optionValue ? optionValue(option) : option.name
+                    optionValue ? optionValue(option) : option.name
                   }
                   loadOptions={(input, page) => filter.api(input, page)}
                 />

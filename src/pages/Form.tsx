@@ -148,7 +148,7 @@ const FormPage = () => {
     const data: { [key in FormDataFields]?: string } | any =
       values.type === FormType.EDIT
         ? editFields?.reduce((obj, curr) => {
-            obj[curr?.attribute!] = curr.value;
+            obj[curr.attribute!] = curr.value;
             return obj;
           }, {})
         : values.data;
@@ -808,20 +808,20 @@ const FormPage = () => {
   ) => {
     const { data } = values;
 
-    const options = typeOptions[values?.objectType!];
-    const labels = typeLabels[values?.objectType!];
+    const options = typeOptions[values.objectType!];
+    const labels = typeLabels[values.objectType!];
 
     const components: any = [];
     const isNaturalLakeOrPondFields = [
       FormObjectType.POND,
       FormObjectType.PONDED_LAKE
-    ].includes(values?.objectType!);
+    ].includes(values.objectType!);
 
     const hasPoolAreaWaterVolumeFields = [
       FormObjectType.NATURAL_LAKE,
       FormObjectType.PONDED_LAKE,
       FormObjectType.POND
-    ].includes(values?.objectType!);
+    ].includes(values.objectType!);
 
     if (hasPoolAreaWaterVolumeFields) {
       components.push(
@@ -1180,9 +1180,9 @@ const FormPage = () => {
   };
 
   const mapEditFields = () => {
-    const fields = Object.keys(form?.data!).map((key) => {
+    const fields = form?.data ? Object.keys(form.data).map((key) => {
       return { attribute: key, value: form?.data?.[key] };
-    });
+    }) : [];
 
     if (!isEmpty(form?.geom) && form?.objectType) {
       const attribute = editOptions[form.objectType].find((item) =>
@@ -1221,7 +1221,7 @@ const FormPage = () => {
       FormObjectType.FISH_PASS,
       FormObjectType.EARTH_DAM,
       FormObjectType.WATER_EXCESS_CULVERT
-    ].includes(values?.objectType!);
+    ].includes(values.objectType!);
 
     const handleUploadFile = async (files) => {
       const uploadedFiles = await Api.uploadFiles(Resources.FORMS, files);
@@ -1320,7 +1320,7 @@ const FormPage = () => {
                   getOptionValue={(option) => option?.cadastralId}
                   getInputLabel={() =>
                     `${values?.objectName}, ${values?.cadastralId}, ${
-                      formObjectTypeLabels[values?.objectType!]
+                      formObjectTypeLabels[values.objectType!]
                     }`
                   }
                   getOptionLabel={(option) => {
@@ -1370,7 +1370,7 @@ const FormPage = () => {
                     <div>
                       {values.editFields?.map((item, index) => {
                         const filteredOptions = editOptions[
-                          values?.objectType!
+                          values.objectType!
                         ]?.filter(
                           (option) =>
                             !values.editFields?.some(
@@ -1380,8 +1380,8 @@ const FormPage = () => {
                             )
                         );
 
-                        const options = typeOptions[values?.objectType!];
-                        const labels = typeLabels[values?.objectType!];
+                        const options = typeOptions[values.objectType!];
+                        const labels = typeLabels[values.objectType!];
 
                         const handleRemove = (index) => {
                           if (isMapEditAttribute(item.attribute)) {
@@ -1411,7 +1411,7 @@ const FormPage = () => {
                                 )
                               }
                             />
-                            {fields?.[item?.attribute!]?.(
+                            {!!item.attribute && fields?.[item.attribute]?.(
                               item.value,
                               editFieldErrors?.value,
                               (value) =>
@@ -1423,7 +1423,7 @@ const FormPage = () => {
                               options,
                               labels
                             )}
-                            {!disabled && values.editFields?.length! > 1 && (
+                            {!disabled && values.editFields && values.editFields.length > 1 && (
                               <DeleteButton
                                 onClick={() => {
                                   handleRemove(index);
