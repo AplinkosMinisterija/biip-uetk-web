@@ -3,7 +3,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 module.exports = function (app) {
   app.use(
     createProxyMiddleware("/api", {
-      target: "https://dev-internalapi.biip.lt/uetk",
+      target: "https://dev-uetk.biip.lt",
       changeOrigin: true,
       pathRewrite: {
         "^/api": ""
