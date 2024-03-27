@@ -117,7 +117,3 @@ export const filteredRoutes = (profile?: Profile): any =>
 
     return true;
   });
-
-
-
-

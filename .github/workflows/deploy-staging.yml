@@ -19,5 +19,5 @@ jobs:
         NODE_ENV=production
         VITE_SENTRY_ENV=staging
         VITE_SENTRY_DSN=https://e2494aceced346f6b08c57e7ec8769ae@sentry.biip.lt/12
-        VITE_MAPS_HOST=https://maps.biip.lt
+        VITE_MAPS_HOST=https://staging-maps.biip.lt
       
