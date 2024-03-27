@@ -19,4 +19,4 @@ jobs:
         VITE_SENTRY_ENV=development
         VITE_SENTRY_DSN=https://e2494aceced346f6b08c57e7ec8769ae@sentry.biip.lt/12
         VITE_MAPS_HOST=https://dev-maps.biip.lt
-        VITE_BASE_URL=/app
+      
