@@ -12,9 +12,10 @@ COPY . .
 
 # Set env variables
 ARG NODE_ENV=production
+ARG VITE_BASE_URL=/app
 ARG VITE_SENTRY_DSN=
 ARG VITE_SENTRY_ENV=
-ARG VITE_BASE_URL=/app
+ARG VITE_MAPS_HOST=
 
 # Build and cleanup
 RUN yarn build
