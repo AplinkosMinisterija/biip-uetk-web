@@ -169,7 +169,7 @@ export const colorsByStatus = {
   [StatusTypes.REJECTED]: TagColors.PINK
 };
 
-const mapsHost = process.env.REACT_APP_MAPS_HOST || "https://maps.biip.lt";
+const mapsHost = import.meta.env.VITE_MAPS_HOST;
 export const Url = {
   DRAW: `${mapsHost}/edit`,
   UETK: `${mapsHost}/uetk`

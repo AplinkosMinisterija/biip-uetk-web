@@ -10,7 +10,7 @@ import { canShowResponseDate } from "../../utils/functions";
 import { purposeTypeLabels, requestStatusLabels } from "../../utils/texts";
 
 export const mapRequestFilters = (filters: RequestFilters) => {
-  let params: RequestFiltersProps = {};
+  const params: any = {};
 
   if (filters) {
     (!!filters.createdFrom || !!filters.createdTo) &&
@@ -24,10 +24,10 @@ export const mapRequestFilters = (filters: RequestFilters) => {
       });
 
     !isEmpty(filters?.purpose) &&
-      (params.purpose = { $in: filters?.purpose!?.map((state) => state.id) });
+      (params.purpose = { $in: filters?.purpose?.map((state) => state.id) });
 
     !isEmpty(filters?.status) &&
-      (params.status = { $in: filters?.status!?.map((state) => state.id) });
+      (params.status = { $in: filters?.status?.map((state) => state.id) });
   }
   return params;
 };
@@ -53,7 +53,7 @@ export const mapRequests = (requests: Request[]): TableRow[] =>
           ]}
         />
       ),
-      createdAt: formatDate(new Date(request?.createdAt!)),
+      createdAt: request?.createdAt ? formatDate(new Date(request.createdAt)) : '',
       createdBy,
       generatedFile: <FilesToDownload url={request.generatedFile} />,
       respondedAt:

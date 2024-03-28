@@ -88,7 +88,7 @@ const DragAndDropUploadField = ({
     e.stopPropagation();
 
     if (onDelete) {
-      onDelete([...files?.slice(0, index), ...files?.slice(index + 1)]);
+      onDelete([...files.slice(0, index), ...files.slice(index + 1)]);
     }
   };
 

@@ -32,7 +32,7 @@ const Profile = () => {
   const token = cookies.get("token");
   const queryClient = useQueryClient();
   const updateForm = useMutation(
-    (values: UserProps) => api.updateProfile(user?.id!, values),
+    async (values: UserProps) => user.id ? api.updateProfile(user.id, values) : Promise.resolve(),
     {
       onError: () => {
         handleErrorFromServerToast();

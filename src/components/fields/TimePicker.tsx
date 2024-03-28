@@ -72,7 +72,6 @@ const TimePicker = ({
       {open && !disabled ? (
         <DatePicker
           locale="lt"
-          //@ts-ignore
           filterTime={filterTime}
           open={open}
           showTimeSelect

@@ -31,7 +31,7 @@ const store = configureStore({
   ]
 });
 
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 
 const reduxData = { store, persistor };
 

@@ -84,7 +84,7 @@ export const validateForm = Yup.object().shape({
 
     if (!isEqual(type, FormType.NEW)) return Yup.mixed().notRequired();
 
-    let obj: any = {};
+    const obj: any = {};
 
     const requirePondedRiver = [
       FormObjectType.POND,

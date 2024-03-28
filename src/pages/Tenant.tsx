@@ -24,7 +24,7 @@ const TenantForm = () => {
   const queryClient = useQueryClient();
 
   const updateUser = useMutation(
-    (values: TenantProps) => api.updateTenant(tenant?.id!, values),
+    async (values: TenantProps) => tenant?.id ?  api.updateTenant(tenant.id, values) : Promise.resolve(),
     {
       onError: () => {
         handleErrorFromServerToast();

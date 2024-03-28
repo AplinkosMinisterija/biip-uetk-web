@@ -68,8 +68,10 @@ export const canShowResponseDate = (status) => {
 };
 
 export const sortDesktop = (columns: Columns, key: string, key2: string) => {
-  if (columns[key].desktopOrder && columns[key2].desktopOrder) {
-    return columns?.[key]?.desktopOrder! > columns?.[key2]?.desktopOrder!
+  const desktopOrder1 = columns?.[key]?.desktopOrder;
+  const desktopOrder2 = columns?.[key2]?.desktopOrder;
+  if (desktopOrder1 && desktopOrder2) {
+    return desktopOrder1 > desktopOrder2
       ? 1
       : -1;
   }
@@ -78,8 +80,10 @@ export const sortDesktop = (columns: Columns, key: string, key2: string) => {
 };
 
 export const sortMobile = (columns: Columns, key: string, key2: string) => {
-  if (columns[key].mobileOrder && columns[key2].mobileOrder) {
-    return columns?.[key]?.mobileOrder! > columns?.[key2]?.mobileOrder!
+  const mobileOrder1 = columns?.[key]?.mobileOrder;
+  const mobileOrder2 = columns?.[key2]?.mobileOrder;
+  if (mobileOrder1 && mobileOrder2) {
+    return mobileOrder1 > mobileOrder2
       ? 1
       : -1;
   }
@@ -172,8 +176,8 @@ export const useGetSortedColumns = (columns: Columns) => {
         : sortDesktop(columns, key, key2)
     )
     .reduce((obj, key) => {
-      const isVisible =
-        !columns[key].hasOwnProperty("visible") || columns[key].visible;
+      // eslint-disable-next-line no-prototype-builtins
+      const isVisible = !columns[key]?.hasOwnProperty("visible") || columns[key].visible;
 
       if (isVisible) {
         obj[key] = columns[key];
@@ -184,7 +188,7 @@ export const useGetSortedColumns = (columns: Columns) => {
   return sortedColumns;
 };
 
-export const getPublicUrl = (url: string) => `${process.env.PUBLIC_URL}/${url}`;
+export const getPublicUrl = (url: string) => `/${url}`;
 
 export const availableMimeTypes = [
   "image/png",
