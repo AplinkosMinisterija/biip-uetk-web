@@ -66,7 +66,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const StyledButton = styled.button<{}>`
+const StyledButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;

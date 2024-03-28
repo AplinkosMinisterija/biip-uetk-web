@@ -205,7 +205,7 @@ const Wrapper = styled.div<{
   min-width: 100px;
 `;
 
-const StyledButton = styled.button<{}>`
+const StyledButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;

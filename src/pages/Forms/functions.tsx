@@ -19,7 +19,7 @@ export const canShowResponseDate = (status) => {
 };
 
 export const mapFormFilters = (filters: FormFilters): FormFiltersProps => {
-  let params: FormFiltersProps = {};
+  const params: any = {};
 
   if (filters) {
     (!!filters.createdFrom || !!filters.createdTo) &&
@@ -32,15 +32,16 @@ export const mapFormFilters = (filters: FormFilters): FormFiltersProps => {
         })
       });
 
+
     !isEmpty(filters?.type) &&
-      (params.type = { $in: filters?.type!?.map((state) => state.id) });
+      (params.type = { $in: filters?.type?.map((state) => state.id) });
     !isEmpty(filters?.objectType) &&
       (params.objectType = {
-        $in: filters?.objectType!?.map((state) => state.id)
+        $in: filters?.objectType?.map((state) => state.id)
       });
 
     !isEmpty(filters?.status) &&
-      (params.status = { $in: filters?.status!?.map((state) => state.id) });
+      (params.status = { $in: filters?.status?.map((state) => state.id) });
   }
   return params;
 };
@@ -52,7 +53,7 @@ export const mapForms = (forms: Form[]): TableRow[] =>
       id: form.id,
       name: `${form.objectName}`,
       providedBy: form.providedBy,
-      objectType: formObjectTypeLabels[form?.objectType!],
+      objectType: form.objectType ? formObjectTypeLabels[form.objectType] : '',
       status: (
         <TableStatusRowItem
           info={[
@@ -63,7 +64,7 @@ export const mapForms = (forms: Form[]): TableRow[] =>
           ]}
         />
       ),
-      createdAt: formatDate(new Date(form?.createdAt!)),
+      createdAt: form.createdAt ? formatDate(new Date(form.createdAt)) : '',
       type: formTypeLabels[form.type],
       respondedAt:
         canShowResponseDate(form?.status) &&

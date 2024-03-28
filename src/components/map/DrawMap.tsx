@@ -63,7 +63,7 @@ const DrawMap = ({
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              if (!!onClose) {
+              if (onClose) {
                 return onClose();
               }
 

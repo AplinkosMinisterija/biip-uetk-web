@@ -58,7 +58,7 @@ function App() {
   const tenant = useAppSelector((state) => state.tenant);
   const currentProfile = useGetCurrentProfile();
   const isTenantOwner = useIsTenantOwner();
-  const profileId = currentProfile?.id!;
+  const profileId = currentProfile?.id;
   const publicSlugs = [slugs.profiles, slugs.login];
   const isPublicSlugs = publicSlugs.includes(location.pathname);
 
@@ -226,7 +226,7 @@ function App() {
 
 const PublicRoute = ({ loggedIn, profileId }: RouteProps) => {
   if (loggedIn) {
-    return <Navigate to={!!profileId ? slugs.forms : slugs.profiles} replace />;
+    return <Navigate to={profileId ? slugs.forms : slugs.profiles} replace />;
   }
 
   return <Outlet />;

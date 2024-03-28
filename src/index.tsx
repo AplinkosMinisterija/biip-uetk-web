@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-const basename = process.env.PUBLIC_URL || "/";
+const basename = import.meta.env.VITE_BASE_URL;
 
 const queryClient = new QueryClient();
 

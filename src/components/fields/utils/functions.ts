@@ -19,5 +19,5 @@ export const filterSelectedOptions = (
   );
 
 export const handleRemove = (index: number, onChange: any, values: any[]) => {
-  onChange([...values?.slice(0, index), ...values?.slice(index + 1)]);
+  onChange([...values.slice(0, index), ...values.slice(index + 1)]);
 };

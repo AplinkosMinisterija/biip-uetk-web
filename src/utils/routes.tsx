@@ -55,7 +55,7 @@ export const externalRoutes = [
   }
 ];
 
-const routes = [
+export const routes = [
   {
     label: menuLabels.profile,
     slug: slugs.profile,
