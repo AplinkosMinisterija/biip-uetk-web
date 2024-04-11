@@ -14,6 +14,7 @@ import {
   SubPoolTypes
 } from "./constants";
 import { validationTexts } from "./texts";
+const env = import.meta.env;
 
 export const handleErrorFromServerToast = (responseError?: string) => {
   toast.error(
@@ -188,7 +189,7 @@ export const useGetSortedColumns = (columns: Columns) => {
   return sortedColumns;
 };
 
-export const getPublicUrl = (url: string) => `/${url}`;
+export const getPublicUrl = (url: string) => `${env.VITE_BASE_URL}/${url}`;
 
 export const availableMimeTypes = [
   "image/png",

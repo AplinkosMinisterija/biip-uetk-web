@@ -10,6 +10,7 @@ export default () => {
     base: env.VITE_BASE_URL,
     server: {
       proxy: {
+        open: '/app',
         '/api': {
           target: env.VITE_PROXY_URL,
           changeOrigin: true,
