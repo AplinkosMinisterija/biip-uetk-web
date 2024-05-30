@@ -1,16 +1,16 @@
-import { useFormik } from "formik";
-import { useMutation } from "react-query";
-import styled from "styled-components";
-import api from "../api";
-import Button from "../components/buttons/Button";
-import PasswordField from "../components/fields/PasswordField";
-import TextField from "../components/fields/TextField";
-import Icon from "../components/other/Icons";
-import { handleErrorFromServerToast } from "../utils/functions";
-import { useEGatesSign, useUserInfo } from "../utils/hooks";
-import { handleUpdateTokens } from "../utils/loginFunctions";
-import { buttonsTitles, inputLabels, validationTexts } from "../utils/texts";
-import { loginSchema } from "../utils/validation";
+import { useFormik } from 'formik';
+import { useMutation } from 'react-query';
+import styled from 'styled-components';
+import api from '../api';
+import Button from '../components/buttons/Button';
+import PasswordField from '../components/fields/PasswordField';
+import TextField from '../components/fields/TextField';
+import Icon from '../components/other/Icons';
+import { handleErrorFromServerToast } from '../utils/functions';
+import { useEGatesSign, useUserInfo } from '../utils/hooks';
+import { handleUpdateTokens } from '../utils/loginFunctions';
+import { buttonsTitles, inputLabels, validationTexts } from '../utils/texts';
+import { loginSchema } from '../utils/validation';
 
 interface LoginProps {
   email: string;
@@ -18,13 +18,7 @@ interface LoginProps {
 }
 
 export const Login = () => {
-  const onSubmit = async ({
-    email,
-    password
-  }: {
-    email: string;
-    password: string;
-  }) => {
+  const onSubmit = async ({ email, password }: { email: string; password: string }) => {
     const params = { email, password };
     await loginMutation.mutateAsync(params);
   };
@@ -43,24 +37,21 @@ export const Login = () => {
     onSuccess: (data) => {
       handleUpdateTokens(data);
     },
-    retry: false
+    retry: false,
   });
 
-  const { mutateAsync: eGatesMutation, isLoading: eGatesSignLoading } =
-    useEGatesSign();
+  const { mutateAsync: eGatesMutation, isLoading: eGatesSignLoading } = useEGatesSign();
 
-  const loading = [loginMutation.isLoading, userInfoLoading].some(
-    (loading) => loading
-  );
+  const loading = [loginMutation.isLoading, userInfoLoading].some((loading) => loading);
 
   const { values, errors, setFieldValue, handleSubmit, setErrors } = useFormik({
     initialValues: {
-      email: "",
-      password: ""
+      email: '',
+      password: '',
     },
     validateOnChange: false,
     validationSchema: loginSchema,
-    onSubmit
+    onSubmit,
   });
 
   const handleType = (field: string, value: string) => {
@@ -68,44 +59,48 @@ export const Login = () => {
     setErrors({});
   };
 
+  const isLoginFieldsVisible = import.meta.env.VITE_USER_NODE_ENV !== 'production';
+
   return (
     <FormContainer
       onSubmit={handleSubmit}
       onKeyDown={(e) => {
-        if (e.key === "Enter") {
+        if (e.key === 'Enter') {
           handleSubmit();
         }
       }}
     >
-      <InnerContainer>
-        <TextField
-          label={inputLabels.email}
-          type="email"
-          value={values.email}
-          error={errors.email}
-          onChange={(e) => handleType("email", e)}
-        />
-        <PasswordField
-          label={inputLabels.password}
-          value={values.password}
-          error={errors.password}
-          onChange={(e) => handleType("password", e)}
-        />
-        <ButtonContainer>
-          <StyledButton loading={loading} type="submit">
-            {buttonsTitles.login}
-          </StyledButton>
-        </ButtonContainer>
+      {isLoginFieldsVisible && (
+        <InnerContainer>
+          <TextField
+            label={inputLabels.email}
+            type="email"
+            value={values.email}
+            error={errors.email}
+            onChange={(e) => handleType('email', e)}
+          />
+          <PasswordField
+            label={inputLabels.password}
+            value={values.password}
+            error={errors.password}
+            onChange={(e) => handleType('password', e)}
+          />
+          <ButtonContainer>
+            <StyledButton loading={loading} type="submit">
+              {buttonsTitles.login}
+            </StyledButton>
+          </ButtonContainer>
 
-        <OrContainer>
-          <Or>
-            <Separator />
-            <SeparatorLabelContainer>
-              <SeparatorLabel> {buttonsTitles.or}</SeparatorLabel>
-            </SeparatorLabelContainer>
-          </Or>
-        </OrContainer>
-      </InnerContainer>
+          <OrContainer>
+            <Or>
+              <Separator />
+              <SeparatorLabelContainer>
+                <SeparatorLabel> {buttonsTitles.or}</SeparatorLabel>
+              </SeparatorLabelContainer>
+            </Or>
+          </OrContainer>
+        </InnerContainer>
+      )}
       <Button
         type="button"
         leftIcon={<Icon name="evv" />}
