@@ -16,6 +16,7 @@ ARG VITE_BASE_URL=/app
 ARG VITE_SENTRY_DSN=
 ARG VITE_SENTRY_ENV=
 ARG VITE_MAPS_HOST=
+ARG VITE_USER_NODE_ENV=production
 
 # Build and cleanup
 RUN yarn build
