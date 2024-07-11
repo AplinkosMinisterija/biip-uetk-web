@@ -1,41 +1,8 @@
 import { createGlobalStyle } from "styled-components";
-export interface Theme {
-  colors: {
-    primary: string;
-    submitted: string;
-    returned: string;
-    secondary: string;
-    tertiary: string;
-    danger: string;
-    transparent: string;
-    success: string;
-    confirmed: string;
-    hover: {
-      submitted: string;
-      primary: string;
-      secondary: string;
-      tertiary: string;
-      danger: string;
-      success: string;
-      returned: string;
-      confirmed: string;
-    };
-    tertiaryMedium: string;
-    tertiaryLight: string;
-    new: string;
-    not_finished: string;
-    finished: string;
-    late: string;
-    input: string;
-    border: string;
-    label: string;
-    error: string;
-    light: string;
-    white: string;
-    darkerWhite: string;
-    pending: string;
-    grey: string;
-  };
+import { Theme } from '@aplinkosministerija/design-system';
+
+declare module 'styled-components' {
+  export interface DefaultTheme extends Theme {}
 }
 
 export const theme: Theme = {
@@ -74,7 +41,11 @@ export const theme: Theme = {
     darkerWhite: "#A4A7BD",
     pending: "#fea700",
     grey: "#B3B5C4"
-  }
+  },
+  height: {
+    fields: 4,
+    buttons: 4,
+  },
 };
 
 export const GlobalStyle = createGlobalStyle`

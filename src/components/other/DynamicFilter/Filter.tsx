@@ -1,16 +1,16 @@
-import { Formik } from "formik";
-import { map } from "lodash";
-import styled from "styled-components";
-import { device } from "../../../styles";
-import { handleDateRestriction } from "../../../utils/functions";
-import { buttonsTitles } from "../../../utils/texts";
-import Button, { ButtonColors } from "../../buttons/Button";
-import AsyncMultiSelect from "../../fields/AsyncMultiSelect";
-import AsyncSelectField from "../../fields/AsyncSelect";
-import DatePicker from "../../fields/DatePicker";
-import MultiSelect from "../../fields/MultiSelect";
-import SelectField from "../../fields/SelectField";
-import TextField from "../../fields/TextField";
+import { Formik } from 'formik';
+import { map } from 'lodash';
+import styled from 'styled-components';
+import { device } from '../../../styles';
+import { handleDateRestriction } from '../../../utils/functions';
+import { buttonsTitles } from '../../../utils/texts';
+import Button, { ButtonColors } from '../../buttons/Button';
+import AsyncMultiSelect from '../../fields/AsyncMultiSelect';
+import AsyncSelectField from '../../fields/AsyncSelect';
+import DatePicker from '../../fields/DatePicker';
+import MultiSelect from '../../fields/MultiSelect';
+import SelectField from '../../fields/SelectField';
+import { TextField } from '@aplinkosministerija/design-system';
 
 export interface LabelsProps {
   [key: string]: string;
@@ -24,12 +24,12 @@ export interface LoginLayoutProps {
 }
 
 export enum FilterInputTypes {
-  text = "text",
-  date = "date",
-  multiselect = "multiselect",
-  asyncSelect = "asyncSelect",
-  singleselect = "singleselect",
-  asyncMultiSelect = "asyncMultiSelect"
+  text = 'text',
+  date = 'date',
+  multiselect = 'multiselect',
+  asyncSelect = 'asyncSelect',
+  singleselect = 'singleselect',
+  asyncMultiSelect = 'asyncMultiSelect',
 }
 
 export interface FilterConfig {
@@ -48,18 +48,12 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
     const defaultValues: any = {};
     map(filters, (filter) => {
       defaultValues[filter.key] =
-        filter.default ||
-        (filter.inputType === FilterInputTypes.text ? "" : null);
+        filter.default || (filter.inputType === FilterInputTypes.text ? '' : null);
     });
     return defaultValues;
   };
 
-  const renderRow = (
-    row: string[],
-    values: any,
-    setFieldValue: any,
-    index: number
-  ) => (
+  const renderRow = (row: string[], values: any, setFieldValue: any, index: number) => (
     <Content key={`row_${index}`}>
       {map(row, (rowKey: string, index: number) => {
         const filter = filters[rowKey];
@@ -70,11 +64,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
         if (filter) {
           if (filter.inputType === FilterInputTypes.date) {
             return (
-              <InputWrapper
-                single={singleItem}
-                key={filter.key}
-                isLast={index === row.length - 1}
-              >
+              <InputWrapper single={singleItem} key={filter.key} isLast={index === row.length - 1}>
                 <DatePicker
                   name={filter.key}
                   value={values[filter.key]}
@@ -87,90 +77,60 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
             );
           } else if (filter.inputType === FilterInputTypes.singleselect) {
             return (
-              <InputWrapper
-                single={singleItem}
-                key={filter.key}
-                isLast={index === row.length - 1}
-              >
+              <InputWrapper single={singleItem} key={filter.key} isLast={index === row.length - 1}>
                 <SelectField
                   name={filter.key}
                   label={filter.label}
                   value={values[filter.key]}
                   options={filter.options || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
-                    optionLabel ? optionLabel(option) : option.label
-                  }
+                  getOptionLabel={(option) => (optionLabel ? optionLabel(option) : option.label)}
                 />
               </InputWrapper>
             );
           } else if (filter.inputType === FilterInputTypes.multiselect) {
             return (
-              <InputWrapper
-                single={singleItem}
-                key={filter.key}
-                isLast={index === row.length - 1}
-              >
+              <InputWrapper single={singleItem} key={filter.key} isLast={index === row.length - 1}>
                 <MultiSelect
                   name={filter.key}
                   label={filter.label}
                   values={values[filter.key] || []}
                   options={filter.options || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
-                    optionLabel ? optionLabel(option) : option.label
-                  }
+                  getOptionLabel={(option) => (optionLabel ? optionLabel(option) : option.label)}
                 />
               </InputWrapper>
             );
           } else if (filter.inputType === FilterInputTypes.asyncSelect) {
             return (
-              <InputWrapper
-                single={singleItem}
-                key={filter.key}
-                isLast={index === row.length - 1}
-              >
+              <InputWrapper single={singleItem} key={filter.key} isLast={index === row.length - 1}>
                 <AsyncSelectField
                   name={filter.key}
                   label={filter.label}
                   value={values[filter.key]}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
-                    optionLabel ? optionLabel(option) : option.name
-                  }
+                  getOptionLabel={(option) => (optionLabel ? optionLabel(option) : option.name)}
                   loadOptions={(input, page) => filter.api(input, page)}
                 />
               </InputWrapper>
             );
           } else if (filter.inputType === FilterInputTypes.asyncMultiSelect) {
             return (
-              <InputWrapper
-                single={singleItem}
-                key={filter.key}
-                isLast={index === row.length - 1}
-              >
+              <InputWrapper single={singleItem} key={filter.key} isLast={index === row.length - 1}>
                 <AsyncMultiSelect
                   name={filter.key}
                   label={filter.label}
                   values={values[filter.key] || []}
                   onChange={(value) => setFieldValue(filter.key, value)}
-                  getOptionLabel={(option) =>
-                    optionLabel ? optionLabel(option) : option.name
-                  }
-                  getOptionValue={(option) =>
-                    optionValue ? optionValue(option) : option.name
-                  }
+                  getOptionLabel={(option) => (optionLabel ? optionLabel(option) : option.name)}
+                  getOptionValue={(option) => (optionValue ? optionValue(option) : option.name)}
                   loadOptions={(input, page) => filter.api(input, page)}
                 />
               </InputWrapper>
             );
           }
           return (
-            <InputWrapper
-              single={singleItem}
-              key={filter.key}
-              isLast={index === row.length - 1}
-            >
+            <InputWrapper single={singleItem} key={filter.key} isLast={index === row.length - 1}>
               <TextField
                 name={filter.key}
                 key={filter.key}
@@ -193,13 +153,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
         onSubmit={onSubmit}
         validateOnChange={false}
       >
-        {({
-          values,
-          errors,
-          setFieldValue,
-          handleSubmit,
-          handleReset
-        }: any) => (
+        {({ values, errors, setFieldValue, handleSubmit, handleReset }: any) => (
           <>
             {map(rowConfig, (row, index) => {
               return renderRow(row, values, setFieldValue, index);
@@ -213,11 +167,7 @@ const Filter = ({ values, filters, rowConfig, onSubmit }: LoginLayoutProps) => {
               >
                 {buttonsTitles.clearAll}
               </ClearButton>
-              <StyledButton
-                variant={ButtonColors.PRIMARY}
-                type="submit"
-                onClick={handleSubmit}
-              >
+              <StyledButton variant={ButtonColors.PRIMARY} type="submit" onClick={handleSubmit}>
                 {buttonsTitles.filter}
               </StyledButton>
             </Row>
@@ -243,8 +193,8 @@ const Content = styled.div`
 `;
 
 const InputWrapper = styled.div<{ isLast: boolean; single: boolean }>`
-  padding: 0 ${({ isLast }) => (isLast ? 0 : "12px")} 0 0;
-  min-width: ${({ single }) => (single ? "400px" : "auto")};
+  padding: 0 ${({ isLast }) => (isLast ? 0 : '12px')} 0 0;
+  min-width: ${({ single }) => (single ? '400px' : 'auto')};
   flex: 2;
   margin-top: 8px;
 
