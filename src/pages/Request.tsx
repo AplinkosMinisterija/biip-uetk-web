@@ -13,12 +13,10 @@ import { GeneratedFileComponent } from '../components/other/GeneratedFileCompone
 import LoaderComponent from '../components/other/LoaderComponent';
 import TermsAndConditions from '../components/other/TermsAndConditions';
 import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
-import { useAppSelector } from '../state/hooks';
 import { device } from '../styles';
 import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponents';
 import { PurposeTypes, StatusTypes } from '../utils/constants';
 import { getLocationList, handleErrorFromServerToast, isNew } from '../utils/functions';
-import { useGetCurrentProfile } from '../utils/hooks';
 import { purposeTypesOptions } from '../utils/options';
 import { slugs } from '../utils/routes';
 import {
@@ -29,11 +27,12 @@ import {
   requestHistoryStatusLabels,
 } from '../utils/texts';
 import { validateRequest } from '../utils/validation';
-import { TextField } from '@aplinkosministerija/design-system';
+import EmailChangeAlert from '../components/other/EmailChangeAlert';
+import { useAppSelector } from '../state/hooks';
+import { useGetCurrentProfile } from '../utils/hooks';
 
 export interface RequestProps {
   id?: string;
-  notifyEmail: string;
   objects: { cadastralId: string; category: string }[];
   status?: StatusTypes;
   purposeValue: string;
@@ -123,6 +122,7 @@ const RequestPage = () => {
     const { agreeWithConditions, extended, objects, ...rest } = values;
     const params: RequestPayload = {
       ...rest,
+      notifyEmail: currentProfile?.email || userEmail || '',
       objects: objects.map((item) => {
         return {
           type: 'CADASTRAL_ID',
@@ -140,7 +140,6 @@ const RequestPage = () => {
   };
 
   const initialValues: RequestProps = {
-    notifyEmail: request?.notifyEmail || currentProfile?.email || userEmail || '',
     objects: request?.objects || [],
     //geom: !isEmpty(request?.geom) ? request?.geom : undefined,
     agreeWithConditions: disabled || false,
@@ -155,17 +154,9 @@ const RequestPage = () => {
     return (
       <Container>
         <ColumnOne>
+          {!disabled && <EmailChangeAlert />}
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutUser}>
-              <TextField
-                disabled={disabled}
-                label={inputLabels.email}
-                value={values.notifyEmail}
-                name={'notifyEmail'}
-                type="email"
-                error={errors?.notifyEmail}
-                onChange={(email) => handleChange('notifyEmail', email)}
-              />
               <Row columns={2}>
                 <SelectField
                   disabled={disabled}
