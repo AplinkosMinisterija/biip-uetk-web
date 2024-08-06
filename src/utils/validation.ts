@@ -208,10 +208,6 @@ export const validateRequest = Yup.object().shape(
     agreeWithConditions: Yup.boolean()
       .required(validationTexts.requireSelect)
       .oneOf([true], validationTexts.requireSelect),
-    notifyEmail: Yup.string()
-      .email(validationTexts.badEmailFormat)
-      .required(validationTexts.requireText)
-      .nullable(),
     objects: Yup.array()
       .when(['geom', 'objects'], {
         is: (geom, objects) => {
