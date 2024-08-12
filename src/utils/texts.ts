@@ -407,7 +407,7 @@ export const requestStatusLabels = {
 export const formObjectTypeLabels = {
   [FormObjectType.CANAL]: 'Kanalas',
   [FormObjectType.EARTH_DAM]: 'Žemių užtvanka',
-  [FormObjectType.FISH_PASS]: 'Žuvų perlaida',
+  [FormObjectType.FISH_PASS]: 'Žuvų pralaida',
   [FormObjectType.HYDRO_POWER_PLANT]: 'Hidroelektrinė',
   [FormObjectType.ISOLATED_WATER_BODY]: 'Nepratekamas dirbtinis paviršinis vandens telkinys',
   [FormObjectType.NATURAL_LAKE]: 'Natūralus ežeras',
@@ -420,7 +420,7 @@ export const formObjectTypeLabels = {
 export const formObjectLabelsToType = {
   Kanalas: FormObjectType.CANAL,
   'Žemių užtvanka': FormObjectType.EARTH_DAM,
-  'Žuvų perlaida': FormObjectType.FISH_PASS,
+  'Žuvų pralaida': FormObjectType.FISH_PASS,
   Hidroelektrinė: FormObjectType.HYDRO_POWER_PLANT,
   'Nepratekamas dirbtinis paviršinis vandens telkinys': FormObjectType.ISOLATED_WATER_BODY,
   'Natūralus ežeras': FormObjectType.NATURAL_LAKE,
@@ -516,7 +516,7 @@ export const descriptions = {
   footerTitle: '© Lietuvos Respublikos aplinkos ministerija, 2013-2022',
   footerDescription:
     'Duomenys apie įmonę kaupiami ir saugomi Juridinių asmenų registre. Įmonės kodas: 188602370 | Adresas: A. Jakšto g. 4, 01105 Vilnius Telefonas: 8 706 63661 | El. paštas: info@am.lt',
-infoSent: 'Informacija bus siunčiama',
+  infoSent: 'Informacija bus siunčiama',
   email: 'el. paštu',
   emailProfile: 'nurodytu jūsų profilio informacijoje',
   changeEmail: 'Pakeisti savo el. pašto adresą galite',
