@@ -1,23 +1,22 @@
-import { FieldArray } from "formik";
-import { isEmpty, isEqual } from "lodash";
-import { useMutation, useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { default as api, default as Api } from "../api";
-import ButtonsGroup from "../components/buttons/ButtonsGroup";
-import SingleCheckBox from "../components/buttons/CheckBox";
-import SimpleButton from "../components/buttons/SimpleButton";
-import FormHistoryContainer from "../components/containers/FormHistoryContainer";
-import SimpleContainer from "../components/containers/SimpleContainer";
-import AsyncSelectField from "../components/fields/AsyncSelect";
-import DragAndDropUploadField from "../components/fields/DragAndDropUploadField";
-import NumericTextField from "../components/fields/NumericTextField";
-import SelectField from "../components/fields/SelectField";
-import TextAreaField from "../components/fields/TextAreaField";
-import TextField from "../components/fields/TextField";
-import Map from "../components/map/DrawMap";
-import Icon from "../components/other/Icons";
-import LoaderComponent from "../components/other/LoaderComponent";
+import { FieldArray } from 'formik';
+import { isEmpty, isEqual } from 'lodash';
+import { useMutation, useQuery } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { default as api, default as Api } from '../api';
+import ButtonsGroup from '../components/buttons/ButtonsGroup';
+import SingleCheckBox from '../components/buttons/CheckBox';
+import SimpleButton from '../components/buttons/SimpleButton';
+import FormHistoryContainer from '../components/containers/FormHistoryContainer';
+import SimpleContainer from '../components/containers/SimpleContainer';
+import AsyncSelectField from '../components/fields/AsyncSelect';
+import DragAndDropUploadField from '../components/fields/DragAndDropUploadField';
+import NumericTextField from '../components/fields/NumericTextField';
+import SelectField from '../components/fields/SelectField';
+import TextAreaField from '../components/fields/TextAreaField';
+import Map from '../components/map/DrawMap';
+import Icon from '../components/other/Icons';
+import LoaderComponent from '../components/other/LoaderComponent';
 import {
   CubicMeterPerSecond,
   Hectares,
@@ -25,17 +24,13 @@ import {
   Kilowatt,
   Meter,
   SquareMeter,
-  ThousandsPerCubicMeter
-} from "../components/other/MeasurmentUnits";
-import TermsAndConditions from "../components/other/TermsAndConditions";
-import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
-import { device } from "../styles";
-import {
-  ColumnOne,
-  ColumnTwo,
-  Container
-} from "../styles/GenericStyledComponents";
-import { Form } from "../types";
+  ThousandsPerCubicMeter,
+} from '../components/other/MeasurmentUnits';
+import TermsAndConditions from '../components/other/TermsAndConditions';
+import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
+import { device } from '../styles';
+import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponents';
+import { Form } from '../types';
 import {
   FishPassType,
   FormDataFields,
@@ -44,8 +39,8 @@ import {
   FormType,
   HydroPowerPlantType,
   Resources,
-  WaterExcessCulvertType
-} from "../utils/constants";
+  WaterExcessCulvertType,
+} from '../utils/constants';
 import {
   formObjectTypes,
   formProviderTypes,
@@ -53,9 +48,9 @@ import {
   handleErrorFromServerToast,
   isMapEditAttribute,
   isNew,
-  subPoolTypes
-} from "../utils/functions";
-import { slugs } from "../utils/routes";
+  subPoolTypes,
+} from '../utils/functions';
+import { slugs } from '../utils/routes';
 import {
   buttonsTitles,
   fishPassTypeLabels,
@@ -68,25 +63,22 @@ import {
   inputLabels,
   pageTitles,
   subPoolTypeLabels,
-  waterExcessCulvertTypeLabels
-} from "../utils/texts";
-import { validateForm } from "../utils/validation";
+  waterExcessCulvertTypeLabels,
+} from '../utils/texts';
+import { validateForm } from '../utils/validation';
+import { TextField } from '@aplinkosministerija/design-system';
 
-type FormPayload = Omit<Form, "editFields">;
+type FormPayload = Omit<Form, 'editFields'>;
 const FormPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data: form, isLoading } = useQuery(
-    ["form", id],
-    () => api.form(id!),
-    {
-      onError: () => {
-        navigate(slugs.forms);
-      },
-      enabled: !isNew(id)
-    }
-  );
+  const { data: form, isLoading } = useQuery(['form', id], () => api.form(id!), {
+    onError: () => {
+      navigate(slugs.forms);
+    },
+    enabled: !isNew(id),
+  });
 
   const disabled = !isNew(id) && !form?.canEdit;
   const getMapQueryString = (disabled = false) => {
@@ -94,11 +86,11 @@ const FormPage = () => {
     const param = new URLSearchParams();
 
     if (disabled) {
-      param.append("preview", "true");
+      param.append('preview', 'true');
       return queryString + param;
     }
-    param.append("types[]", "point");
-    param.append("buffer", "true");
+    param.append('types[]', 'point');
+    param.append('buffer', 'true');
     return queryString + param;
   };
 
@@ -108,39 +100,33 @@ const FormPage = () => {
   const typeOptions = {
     [FormObjectType.WATER_EXCESS_CULVERT]: Object.keys(WaterExcessCulvertType),
     [FormObjectType.HYDRO_POWER_PLANT]: Object.keys(HydroPowerPlantType),
-    [FormObjectType.FISH_PASS]: Object.keys(FishPassType)
+    [FormObjectType.FISH_PASS]: Object.keys(FishPassType),
   };
   const typeLabels = {
     [FormObjectType.WATER_EXCESS_CULVERT]: waterExcessCulvertTypeLabels,
     [FormObjectType.HYDRO_POWER_PLANT]: hydroPowerPlantTypeLabels,
-    [FormObjectType.FISH_PASS]: fishPassTypeLabels
+    [FormObjectType.FISH_PASS]: fishPassTypeLabels,
   };
 
-  const createForm = useMutation(
-    (values: FormPayload) => api.createForm(values),
-    {
-      onError: () => {
-        handleErrorFromServerToast();
-      },
-      onSuccess: () => {
-        navigate(slugs.forms);
-      },
-      retry: false
-    }
-  );
+  const createForm = useMutation((values: FormPayload) => api.createForm(values), {
+    onError: () => {
+      handleErrorFromServerToast();
+    },
+    onSuccess: () => {
+      navigate(slugs.forms);
+    },
+    retry: false,
+  });
 
-  const updateForm = useMutation(
-    (values: FormPayload) => api.updateForm(id!, values),
-    {
-      onError: () => {
-        handleErrorFromServerToast();
-      },
-      onSuccess: () => {
-        navigate(slugs.forms);
-      },
-      retry: false
-    }
-  );
+  const updateForm = useMutation((values: FormPayload) => api.updateForm(id!, values), {
+    onError: () => {
+      handleErrorFromServerToast();
+    },
+    onSuccess: () => {
+      navigate(slugs.forms);
+    },
+    retry: false,
+  });
 
   const handleSubmit = async (values: Form) => {
     const { editFields, ...rest } = values;
@@ -515,7 +501,7 @@ const FormPage = () => {
     pondedRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
         showError={showError}
-        name={"pondedRiver"}
+        name={'pondedRiver'}
         label={inputLabels.pondedRiver}
         query={{ category: { $in: [FormObjectType.RIVER] } }}
         value={value}
@@ -525,7 +511,7 @@ const FormPage = () => {
     ),
     olderWaterBody: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
-        name={"olderWaterBody"}
+        name={'olderWaterBody'}
         showError={showError}
         label={inputLabels.olderWaterBody}
         query={{}}
@@ -536,7 +522,7 @@ const FormPage = () => {
     ),
     river: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
-        name={"river"}
+        name={'river'}
         showError={showError}
         label={inputLabels.river}
         query={{ category: { $in: [FormObjectType.RIVER] } }}
@@ -547,7 +533,7 @@ const FormPage = () => {
     ),
     pond: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
-        name={"pond"}
+        name={'pond'}
         showError={showError}
         label={inputLabels.pond}
         query={{ category: { $in: [FormObjectType.POND] } }}
@@ -674,7 +660,7 @@ const FormPage = () => {
     ),
     olderRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
-        name={"olderRiver"}
+        name={'olderRiver'}
         query={{ category: { $in: [FormObjectType.RIVER] } }}
         showError={showError}
         label={inputLabels.olderRiver}
@@ -755,7 +741,7 @@ const FormPage = () => {
     ),
     directRiver: (value, error, handleChange, showError = true) => (
       <RenderWaterBodyField
-        name={"directRiver"}
+        name={'directRiver'}
         query={{ category: { $in: [FormObjectType.RIVER] } }}
         label={inputLabels.directRiver}
         showError={showError}
@@ -763,18 +749,10 @@ const FormPage = () => {
         error={error}
         handleChange={handleChange}
       />
-    )
+    ),
   };
 
-  const RenderWaterBodyField = ({
-    value,
-    error,
-    handleChange,
-    showError,
-    label,
-    query,
-    name
-  }) => {
+  const RenderWaterBodyField = ({ value, error, handleChange, showError, label, query, name }) => {
     return (
       <AsyncSelectField
         name={name}
@@ -784,9 +762,7 @@ const FormPage = () => {
         value={value}
         error={error}
         onChange={(value) =>
-          handleChange(
-            `${value?.name}, ${value?.cadastralId}, ${value?.categoryTranslate}`
-          )
+          handleChange(`${value?.name}, ${value?.cadastralId}, ${value?.categoryTranslate}`)
         }
         getOptionValue={(option) => option?.cadastralId}
         getInputLabel={(option) => option}
@@ -794,47 +770,38 @@ const FormPage = () => {
           const { name, cadastralId, categoryTranslate } = option;
           return `${name}, ${cadastralId}, ${categoryTranslate}`;
         }}
-        loadOptions={(input: string, page: number | string) =>
-          getLocationList(input, page, query)
-        }
+        loadOptions={(input: string, page: number | string) => getLocationList(input, page, query)}
       />
     );
   };
 
-  const renderAdditionalFields = (
-    values: Form,
-    errors: any,
-    handleChange: any
-  ) => {
+  const renderAdditionalFields = (values: Form, errors: any, handleChange: any) => {
     const { data } = values;
 
     const options = typeOptions[values.objectType!];
     const labels = typeLabels[values.objectType!];
 
     const components: any = [];
-    const isNaturalLakeOrPondFields = [
-      FormObjectType.POND,
-      FormObjectType.PONDED_LAKE
-    ].includes(values.objectType!);
+    const isNaturalLakeOrPondFields = [FormObjectType.POND, FormObjectType.PONDED_LAKE].includes(
+      values.objectType!,
+    );
 
     const hasPoolAreaWaterVolumeFields = [
       FormObjectType.NATURAL_LAKE,
       FormObjectType.PONDED_LAKE,
-      FormObjectType.POND
+      FormObjectType.POND,
     ].includes(values.objectType!);
 
     if (hasPoolAreaWaterVolumeFields) {
       components.push(
         <Row>
           {fields.poolArea(data?.poolArea, errors?.data?.poolArea, (value) =>
-            handleChange("data.poolArea", value)
+            handleChange('data.poolArea', value),
           )}
-          {fields.waterVolume(
-            data?.waterVolume,
-            errors?.data?.waterVolume,
-            (value) => handleChange("data.waterVolume", value)
+          {fields.waterVolume(data?.waterVolume, errors?.data?.waterVolume, (value) =>
+            handleChange('data.waterVolume', value),
           )}
-        </Row>
+        </Row>,
       );
     }
 
@@ -844,19 +811,15 @@ const FormPage = () => {
           {fields.waterLevelAltitude(
             data?.waterLevelAltitude,
             errors?.data?.waterLevelAltitude,
-            (value) => handleChange("data.waterLevelAltitude", value)
+            (value) => handleChange('data.waterLevelAltitude', value),
           )}
-          {fields.maxWaterDepth(
-            data?.maxWaterDepth,
-            errors?.data?.maxWaterDepth,
-            (value) => handleChange("data.maxWaterDepth", value)
+          {fields.maxWaterDepth(data?.maxWaterDepth, errors?.data?.maxWaterDepth, (value) =>
+            handleChange('data.maxWaterDepth', value),
           )}
-          {fields.avgWaterDepth(
-            data?.avgWaterDepth,
-            errors?.data?.avgWaterDepth,
-            (value) => handleChange("data.avgWaterDepth", value)
+          {fields.avgWaterDepth(data?.avgWaterDepth, errors?.data?.avgWaterDepth, (value) =>
+            handleChange('data.avgWaterDepth', value),
           )}
-        </Row>
+        </Row>,
       );
     }
 
@@ -867,39 +830,35 @@ const FormPage = () => {
             {fields.usefulWaterVolume(
               data?.usefulWaterVolume,
               errors?.data?.usefulWaterVolume,
-              (value) => handleChange("data.usefulWaterVolume", value)
+              (value) => handleChange('data.usefulWaterVolume', value),
             )}
             {fields.distanceFromRiverMouth(
               data?.distanceFromRiverMouth,
               errors?.data?.distanceFromRiverMouth,
-              (value) => handleChange("data.distanceFromRiverMouth", value)
+              (value) => handleChange('data.distanceFromRiverMouth', value),
             )}
-            {fields.normalPondLevelNPL(
-              data?.avgWaterDepth,
-              errors?.data?.avgWaterDepth,
-              (value) => handleChange("data.avgWaterDepth", value)
+            {fields.normalPondLevelNPL(data?.avgWaterDepth, errors?.data?.avgWaterDepth, (value) =>
+              handleChange('data.avgWaterDepth', value),
             )}
           </Row>
           <Row>
             {fields.maxWaterDepthNPL(
               data?.maxWaterDepthNPL,
               errors?.data?.maxWaterDepthNPL,
-              (value) => handleChange("data.maxWaterDepthNPL", value)
+              (value) => handleChange('data.maxWaterDepthNPL', value),
             )}
             {fields.avgWaterDepthNPL(
               data?.avgWaterDepthNPL,
               errors?.data?.avgWaterDepthNPL,
-              (value) => handleChange("data.avgWaterDepthNPL", value)
+              (value) => handleChange('data.avgWaterDepthNPL', value),
             )}
           </Row>
           <Row repeat={1}>
-            {fields.pondedRiver(
-              data?.pondedRiver,
-              errors?.data?.pondedRiver,
-              (value) => handleChange("data.pondedRiver", value)
+            {fields.pondedRiver(data?.pondedRiver, errors?.data?.pondedRiver, (value) =>
+              handleChange('data.pondedRiver', value),
             )}
           </Row>
-        </>
+        </>,
       );
     }
 
@@ -908,44 +867,36 @@ const FormPage = () => {
         <>
           <Row repeat={3}>
             {fields.poolArea(data?.poolArea, errors?.data?.poolArea, (value) =>
-              handleChange("data.poolArea", value)
+              handleChange('data.poolArea', value),
             )}
-            {fields.waterVolume(
-              data?.waterVolume,
-              errors?.data?.waterVolume,
-              (value) => handleChange("data.waterVolume", value)
+            {fields.waterVolume(data?.waterVolume, errors?.data?.waterVolume, (value) =>
+              handleChange('data.waterVolume', value),
             )}
             {fields.distanceFromRiverMouth(
               data?.distanceFromRiverMouth,
               errors?.data?.distanceFromRiverMouth,
-              (value) => handleChange("data.distanceFromRiverMouth", value)
+              (value) => handleChange('data.distanceFromRiverMouth', value),
             )}
           </Row>
           <Row repeat={3}>
             {fields.waterLevelAltitude(
               data?.waterLevelAltitude,
               errors?.data?.waterLevelAltitude,
-              (value) => handleChange("data.waterLevelAltitude", value)
+              (value) => handleChange('data.waterLevelAltitude', value),
             )}
-            {fields.maxWaterDepth(
-              data?.maxWaterDepth,
-              errors?.data?.maxWaterDepth,
-              (value) => handleChange("data.maxWaterDepth", value)
+            {fields.maxWaterDepth(data?.maxWaterDepth, errors?.data?.maxWaterDepth, (value) =>
+              handleChange('data.maxWaterDepth', value),
             )}
-            {fields.avgWaterDepth(
-              data?.avgWaterDepth,
-              errors?.data?.avgWaterDepth,
-              (value) => handleChange("data.avgWaterDepth", value)
+            {fields.avgWaterDepth(data?.avgWaterDepth, errors?.data?.avgWaterDepth, (value) =>
+              handleChange('data.avgWaterDepth', value),
             )}
           </Row>
           <Row repeat={1}>
-            {fields.olderWaterBody(
-              data?.olderWaterBody,
-              errors?.data?.olderWaterBody,
-              (value) => handleChange("data.olderWaterBody", value)
+            {fields.olderWaterBody(data?.olderWaterBody, errors?.data?.olderWaterBody, (value) =>
+              handleChange('data.olderWaterBody', value),
             )}
           </Row>
-        </>
+        </>,
       );
     }
 
@@ -956,28 +907,22 @@ const FormPage = () => {
             {fields.constructionYear(
               data?.constructionYear,
               errors?.data?.constructionYear,
-              (value) => handleChange("data.constructionYear", value)
+              (value) => handleChange('data.constructionYear', value),
             )}
-            {fields.maxPondHeight(
-              data?.maxPondHeight,
-              errors?.data?.maxPondHeight,
-              (value) => handleChange("data.maxPondHeight", value)
+            {fields.maxPondHeight(data?.maxPondHeight, errors?.data?.maxPondHeight, (value) =>
+              handleChange('data.maxPondHeight', value),
             )}
           </Row>
           <Row>
-            {fields.earthDamLength(
-              data?.earthDamLength,
-              errors?.data?.earthDamLength,
-              (value) => handleChange("data.earthDamLength", value)
+            {fields.earthDamLength(data?.earthDamLength, errors?.data?.earthDamLength, (value) =>
+              handleChange('data.earthDamLength', value),
             )}
 
-            {fields.earthDamWidth(
-              data?.earthDamWidth,
-              errors?.data?.earthDamWidth,
-              (value) => handleChange("data.earthDamWidth", value)
+            {fields.earthDamWidth(data?.earthDamWidth, errors?.data?.earthDamWidth, (value) =>
+              handleChange('data.earthDamWidth', value),
             )}
           </Row>
-        </>
+        </>,
       );
     }
 
@@ -988,37 +933,35 @@ const FormPage = () => {
             {fields.constructionYear(
               data?.constructionYear,
               errors?.data?.constructionYear,
-              (value) => handleChange("data.constructionYear", value)
+              (value) => handleChange('data.constructionYear', value),
             )}
             {fields.type(
               data?.type,
               errors?.data?.type,
-              (value) => handleChange("data.type", value),
+              (value) => handleChange('data.type', value),
               true,
               options,
-              labels
+              labels,
             )}
           </Row>
           <Row>
-            {fields.pondHeight(
-              data?.pondHeight,
-              errors?.data?.pondHeight,
-              (value) => handleChange("data.pondHeight", value)
+            {fields.pondHeight(data?.pondHeight, errors?.data?.pondHeight, (value) =>
+              handleChange('data.pondHeight', value),
             )}
 
             {fields.environmentalDebit(
               data?.environmentalDebit,
               errors?.data?.environmentalDebit,
-              (value) => handleChange("data.environmentalDebit", value)
+              (value) => handleChange('data.environmentalDebit', value),
             )}
           </Row>
           <Row>
             {fields.minDebit(data?.minDebit, errors?.data?.minDebit, (value) =>
-              handleChange("data.minDebit", value)
+              handleChange('data.minDebit', value),
             )}
 
             {fields.maxDebit(data?.maxDebit, errors?.data?.maxDebit, (value) =>
-              handleChange("data.maxDebit", value)
+              handleChange('data.maxDebit', value),
             )}
           </Row>
           <Row>
@@ -1027,19 +970,13 @@ const FormPage = () => {
           </Row>
           <Row repeat={4}>
             {fields.qvid(data?.qvid, errors?.data?.qvid, (value) =>
-              handleChange("data.qvid", value)
+              handleChange('data.qvid', value),
             )}
-            {fields.q95(data?.q95, errors?.data?.q95, (value) =>
-              handleChange("data.q95", value)
-            )}
-            {fields.q1(data?.q1, errors?.data?.q1, (value) =>
-              handleChange("data.q1", value)
-            )}
-            {fields.q5(data?.q5, errors?.data?.q5, (value) =>
-              handleChange("data.q5", value)
-            )}
+            {fields.q95(data?.q95, errors?.data?.q95, (value) => handleChange('data.q95', value))}
+            {fields.q1(data?.q1, errors?.data?.q1, (value) => handleChange('data.q1', value))}
+            {fields.q5(data?.q5, errors?.data?.q5, (value) => handleChange('data.q5', value))}
           </Row>
-        </>
+        </>,
       );
     }
 
@@ -1050,28 +987,28 @@ const FormPage = () => {
             {fields.constructionYear(
               data?.constructionYear,
               errors?.data?.constructionYear,
-              (value) => handleChange("data.constructionYear", value)
+              (value) => handleChange('data.constructionYear', value),
             )}
             {fields.type(
               data?.type,
               errors?.data?.type,
-              (value) => handleChange("data.type", value),
+              (value) => handleChange('data.type', value),
               true,
               options,
-              labels
+              labels,
             )}
           </Row>
           <Row>
             {fields.power(data?.power, errors?.data?.power, (value) =>
-              handleChange("data.power", value)
+              handleChange('data.power', value),
             )}
             {fields.maxPressureHeight(
               data?.maxPressureHeight,
               errors?.data?.maxPressureHeight,
-              (value) => handleChange("data.maxPressureHeight", value)
+              (value) => handleChange('data.maxPressureHeight', value),
             )}
           </Row>
-        </>
+        </>,
       );
     }
 
@@ -1081,22 +1018,20 @@ const FormPage = () => {
           {fields.constructionYear(
             data?.constructionYear,
             errors?.data?.constructionYear,
-            (value) => handleChange("data.constructionYear", value)
+            (value) => handleChange('data.constructionYear', value),
           )}
           {fields.type(
             data?.type,
             errors?.data?.type,
-            (value) => handleChange("data.type", value),
+            (value) => handleChange('data.type', value),
             true,
             options,
-            labels
+            labels,
           )}
-          {fields.fishPassDebit(
-            data?.fishPassDebit,
-            errors?.data?.fishPassDebit,
-            (value) => handleChange("data.fishPassDebit", value)
+          {fields.fishPassDebit(data?.fishPassDebit, errors?.data?.fishPassDebit, (value) =>
+            handleChange('data.fishPassDebit', value),
           )}
-        </Row>
+        </Row>,
       );
     }
 
@@ -1107,33 +1042,33 @@ const FormPage = () => {
     FormDataFields.name,
     FormDataFields.hydrostaticId,
     FormDataFields.constructionYear,
-    FormDataFields.centerCoordinates
+    FormDataFields.centerCoordinates,
   ];
 
   const hydroPowerPlantOptions = [
     ...commonOptions,
     FormDataFields.maxPondPressureHeight,
     FormDataFields.type,
-    FormDataFields.power
+    FormDataFields.power,
   ];
 
   const fishPassOptions = [
     ...commonOptions,
     FormDataFields.type,
-    FormDataFields.fishPassProjectDebit
+    FormDataFields.fishPassProjectDebit,
   ];
 
   const earthDamOptions = [
     ...commonOptions,
     FormDataFields.earthDamWidth,
     FormDataFields.earthDamLength,
-    FormDataFields.maxPondPressureHeight
+    FormDataFields.maxPondPressureHeight,
   ];
 
   const waterExcessCulvertOptions = [
     ...commonOptions,
     FormDataFields.avgPerennialDebit95,
-    FormDataFields.type
+    FormDataFields.type,
   ];
 
   const waterBodyCommonOptions = [
@@ -1141,7 +1076,7 @@ const FormPage = () => {
     FormDataFields.cadastralId,
     FormDataFields.category,
     FormDataFields.subPool,
-    FormDataFields.otherData
+    FormDataFields.otherData,
   ];
 
   const riverOptions = [
@@ -1151,7 +1086,7 @@ const FormPage = () => {
     FormDataFields.olderRiverBank,
     FormDataFields.inflowOrder,
     FormDataFields.riverLength,
-    FormDataFields.avgDebitQGrid
+    FormDataFields.avgDebitQGrid,
   ];
 
   const lakeOptions = [
@@ -1163,7 +1098,7 @@ const FormPage = () => {
     FormDataFields.lakeNumberInSquare,
     FormDataFields.lakeWidth,
     FormDataFields.bankLineLength,
-    FormDataFields.directRiver
+    FormDataFields.directRiver,
   ];
 
   const editOptions = {
@@ -1176,20 +1111,22 @@ const FormPage = () => {
     [FormObjectType.NATURAL_LAKE]: lakeOptions,
     [FormObjectType.HYDRO_POWER_PLANT]: hydroPowerPlantOptions,
     [FormObjectType.POND]: lakeOptions,
-    [FormObjectType.PONDED_LAKE]: lakeOptions
+    [FormObjectType.PONDED_LAKE]: lakeOptions,
   };
 
   const mapEditFields = () => {
-    const fields = form?.data ? Object.keys(form.data).map((key) => {
-      return { attribute: key, value: form?.data?.[key] };
-    }) : [];
+    const fields = form?.data
+      ? Object.keys(form.data).map((key) => {
+          return { attribute: key, value: form?.data?.[key] };
+        })
+      : [];
 
     if (!isEmpty(form?.geom) && form?.objectType) {
       const attribute = editOptions[form.objectType].find((item) =>
-        item.toLocaleLowerCase().includes("coordinates")
+        item.toLocaleLowerCase().includes('coordinates'),
       );
 
-      fields.push({ attribute: attribute!, value: "" });
+      fields.push({ attribute: attribute!, value: '' });
     }
 
     return fields;
@@ -1197,21 +1134,19 @@ const FormPage = () => {
 
   const initialValues: Form = {
     objectType: form?.objectType,
-    objectName: form?.objectName || "",
-    cadastralId: form?.cadastralId || "",
+    objectName: form?.objectName || '',
+    cadastralId: form?.cadastralId || '',
     geom: form?.geom || undefined,
-    description: form?.description || "",
+    description: form?.description || '',
     type: form?.type || FormType.NEW,
     status: undefined,
     files: form?.files || [],
     providerType: form?.providerType || FormProviderType.MANAGER,
     editFields:
-      form?.type === FormType.EDIT
-        ? mapEditFields()
-        : [{ attribute: undefined, value: "" }],
-    providedBy: form?.providedBy || "",
+      form?.type === FormType.EDIT ? mapEditFields() : [{ attribute: undefined, value: '' }],
+    providedBy: form?.providedBy || '',
     data: form?.data || {},
-    agreeWithConditions: disabled || false
+    agreeWithConditions: disabled || false,
   };
   const mainFieldsDisabled = !!form?.id;
 
@@ -1220,34 +1155,28 @@ const FormPage = () => {
       FormObjectType.HYDRO_POWER_PLANT,
       FormObjectType.FISH_PASS,
       FormObjectType.EARTH_DAM,
-      FormObjectType.WATER_EXCESS_CULVERT
+      FormObjectType.WATER_EXCESS_CULVERT,
     ].includes(values.objectType!);
 
     const handleUploadFile = async (files) => {
       const uploadedFiles = await Api.uploadFiles(Resources.FORMS, files);
-      handleChange("files", [...values.files, ...uploadedFiles]);
+      handleChange('files', [...values.files, ...uploadedFiles]);
     };
 
     const isNewType = isEqual(values.type, FormType.NEW);
     const isEditType = isEqual(values.type, FormType.EDIT);
 
-    const showFilesContainer =
-      (!isEmpty(values?.files) && disabled) || !disabled;
+    const showFilesContainer = (!isEmpty(values?.files) && disabled) || !disabled;
 
     const hasMapField =
-      isNewType ||
-      values.editFields?.some((item) => isMapEditAttribute(item.attribute));
+      isNewType || values.editFields?.some((item) => isMapEditAttribute(item.attribute));
 
-    const mapField = [FormObjectType.RIVER, FormObjectType.CANAL].includes(
-      values.objectType!
-    )
+    const mapField = [FormObjectType.RIVER, FormObjectType.CANAL].includes(values.objectType!)
       ? formLabels.selectRiverMouth
       : formLabels.selectCenter;
 
     const textareaLabel =
-      FormType.REMOVE === values.type
-        ? formLabels.deregistration
-        : formLabels.otherInfo;
+      FormType.REMOVE === values.type ? formLabels.deregistration : formLabels.otherInfo;
     return (
       <Container>
         <ColumnOne>
@@ -1266,11 +1195,9 @@ const FormPage = () => {
                     error={errors.objectType}
                     name="objectType"
                     onChange={(firstName) => {
-                      handleChange("objectType", firstName);
-                      handleChange("data", {});
-                      handleChange("editFields", [
-                        { attribute: undefined, value: "" }
-                      ]);
+                      handleChange('objectType', firstName);
+                      handleChange('data', {});
+                      handleChange('editFields', [{ attribute: undefined, value: '' }]);
                     }}
                   />
                 )}
@@ -1279,15 +1206,13 @@ const FormPage = () => {
                   options={Object.keys(FormType)}
                   disabled={mainFieldsDisabled}
                   onChange={(e) => {
-                    handleChange("type", e);
-                    handleChange("objectName", "");
-                    handleChange("objectType", "");
-                    handleChange("cadastralId", "");
-                    handleChange("data", {});
-                    handleChange("editFields", [
-                      { attribute: undefined, value: "" }
-                    ]);
-                    handleChange("geom", undefined);
+                    handleChange('type', e);
+                    handleChange('objectName', '');
+                    handleChange('objectType', '');
+                    handleChange('cadastralId', '');
+                    handleChange('data', {});
+                    handleChange('editFields', [{ attribute: undefined, value: '' }]);
+                    handleChange('geom', undefined);
                   }}
                   isSelected={(option) => option === values?.type}
                   getOptionLabel={(option) => {
@@ -1302,9 +1227,7 @@ const FormPage = () => {
                   error={errors.objectName}
                   disabled={disabled}
                   name="objectName"
-                  onChange={(objectName) =>
-                    handleChange("objectName", objectName)
-                  }
+                  onChange={(objectName) => handleChange('objectName', objectName)}
                 />
               ) : (
                 <AsyncSelectField
@@ -1313,9 +1236,9 @@ const FormPage = () => {
                   disabled={disabled}
                   error={errors.objectName}
                   onChange={(value) => {
-                    handleChange("objectName", value?.name);
-                    handleChange("objectType", value?.category);
-                    handleChange("cadastralId", value?.cadastralId);
+                    handleChange('objectName', value?.name);
+                    handleChange('objectType', value?.category);
+                    handleChange('cadastralId', value?.cadastralId);
                   }}
                   getOptionValue={(option) => option?.cadastralId}
                   getInputLabel={() =>
@@ -1332,52 +1255,43 @@ const FormPage = () => {
                   }
                 />
               )}
-              {isNewType &&
-                renderAdditionalFields(values, errors, handleChange)}
+              {isNewType && renderAdditionalFields(values, errors, handleChange)}
             </SimpleContainer>
 
             {isNewType && hasCadastralObjects && (
               <SimpleContainer title={formLabels.cadastralObjects}>
                 <Row repeat={1}>
-                  {fields.river(
-                    values?.data?.river,
-                    errors?.data?.river,
-                    (value) => handleChange("data.river", value)
+                  {fields.river(values?.data?.river, errors?.data?.river, (value) =>
+                    handleChange('data.river', value),
                   )}
                 </Row>
                 <Row repeat={1}>
-                  {fields.pond(
-                    values?.data?.pond,
-                    errors?.data?.pond,
-                    (value) => handleChange("data.pond", value)
+                  {fields.pond(values?.data?.pond, errors?.data?.pond, (value) =>
+                    handleChange('data.pond', value),
                   )}
                 </Row>
                 <Row repeat={3}>
                   {fields.distanceFromRiverMouth(
                     values?.data?.distanceFromRiverMouth,
                     errors?.data?.distanceFromRiverMouth,
-                    (value) =>
-                      handleChange("data.distanceFromRiverMouth", value)
+                    (value) => handleChange('data.distanceFromRiverMouth', value),
                   )}
                 </Row>
               </SimpleContainer>
             )}
             {isEditType && !!values?.objectType && (
-              <SimpleContainer title={"Keičiama informacija"}>
+              <SimpleContainer title={'Keičiama informacija'}>
                 <FieldArray
                   name={`editFields`}
                   render={(arrayHelpers) => (
                     <div>
                       {values.editFields?.map((item, index) => {
-                        const filteredOptions = editOptions[
-                          values.objectType!
-                        ]?.filter(
+                        const filteredOptions = editOptions[values.objectType!]?.filter(
                           (option) =>
                             !values.editFields?.some(
                               (editField) =>
-                                editField.attribute === option &&
-                                item.attribute !== option
-                            )
+                                editField.attribute === option && item.attribute !== option,
+                            ),
                         );
 
                         const options = typeOptions[values.objectType!];
@@ -1385,7 +1299,7 @@ const FormPage = () => {
 
                         const handleRemove = (index) => {
                           if (isMapEditAttribute(item.attribute)) {
-                            handleChange("geom", undefined);
+                            handleChange('geom', undefined);
                           }
 
                           arrayHelpers.remove(Number(index));
@@ -1405,31 +1319,25 @@ const FormPage = () => {
                               showError={false}
                               name="attribute"
                               onChange={(attribute) =>
-                                handleChange(
-                                  `editFields.${index}.attribute`,
-                                  attribute
-                                )
+                                handleChange(`editFields.${index}.attribute`, attribute)
                               }
                             />
-                            {!!item.attribute && fields?.[item.attribute]?.(
-                              item.value,
-                              editFieldErrors?.value,
-                              (value) =>
-                                handleChange(
-                                  `editFields.${index}.value`,
-                                  value
-                                ),
-                              false,
-                              options,
-                              labels
-                            )}
+                            {!!item.attribute &&
+                              fields?.[item.attribute]?.(
+                                item.value,
+                                editFieldErrors?.value,
+                                (value) => handleChange(`editFields.${index}.value`, value),
+                                false,
+                                options,
+                                labels,
+                              )}
                             {!disabled && values.editFields && values.editFields.length > 1 && (
                               <DeleteButton
                                 onClick={() => {
                                   handleRemove(index);
                                 }}
                               >
-                                <DeleteIcon name={"delete"} />
+                                <DeleteIcon name={'delete'} />
                               </DeleteButton>
                             )}
                           </EditFieldsRow>
@@ -1440,8 +1348,8 @@ const FormPage = () => {
                         <SimpleButton
                           onClick={() => {
                             arrayHelpers.push({
-                              attribute: "",
-                              value: undefined
+                              attribute: '',
+                              value: undefined,
                             });
                           }}
                         >
@@ -1458,9 +1366,9 @@ const FormPage = () => {
                 <Map
                   queryString={mapQueryString}
                   error={errors?.geom}
-                  onSave={(data) => handleChange("geom", data)}
+                  onSave={(data) => handleChange('geom', data)}
                   value={values?.geom}
-                  height={"300px"}
+                  height={'300px'}
                 />
               </SimpleContainer>
             )}
@@ -1470,9 +1378,9 @@ const FormPage = () => {
                   disabled={disabled}
                   error={errors?.files}
                   onUpload={handleUploadFile}
-                  onDelete={(files: File[]) => handleChange("files", files)}
+                  onDelete={(files: File[]) => handleChange('files', files)}
                   files={values?.files || []}
-                  label={""}
+                  label={''}
                 />
               </SimpleContainer>
             )}
@@ -1482,10 +1390,8 @@ const FormPage = () => {
                 disabled={disabled}
                 value={values.description}
                 error={errors?.description}
-                name={"description"}
-                onChange={(description) =>
-                  handleChange("description", description)
-                }
+                name={'description'}
+                onChange={(description) => handleChange('description', description)}
               />
             </SimpleContainer>
 
@@ -1500,8 +1406,8 @@ const FormPage = () => {
                   error={errors.providerType}
                   name="providerType"
                   onChange={(firstName) => {
-                    handleChange("providerType", firstName);
-                    handleChange("providedBy", "");
+                    handleChange('providerType', firstName);
+                    handleChange('providedBy', '');
                   }}
                 />
                 {values.providerType === FormProviderType.OTHER && (
@@ -1511,9 +1417,7 @@ const FormPage = () => {
                     value={values?.providedBy}
                     error={errors?.providedBy}
                     name="providedBy"
-                    onChange={(objectName) =>
-                      handleChange("providedBy", objectName)
-                    }
+                    onChange={(objectName) => handleChange('providedBy', objectName)}
                   />
                 )}
                 <SingleCheckBox
@@ -1521,9 +1425,7 @@ const FormPage = () => {
                   label={<TermsAndConditions />}
                   value={values.agreeWithConditions}
                   error={!!errors?.agreeWithConditions}
-                  onChange={(value) =>
-                    handleChange(`agreeWithConditions`, value)
-                  }
+                  onChange={(value) => handleChange(`agreeWithConditions`, value)}
                 />
               </InnerContainer>
             </SimpleContainer>

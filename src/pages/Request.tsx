@@ -1,47 +1,38 @@
-import { isEqual } from "lodash";
-import { useMutation, useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { default as api, default as Api } from "../api";
-import SingleCheckBox from "../components/buttons/CheckBox";
-import FormHistoryContainer from "../components/containers/FormHistoryContainer";
-import SimpleContainer from "../components/containers/SimpleContainer";
-import AsyncMultiSelect from "../components/fields/AsyncMultiSelect";
-import SelectField from "../components/fields/SelectField";
-import TextAreaField from "../components/fields/TextAreaField";
-import TextField from "../components/fields/TextField";
-import { GeneratedFileComponent } from "../components/other/GeneratedFileComponent";
-import LoaderComponent from "../components/other/LoaderComponent";
-import TermsAndConditions from "../components/other/TermsAndConditions";
-import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
-import { useAppSelector } from "../state/hooks";
-import { device } from "../styles";
-import {
-  ColumnOne,
-  ColumnTwo,
-  Container
-} from "../styles/GenericStyledComponents";
-import { PurposeTypes, StatusTypes } from "../utils/constants";
-import {
-  getLocationList,
-  handleErrorFromServerToast,
-  isNew
-} from "../utils/functions";
-import { useGetCurrentProfile } from "../utils/hooks";
-import { purposeTypesOptions } from "../utils/options";
-import { slugs } from "../utils/routes";
+import { isEqual } from 'lodash';
+import { useMutation, useQuery } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { default as api, default as Api } from '../api';
+import SingleCheckBox from '../components/buttons/CheckBox';
+import FormHistoryContainer from '../components/containers/FormHistoryContainer';
+import SimpleContainer from '../components/containers/SimpleContainer';
+import AsyncMultiSelect from '../components/fields/AsyncMultiSelect';
+import SelectField from '../components/fields/SelectField';
+import TextAreaField from '../components/fields/TextAreaField';
+import { GeneratedFileComponent } from '../components/other/GeneratedFileComponent';
+import LoaderComponent from '../components/other/LoaderComponent';
+import TermsAndConditions from '../components/other/TermsAndConditions';
+import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
+import { device } from '../styles';
+import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponents';
+import { PurposeTypes, StatusTypes } from '../utils/constants';
+import { getLocationList, handleErrorFromServerToast, isNew } from '../utils/functions';
+import { purposeTypesOptions } from '../utils/options';
+import { slugs } from '../utils/routes';
 import {
   formLabels,
   inputLabels,
   pageTitles,
   purposeTypeLabels,
-  requestHistoryStatusLabels
-} from "../utils/texts";
-import { validateRequest } from "../utils/validation";
+  requestHistoryStatusLabels,
+} from '../utils/texts';
+import { validateRequest } from '../utils/validation';
+import EmailChangeAlert from '../components/other/EmailChangeAlert';
+import { useAppSelector } from '../state/hooks';
+import { useGetCurrentProfile } from '../utils/hooks';
 
 export interface RequestProps {
   id?: string;
-  notifyEmail: string;
   objects: { cadastralId: string; category: string }[];
   status?: StatusTypes;
   purposeValue: string;
@@ -68,11 +59,11 @@ export interface RequestPayload {
   geom?: any;
 }
 
-const requestDataTypes = ["false", "true"];
+const requestDataTypes = ['false', 'true'];
 
 const requestDataTypeLabels = {
-  false: "Pagrindiniai duomenys (.pdf)",
-  true: "Išplėstiniai duomenys (.pdf)"
+  false: 'Pagrindiniai duomenys (.pdf)',
+  true: 'Išplėstiniai duomenys (.pdf)',
 };
 
 const RequestPage = () => {
@@ -82,16 +73,12 @@ const RequestPage = () => {
   const { id } = useParams();
   const title = isNew(id) ? pageTitles.newRequest : pageTitles.request(id!);
 
-  const { data: request, isLoading } = useQuery(
-    ["request", id],
-    () => api.request(id!),
-    {
-      onError: () => {
-        navigate(slugs.requests);
-      },
-      enabled: !isNew(id)
-    }
-  );
+  const { data: request, isLoading } = useQuery(['request', id], () => api.request(id!), {
+    onError: () => {
+      navigate(slugs.requests);
+    },
+    enabled: !isNew(id),
+  });
 
   const disabled = !isNew(id) && !request?.canEdit;
 
@@ -111,43 +98,38 @@ const RequestPage = () => {
 
   // const mapQueryString = getMapQueryString(disabled);
 
-  const createRequest = useMutation(
-    (values: RequestPayload) => api.createRequests(values),
-    {
-      onError: () => {
-        handleErrorFromServerToast();
-      },
-      onSuccess: () => {
-        navigate(slugs.requests);
-      },
-      retry: false
-    }
-  );
+  const createRequest = useMutation((values: RequestPayload) => api.createRequests(values), {
+    onError: () => {
+      handleErrorFromServerToast();
+    },
+    onSuccess: () => {
+      navigate(slugs.requests);
+    },
+    retry: false,
+  });
 
-  const updateRequest = useMutation(
-    (values: RequestPayload) => api.updaterRequest(id!, values),
-    {
-      onError: () => {
-        handleErrorFromServerToast();
-      },
-      onSuccess: () => {
-        navigate(slugs.requests);
-      },
-      retry: false
-    }
-  );
+  const updateRequest = useMutation((values: RequestPayload) => api.updaterRequest(id!, values), {
+    onError: () => {
+      handleErrorFromServerToast();
+    },
+    onSuccess: () => {
+      navigate(slugs.requests);
+    },
+    retry: false,
+  });
 
   const handleSubmit = async (values: RequestProps) => {
     const { agreeWithConditions, extended, objects, ...rest } = values;
     const params: RequestPayload = {
       ...rest,
+      notifyEmail: currentProfile?.email || userEmail || '',
       objects: objects.map((item) => {
         return {
-          type: "CADASTRAL_ID",
-          id: item?.cadastralId
+          type: 'CADASTRAL_ID',
+          id: item?.cadastralId,
         };
       }),
-      data: { extended: extended === "true" }
+      data: { extended: extended === 'true' },
     };
 
     if (isNew(id)) {
@@ -158,14 +140,12 @@ const RequestPage = () => {
   };
 
   const initialValues: RequestProps = {
-    notifyEmail:
-      request?.notifyEmail || currentProfile?.email || userEmail || "",
     objects: request?.objects || [],
     //geom: !isEmpty(request?.geom) ? request?.geom : undefined,
     agreeWithConditions: disabled || false,
-    purposeValue: request?.purposeValue || "",
+    purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    extended: request?.data?.extended?.toString() || "false"
+    extended: request?.data?.extended?.toString() || 'false',
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
@@ -174,27 +154,19 @@ const RequestPage = () => {
     return (
       <Container>
         <ColumnOne>
+          {!disabled && <EmailChangeAlert />}
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutUser}>
-              <TextField
-                disabled={disabled}
-                label={inputLabels.email}
-                value={values.notifyEmail}
-                name={"notifyEmail"}
-                type="email"
-                error={errors?.notifyEmail}
-                onChange={(email) => handleChange("notifyEmail", email)}
-              />
               <Row columns={2}>
                 <SelectField
                   disabled={disabled}
                   label={inputLabels.dataReceivingPurpose}
                   value={values.purpose}
                   error={errors.dataReceivingPurpose}
-                  name={"purpose"}
+                  name={'purpose'}
                   onChange={(e) => {
-                    handleChange("purpose", e);
-                    handleChange("purposeValue", "");
+                    handleChange('purpose', e);
+                    handleChange('purposeValue', '');
                   }}
                   options={purposeTypesOptions}
                   getOptionLabel={(e) => {
@@ -204,12 +176,12 @@ const RequestPage = () => {
 
                 {isEqual(values.purpose, PurposeTypes.OTHER) && (
                   <TextAreaField
-                    label={"Kita"}
+                    label={'Kita'}
                     disabled={disabled}
                     value={values.purposeValue}
                     error={errors?.purposeValue}
                     rows={1}
-                    onChange={(e: string) => handleChange("purposeValue", e)}
+                    onChange={(e: string) => handleChange('purposeValue', e)}
                   />
                 )}
               </Row>
@@ -219,7 +191,7 @@ const RequestPage = () => {
                   label={inputLabels.requestType}
                   value={values.extended}
                   error={errors.extended}
-                  name={"extended"}
+                  name={'extended'}
                   onChange={(e) => {
                     handleChange(`extended`, e?.toString());
                   }}
@@ -241,7 +213,7 @@ const RequestPage = () => {
                   getOptionValue={(option) => option?.cadastralId}
                   error={errors.objects}
                   onChange={(value) => {
-                    handleChange("objects", value);
+                    handleChange('objects', value);
                   }}
                   getOptionLabel={(option) => {
                     const { name, cadastralId, categoryTranslate } = option;
@@ -280,9 +252,7 @@ const RequestPage = () => {
         </ColumnOne>
         {!isNew(id) && (
           <ColumnTwo>
-            {isApproved && (
-              <GeneratedFileComponent generatedFile={request?.generatedFile} />
-            )}
+            {isApproved && <GeneratedFileComponent generatedFile={request?.generatedFile} />}
             <FormHistoryContainer
               name={`historyRequests-${id}`}
               formHistoryLabels={requestHistoryStatusLabels}

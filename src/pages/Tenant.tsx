@@ -1,17 +1,14 @@
-import { useMutation, useQueryClient } from "react-query";
-import api from "../api";
-import SimpleContainer from "../components/containers/SimpleContainer";
-import TextField from "../components/fields/TextField";
-import FormPageWrapper from "../components/wrappers/FormikFormPageWrapper";
-import { useAppSelector } from "../state/hooks";
-import { ColumnOne, Grid } from "../styles/GenericStyledComponents";
-import { Tenant } from "../types";
-import {
-  handleErrorFromServerToast,
-  handleSuccessToast
-} from "../utils/functions";
-import { formLabels, inputLabels, validationTexts } from "../utils/texts";
-import { validateUpdateTenantForm } from "../utils/validation";
+import { useMutation, useQueryClient } from 'react-query';
+import api from '../api';
+import SimpleContainer from '../components/containers/SimpleContainer';
+import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
+import { useAppSelector } from '../state/hooks';
+import { ColumnOne, Grid } from '../styles/GenericStyledComponents';
+import { Tenant } from '../types';
+import { handleErrorFromServerToast, handleSuccessToast } from '../utils/functions';
+import { formLabels, inputLabels, validationTexts } from '../utils/texts';
+import { validateUpdateTenantForm } from '../utils/validation';
+import { PhoneField, TextField } from '@aplinkosministerija/design-system';
 
 export interface TenantProps {
   phone: string;
@@ -24,22 +21,23 @@ const TenantForm = () => {
   const queryClient = useQueryClient();
 
   const updateUser = useMutation(
-    async (values: TenantProps) => tenant?.id ?  api.updateTenant(tenant.id, values) : Promise.resolve(),
+    async (values: TenantProps) =>
+      tenant?.id ? api.updateTenant(tenant.id, values) : Promise.resolve(),
     {
       onError: () => {
         handleErrorFromServerToast();
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(["tenant", loggedIn]);
+        await queryClient.invalidateQueries(['tenant', loggedIn]);
         handleSuccessToast(validationTexts.tenantUpdated);
       },
-      retry: false
-    }
+      retry: false,
+    },
   );
 
   const initialValues: TenantProps = {
-    phone: tenant.phone || "",
-    email: tenant.email || ""
+    phone: tenant.phone || '',
+    email: tenant.email || '',
   };
 
   const renderForm = (values: TenantProps, errors: any, handleChange) => {
@@ -47,13 +45,12 @@ const TenantForm = () => {
       <ColumnOne>
         <SimpleContainer title={formLabels.infoAboutTenant}>
           <Grid column={2}>
-            <TextField
+            <PhoneField
               label={inputLabels.phone}
               value={values.phone}
               error={errors.phone}
               name="phone"
-              placeholder="862211123"
-              onChange={(e) => handleChange("phone", e)}
+              onChange={(e) => handleChange('phone', e)}
             />
             <TextField
               label={inputLabels.email}
@@ -62,7 +59,7 @@ const TenantForm = () => {
               type="email"
               name="email"
               placeholder="naudotojas@am.lt"
-              onChange={(e) => handleChange("email", e)}
+              onChange={(e) => handleChange('email', e)}
             />
           </Grid>
         </SimpleContainer>
