@@ -1,19 +1,17 @@
-import styled from "styled-components";
-import { url } from "../../utils/texts";
+import styled from 'styled-components';
 
-export interface NotFoundProps {
-  url?: string;
-  urlLabel?: string;
-  label: string;
+export interface TermsAndConditionsProps {
+  url: string;
+  urlText: string;
 }
 
-const TermsAndConditions = () => {
+const TermsAndConditions = ({ url, urlText }: TermsAndConditionsProps) => {
   return (
     <Container>
-      Su{" "}
-      <Url target="_blank" href={url.termsAndConditions}>
-        duomenų teikimo sąlygomis susipažinau
-      </Url>{" "}
+      Su{' '}
+      <Url target="_blank" href={url}>
+        {urlText}
+      </Url>{' '}
       ir sutinku.
     </Container>
   );
