@@ -1,3 +1,4 @@
+import { TextField } from '@aplinkosministerija/design-system';
 import { FieldArray } from 'formik';
 import { isEmpty, isEqual } from 'lodash';
 import { useMutation, useQuery } from 'react-query';
@@ -63,10 +64,10 @@ import {
   inputLabels,
   pageTitles,
   subPoolTypeLabels,
+  url,
   waterExcessCulvertTypeLabels,
 } from '../utils/texts';
 import { validateForm } from '../utils/validation';
-import { TextField } from '@aplinkosministerija/design-system';
 
 type FormPayload = Omit<Form, 'editFields'>;
 const FormPage = () => {
@@ -1422,7 +1423,12 @@ const FormPage = () => {
                 )}
                 <SingleCheckBox
                   disabled={disabled}
-                  label={<TermsAndConditions />}
+                  label={
+                    <TermsAndConditions
+                      urlText="duomenų teikimo sąlygomis susipažinau"
+                      url={url.formTermsAndConditions}
+                    />
+                  }
                   value={values.agreeWithConditions}
                   error={!!errors?.agreeWithConditions}
                   onChange={(value) => handleChange(`agreeWithConditions`, value)}

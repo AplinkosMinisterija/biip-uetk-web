@@ -25,6 +25,7 @@ import {
   pageTitles,
   purposeTypeLabels,
   requestHistoryStatusLabels,
+  url,
 } from '../utils/texts';
 import { validateRequest } from '../utils/validation';
 import EmailChangeAlert from '../components/other/EmailChangeAlert';
@@ -242,7 +243,12 @@ const RequestPage = () => {
             <SimpleContainer title={formLabels.otherInfo}>
               <SingleCheckBox
                 disabled={disabled}
-                label={<TermsAndConditions />}
+                label={
+                  <TermsAndConditions
+                    urlText="duomenų gavimo taisyklėmis susipažinau"
+                    url={url.requestTermsAndConditions}
+                  />
+                }
                 value={values.agreeWithConditions}
                 error={errors?.agreeWithConditions}
                 onChange={(value) => handleChange(`agreeWithConditions`, value)}

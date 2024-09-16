@@ -30,7 +30,8 @@ export const url = {
   new: 'naujas',
   publicUETK: 'https://uetk.biip.lt/',
   upload: '/api/public/files',
-  termsAndConditions: 'https://uetk.biip.lt/duomenu-teikimo-taisykles/',
+  formTermsAndConditions: 'https://uetk.biip.lt/duomenu-teikimo-taisykles',
+  requestTermsAndConditions: 'https://uetk.biip.lt/duomenu-gavimo-taisykles',
 };
 
 export const subTitles = {
