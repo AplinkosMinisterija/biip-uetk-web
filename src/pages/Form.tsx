@@ -68,6 +68,7 @@ import {
   waterExcessCulvertTypeLabels,
 } from '../utils/texts';
 import { validateForm } from '../utils/validation';
+import EmailChangeAlert from '../components/other/EmailChangeAlert';
 
 type FormPayload = Omit<Form, 'editFields'>;
 const FormPage = () => {
@@ -1181,6 +1182,7 @@ const FormPage = () => {
     return (
       <Container>
         <ColumnOne>
+        {!disabled && <EmailChangeAlert />}
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutObject}>
               <Row>
