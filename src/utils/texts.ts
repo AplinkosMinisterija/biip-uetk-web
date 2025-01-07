@@ -406,29 +406,33 @@ export const requestStatusLabels = {
 };
 
 export const formObjectTypeLabels = {
-  [FormObjectType.CANAL]: 'Kanalas',
-  [FormObjectType.EARTH_DAM]: 'Žemių užtvanka',
-  [FormObjectType.FISH_PASS]: 'Žuvų pralaida',
-  [FormObjectType.HYDRO_POWER_PLANT]: 'Hidroelektrinė',
-  [FormObjectType.ISOLATED_WATER_BODY]: 'Nepratekamas dirbtinis paviršinis vandens telkinys',
-  [FormObjectType.NATURAL_LAKE]: 'Natūralus ežeras',
-  [FormObjectType.POND]: 'Tvenkinys',
-  [FormObjectType.PONDED_LAKE]: 'Patvenktas ežeras',
   [FormObjectType.RIVER]: 'Upė',
+  [FormObjectType.CANAL]: 'Kanalas',
+  [FormObjectType.INTERMEDIATE_WATER_BODY]: 'Tarpinis vandens telkinys',
+  [FormObjectType.TERRITORIAL_WATER_BODY]: 'Teritorinis vandens telkinys',
+  [FormObjectType.NATURAL_LAKE]: 'Natūralus ežeras',
+  [FormObjectType.PONDED_LAKE]: 'Patvenktas ežeras',
+  [FormObjectType.POND]: 'Tvenkinys',
+  [FormObjectType.ISOLATED_WATER_BODY]: 'Nepratekamas dirbtinis paviršinis vandens telkinys',
+  [FormObjectType.EARTH_DAM]: 'Žemių užtvanka',
   [FormObjectType.WATER_EXCESS_CULVERT]: 'Vandens pertekliaus pralaida',
+  [FormObjectType.HYDRO_POWER_PLANT]: 'Hidroelektrinė',
+  [FormObjectType.FISH_PASS]: 'Žuvų pralaida',
 };
 
-export const formObjectLabelsToType = {
-  Kanalas: FormObjectType.CANAL,
-  'Žemių užtvanka': FormObjectType.EARTH_DAM,
-  'Žuvų pralaida': FormObjectType.FISH_PASS,
-  Hidroelektrinė: FormObjectType.HYDRO_POWER_PLANT,
-  'Nepratekamas dirbtinis paviršinis vandens telkinys': FormObjectType.ISOLATED_WATER_BODY,
-  'Natūralus ežeras': FormObjectType.NATURAL_LAKE,
-  Tvenkinys: FormObjectType.POND,
-  'Patvenktas ežeras': FormObjectType.PONDED_LAKE,
-  Upė: FormObjectType.RIVER,
-  'Vandens pertekliaus pralaida': FormObjectType.WATER_EXCESS_CULVERT,
+export const reverseFormObjectTypeLabels = {
+  Upė: 'RIVER',
+  Kanalas: 'CANAL',
+  'Tarpinis vandens telkinys': 'INTERMEDIATE_WATER_BODY',
+  'Teritorinis vandens telkinys': 'TERRITORIAL_WATER_BODY',
+  'Natūralus ežeras': 'NATURAL_LAKE',
+  'Patvenktas ežeras': 'PONDED_LAKE',
+  Tvenkinys: 'POND',
+  'Nepratekamas dirbtinis paviršinis vandens telkinys': 'ISOLATED_WATER_BODY',
+  'Žemių užtvanka': 'EARTH_DAM',
+  'Vandens pertekliaus pralaida': 'WATER_EXCESS_CULVERT',
+  Hidroelektrinė: 'HYDRO_POWER_PLANT',
+  'Žuvų pralaida': 'FISH_PASS',
 };
 
 export const waterExcessCulvertTypeLabels = {
