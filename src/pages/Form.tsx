@@ -1,4 +1,4 @@
-import { TextField } from '@aplinkosministerija/design-system';
+import { MapField, TextField } from '@aplinkosministerija/design-system';
 import { FieldArray } from 'formik';
 import { isEmpty, isEqual } from 'lodash';
 import { useMutation, useQuery } from 'react-query';
@@ -39,6 +39,7 @@ import {
   FormProviderType,
   FormType,
   HydroPowerPlantType,
+  mapsHost,
   Resources,
   WaterExcessCulvertType,
 } from '../utils/constants';
@@ -63,6 +64,7 @@ import {
   hydroPowerPlantTypeLabels,
   inputLabels,
   pageTitles,
+  reverseFormObjectTypeLabels,
   subPoolTypeLabels,
   url,
   waterExcessCulvertTypeLabels,
@@ -1179,6 +1181,10 @@ const FormPage = () => {
 
     const textareaLabel =
       FormType.REMOVE === values.type ? formLabels.deregistration : formLabels.otherInfo;
+
+    const mapPath = '/uetk?hideSidebar=true';
+    const cadastralId = values?.cadastralId;
+
     return (
       <Container>
         <ColumnOne>
@@ -1233,30 +1239,52 @@ const FormPage = () => {
                   onChange={(objectName) => handleChange('objectName', objectName)}
                 />
               ) : (
-                <AsyncSelectField
-                  label={inputLabels.objectNameOrCode}
-                  value={values.objectName}
-                  disabled={disabled}
-                  error={errors.objectName}
-                  onChange={(value) => {
-                    handleChange('objectName', value?.name);
-                    handleChange('objectType', value?.category);
-                    handleChange('cadastralId', value?.cadastralId);
-                  }}
-                  getOptionValue={(option) => option?.cadastralId}
-                  getInputLabel={() =>
-                    `${values?.objectName}, ${values?.cadastralId}, ${
-                      formObjectTypeLabels[values.objectType!]
-                    }`
-                  }
-                  getOptionLabel={(option) => {
-                    const { name, cadastralId, categoryTranslate } = option;
-                    return `${name}, ${cadastralId}, ${categoryTranslate}`;
-                  }}
-                  loadOptions={(input: string, page: number | string) =>
-                    getLocationList(input, page, {})
-                  }
-                />
+                <>
+                  <AsyncSelectField
+                    label={inputLabels.objectNameOrCode}
+                    value={values.objectName}
+                    disabled={disabled}
+                    error={errors.objectName}
+                    onChange={(value) => {
+                      handleChange('objectName', value?.name);
+                      handleChange('objectType', value?.category);
+                      handleChange('cadastralId', value?.cadastralId);
+                    }}
+                    getOptionValue={(option) => option?.cadastralId}
+                    getInputLabel={() =>
+                      `${values?.objectName}, ${values?.cadastralId}, ${
+                        formObjectTypeLabels[values.objectType!]
+                      }`
+                    }
+                    getOptionLabel={(option) => {
+                      const { name, cadastralId, categoryTranslate } = option;
+                      return `${name}, ${cadastralId}, ${categoryTranslate}`;
+                    }}
+                    loadOptions={(input: string, page: number | string) =>
+                      getLocationList(input, page, {})
+                    }
+                  />
+                  <MapField
+                    {...(cadastralId && { filter: { cadastralId } })}
+                    mapHost={mapsHost}
+                    mapPath={mapPath}
+                    onClick={(result) => {
+                      if (disabled) return;
+
+                      const item = result?.[0];
+
+                      if (item) {
+                        handleChange('objectName', item?.['1. Pavadinimas']);
+                        handleChange(
+                          'objectType',
+                          reverseFormObjectTypeLabels[item?.['3. Kategorija']],
+                        );
+                        handleChange('cadastralId', item?.['2. Kadastro identifikavimo kodas']);
+                      }
+                    }}
+                    allow="geolocation *"
+                  />
+                </>
               )}
               {isNewType && renderAdditionalFields(values, errors, handleChange)}
             </SimpleContainer>
