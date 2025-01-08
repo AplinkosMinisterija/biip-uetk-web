@@ -1181,10 +1181,8 @@ const FormPage = () => {
     const textareaLabel =
       FormType.REMOVE === values.type ? formLabels.deregistration : formLabels.otherInfo;
 
-    const basePath = '/uetk';
+    const mapPath = '/uetk';
     const cadastralId = values?.cadastralId;
-
-    const mapPath = cadastralId ? `${basePath}?cadastralId=${cadastralId}` : basePath;
 
     return (
       <Container>
@@ -1265,9 +1263,9 @@ const FormPage = () => {
                     }
                   />
                   <MapField
+                    {...(cadastralId && { filter: { cadastralId } })}
                     mapHost={mapsHost}
                     mapPath={mapPath}
-                    onchange={(value) => console.log(value)}
                     onClick={(result) => {
                       if (disabled) return;
 
