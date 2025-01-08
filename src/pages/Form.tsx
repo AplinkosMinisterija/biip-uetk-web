@@ -1181,7 +1181,7 @@ const FormPage = () => {
     const textareaLabel =
       FormType.REMOVE === values.type ? formLabels.deregistration : formLabels.otherInfo;
 
-    const mapPath = '/uetk?hideSidebar=true';
+    const mapPath = '/uetk?hideSidebar=true&preview=true';
     const cadastralId = values?.cadastralId;
 
     return (
