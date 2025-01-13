@@ -1,4 +1,4 @@
-import { MapField, TextField } from '@aplinkosministerija/design-system';
+import { MapField, SelectField, TextField } from '@aplinkosministerija/design-system';
 import { FieldArray } from 'formik';
 import { isEmpty, isEqual } from 'lodash';
 import { useMutation, useQuery } from 'react-query';
@@ -13,7 +13,6 @@ import SimpleContainer from '../components/containers/SimpleContainer';
 import AsyncSelectField from '../components/fields/AsyncSelect';
 import DragAndDropUploadField from '../components/fields/DragAndDropUploadField';
 import NumericTextField from '../components/fields/NumericTextField';
-import SelectField from '../components/fields/SelectField';
 import TextAreaField from '../components/fields/TextAreaField';
 import Map from '../components/map/DrawMap';
 import Icon from '../components/other/Icons';
