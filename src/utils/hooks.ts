@@ -1,17 +1,13 @@
-import { useMutation, useQuery } from "react-query";
-import Cookies from "universal-cookie";
-import api from "../api";
-import { useAppDispatch, useAppSelector } from "../state/hooks";
-import { actions as tenantActions } from "../state/tenant/reducer";
-import { actions as userActions } from "../state/user/reducer";
-import { Tenant, User } from "../types";
-import {
-  handleErrorFromServerToast,
-  handleIsTenantOwner,
-  handleIsTenantUser
-} from "./functions";
-import { clearCookies, emptyUser, handleSetProfile } from "./loginFunctions";
-import { filteredRoutes } from "./routes";
+import { useMutation, useQuery } from 'react-query';
+import Cookies from 'universal-cookie';
+import api from '../api';
+import { useAppDispatch, useAppSelector } from '../state/hooks';
+import { actions as tenantActions } from '../state/tenant/reducer';
+import { actions as userActions } from '../state/user/reducer';
+import { Tenant, User } from '../types';
+import { handleErrorFromServerToast, handleIsTenantOwner, handleIsTenantUser } from './functions';
+import { clearCookies, emptyUser, handleSetProfile } from './loginFunctions';
+import { filteredRoutes } from './routes';
 
 const cookies = new Cookies();
 
@@ -21,9 +17,9 @@ export const useFilteredRoutes = () => {
 
 export const useGetCurrentProfile = () => {
   const profiles = useAppSelector((state) => state.user.userData.profiles);
-  const profileId = cookies.get("profileId");
+  const profileId = cookies.get('profileId');
   const currentProfile = profiles?.find(
-    (profile) => profile.id.toString() === profileId?.toString()
+    (profile) => profile.id.toString() === profileId?.toString(),
   );
   return currentProfile;
 };
@@ -44,7 +40,7 @@ export const useEGatesSign = () => {
     onSuccess: ({ url }) => {
       window.location.replace(url);
     },
-    retry: false
+    retry: false,
   });
 
   return { isLoading, mutateAsync };
@@ -53,10 +49,10 @@ export const useEGatesSign = () => {
 export const useTenantInfoMutation = () => {
   const dispatch = useAppDispatch();
   const loggedIn = useAppSelector((state) => state?.user?.loggedIn);
-  const profileId = cookies.get("profileId");
+  const profileId = cookies.get('profileId');
 
   const { isFetching } = useQuery(
-    ["tenant", loggedIn, profileId],
+    ['tenant', loggedIn, profileId],
     () => api.getTenantInfo(profileId),
     {
       onError: () => {
@@ -66,8 +62,9 @@ export const useTenantInfoMutation = () => {
         dispatch(tenantActions.setTenant({ id, name, code, phone, email }));
       },
       retry: false,
-      enabled: loggedIn && !isNaN(profileId)
-    }
+      refetchOnWindowFocus: false,
+      enabled: loggedIn && !isNaN(profileId),
+    },
   );
 
   return { isFetching };
@@ -75,7 +72,7 @@ export const useTenantInfoMutation = () => {
 
 export const useUserInfo = () => {
   const dispatch = useAppDispatch();
-  const token = cookies.get("token");
+  const token = cookies.get('token');
 
   const { isLoading } = useQuery([token], () => api.getUserInfo(), {
     onError: () => {
@@ -89,7 +86,7 @@ export const useUserInfo = () => {
       }
     },
     retry: false,
-    enabled: !!token
+    enabled: !!token,
   });
 
   return { isLoading };
@@ -105,7 +102,7 @@ export const useLogoutMutation = () => {
     onSuccess: () => {
       clearCookies();
       dispatch(userActions.setUser(emptyUser));
-    }
+    },
   });
 
   return { mutateAsync };
