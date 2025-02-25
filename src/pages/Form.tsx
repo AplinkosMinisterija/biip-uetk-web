@@ -1,4 +1,4 @@
-import { MapField, SelectField, TextField } from '@aplinkosministerija/design-system';
+import { DragAndDropUploadField, TextAreaField, CheckBox, MapField, SelectField, TextField, NumericTextField } from '@aplinkosministerija/design-system';
 import { FieldArray } from 'formik';
 import { isEmpty, isEqual } from 'lodash';
 import { useMutation, useQuery } from 'react-query';
@@ -6,14 +6,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { default as api, default as Api } from '../api';
 import ButtonsGroup from '../components/buttons/ButtonsGroup';
-import SingleCheckBox from '../components/buttons/CheckBox';
 import SimpleButton from '../components/buttons/SimpleButton';
 import FormHistoryContainer from '../components/containers/FormHistoryContainer';
 import SimpleContainer from '../components/containers/SimpleContainer';
 import AsyncSelectField from '../components/fields/AsyncSelect';
-import DragAndDropUploadField from '../components/fields/DragAndDropUploadField';
-import NumericTextField from '../components/fields/NumericTextField';
-import TextAreaField from '../components/fields/TextAreaField';
 import Map from '../components/map/DrawMap';
 import Icon from '../components/other/Icons';
 import LoaderComponent from '../components/other/LoaderComponent';
@@ -160,7 +156,7 @@ const FormPage = () => {
         error={error}
         name="poolArea"
         onChange={(value) => handleChange(value)}
-        rightIcon={<SquareMeter />}
+        right={<SquareMeter />}
         disabled={disabled}
       />
     ),
@@ -172,7 +168,7 @@ const FormPage = () => {
         error={error}
         name="waterVolume"
         onChange={(value) => handleChange(value)}
-        rightIcon={<ThousandsPerCubicMeter />}
+        right={<ThousandsPerCubicMeter />}
         disabled={disabled}
       />
     ),
@@ -185,7 +181,7 @@ const FormPage = () => {
         error={error}
         name="waterLevelAltitude"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -197,7 +193,7 @@ const FormPage = () => {
         error={error}
         name="maxWaterDepth"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -209,7 +205,7 @@ const FormPage = () => {
         error={error}
         name="avgWaterDepth"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -221,7 +217,7 @@ const FormPage = () => {
         error={error}
         name="maxWaterDepthNPL"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -233,7 +229,7 @@ const FormPage = () => {
         error={error}
         name="avgWaterDepthNPL"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -245,7 +241,7 @@ const FormPage = () => {
         error={error}
         name="usefulWaterVolume"
         onChange={(value) => handleChange(value)}
-        rightIcon={<ThousandsPerCubicMeter />}
+        right={<ThousandsPerCubicMeter />}
         disabled={disabled}
       />
     ),
@@ -257,7 +253,7 @@ const FormPage = () => {
         error={error}
         name="distanceFromRiverMouth"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Kilometer />}
+        right={<Kilometer />}
         disabled={disabled}
       />
     ),
@@ -291,7 +287,7 @@ const FormPage = () => {
         error={error}
         name="normalPondLevelNPL"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -347,7 +343,7 @@ const FormPage = () => {
         error={error}
         name="fishPassDebit"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -359,7 +355,7 @@ const FormPage = () => {
         error={error}
         name="fishPassProjectDebit"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -372,7 +368,7 @@ const FormPage = () => {
         bottomLabel="30 sausiausių parų"
         name="minDebit"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -386,7 +382,7 @@ const FormPage = () => {
         name="maxDebit"
         bottomLabel="Esant maks.(skaičiuotinai) debito tikimybei"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -398,7 +394,7 @@ const FormPage = () => {
         error={error}
         name="qvid"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -410,7 +406,7 @@ const FormPage = () => {
         error={error}
         name="q95"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -422,7 +418,7 @@ const FormPage = () => {
         error={error}
         name="q1"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -434,7 +430,7 @@ const FormPage = () => {
         error={error}
         name="q5"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -446,7 +442,7 @@ const FormPage = () => {
         error={error}
         name="avgPerennialDebit95"
         onChange={(value) => handleChange(value)}
-        rightIcon={<CubicMeterPerSecond />}
+        right={<CubicMeterPerSecond />}
         disabled={disabled}
       />
     ),
@@ -459,7 +455,7 @@ const FormPage = () => {
         error={error}
         name="power"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Kilowatt />}
+        right={<Kilowatt />}
         disabled={disabled}
       />
     ),
@@ -471,7 +467,7 @@ const FormPage = () => {
         error={error}
         name="maxPressureHeight"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -483,7 +479,7 @@ const FormPage = () => {
         error={error}
         name="maxPondPressureHeight"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Meter />}
+        right={<Meter />}
         disabled={disabled}
       />
     ),
@@ -680,7 +676,7 @@ const FormPage = () => {
         error={error}
         name="surfaceArea"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Hectares />}
+        right={<Hectares />}
         disabled={disabled}
       />
     ),
@@ -692,7 +688,7 @@ const FormPage = () => {
         error={error}
         name="lakeLength"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Kilometer />}
+        right={<Kilometer />}
         disabled={disabled}
       />
     ),
@@ -726,7 +722,7 @@ const FormPage = () => {
         error={error}
         name="lakeWidth"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Kilometer />}
+        right={<Kilometer />}
         disabled={disabled}
       />
     ),
@@ -738,7 +734,7 @@ const FormPage = () => {
         error={error}
         name="bankLineLength"
         onChange={(value) => handleChange(value)}
-        rightIcon={<Kilometer />}
+        right={<Kilometer />}
         disabled={disabled}
       />
     ),
@@ -1450,7 +1446,7 @@ const FormPage = () => {
                     onChange={(objectName) => handleChange('providedBy', objectName)}
                   />
                 )}
-                <SingleCheckBox
+                <CheckBox
                   disabled={disabled}
                   label={
                     <TermsAndConditions
