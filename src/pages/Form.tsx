@@ -538,8 +538,12 @@ const FormPage = () => {
       <RenderWaterBodyField
         name={'pond'}
         showError={showError}
-        label={inputLabels.pond}
-        query={{ category: { $in: [FormObjectType.POND] } }}
+        label={inputLabels.pondOrLake}
+        query={{
+          category: {
+            $in: [FormObjectType.POND, FormObjectType.NATURAL_LAKE, FormObjectType.PONDED_LAKE],
+          },
+        }}
         value={value}
         error={error}
         handleChange={handleChange}
@@ -1187,7 +1191,7 @@ const FormPage = () => {
     return (
       <Container>
         <ColumnOne>
-        {!disabled && <EmailChangeAlert />}
+          {!disabled && <EmailChangeAlert />}
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutObject}>
               <Row>
