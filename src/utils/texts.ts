@@ -327,7 +327,7 @@ export const inputLabels = {
   pondedRiver: 'Patvenktos upės pavadinimas',
   constructionYear: 'Pastatymo metai',
   river: 'Upės pavadinimas',
-  pond: 'Tvenkinio pavadinimas',
+  pondOrLake: 'Tvenkinio / Ežero pavadinimas',
   earthDamWidth: 'Žemių užtvankos ilgis',
   earthDamLength: 'Žemių užtvankos plotis',
   maxPondHeight: 'Maksimalus patvankos aukštis',
