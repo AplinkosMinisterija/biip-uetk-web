@@ -15,6 +15,7 @@ import DragAndDropUploadField from '../components/fields/DragAndDropUploadField'
 import NumericTextField from '../components/fields/NumericTextField';
 import TextAreaField from '../components/fields/TextAreaField';
 import Map from '../components/map/DrawMap';
+import EmailChangeAlert from '../components/other/EmailChangeAlert';
 import Icon from '../components/other/Icons';
 import LoaderComponent from '../components/other/LoaderComponent';
 import {
@@ -69,7 +70,6 @@ import {
   waterExcessCulvertTypeLabels,
 } from '../utils/texts';
 import { validateForm } from '../utils/validation';
-import EmailChangeAlert from '../components/other/EmailChangeAlert';
 
 type FormPayload = Omit<Form, 'editFields'>;
 const FormPage = () => {
@@ -1187,7 +1187,7 @@ const FormPage = () => {
     return (
       <Container>
         <ColumnOne>
-        {!disabled && <EmailChangeAlert />}
+          {!disabled && <EmailChangeAlert />}
           <InnerContainer>
             <SimpleContainer title={formLabels.infoAboutObject}>
               <Row>
