@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import SimpleContainer from '../components/containers/SimpleContainer';
@@ -32,6 +32,7 @@ import {
 const TenantUserForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const queryClient = useQueryClient();
   const currentUser = useAppSelector((state) => state.user?.userData);
 
   const createUser = useMutation((values: User) => api.createTenantUser(values), {
@@ -48,7 +49,8 @@ const TenantUserForm = () => {
     onError: () => {
       handleErrorFromServerToast();
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['tenantUser', id]);
       navigate(slugs.tenantUsers);
     },
     retry: false,
