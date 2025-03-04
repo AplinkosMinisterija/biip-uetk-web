@@ -35,7 +35,7 @@ export const filterConfig = {
     label: formFiltersLabels.objects,
     key: 'objects',
     inputType: FilterInputTypes.asyncMultiSelect,
-    optionsApi: getLocationList,
+    api: getLocationList,
     optionLabel: (option) => {
       const { name, cadastralId, categoryTranslate } = option;
       return `${name}, ${cadastralId}, ${categoryTranslate}`;
