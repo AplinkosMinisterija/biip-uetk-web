@@ -6,6 +6,7 @@ import {
   HistoryTypes,
   HydroPowerPlantType,
   PurposeTypes,
+  RequestDataType,
   RolesTypes,
   ServerErrors,
   StatusTypes,
@@ -48,6 +49,8 @@ export const formFiltersLabels = {
   users: 'Pateikė',
   type: 'Tipas',
   purpose: 'Duomenų gavimo tikslas',
+  objects: 'Objektai',
+  requestDataType: 'Išrašo duomenų tipas',
 };
 
 export const userFilterLabels = {
@@ -419,6 +422,11 @@ export const formObjectTypeLabels = {
   [FormObjectType.WATER_EXCESS_CULVERT]: 'Vandens pertekliaus pralaida',
   [FormObjectType.HYDRO_POWER_PLANT]: 'Hidroelektrinė',
   [FormObjectType.FISH_PASS]: 'Žuvų pralaida',
+};
+
+export const requestDataTypeLabels = {
+  [RequestDataType.BASIC_DATA]: 'Pagrindiniai duomenys (.pdf)',
+  [RequestDataType.EXTENDED_DATA]: 'Išplėstiniai duomenys (.pdf)',
 };
 
 export const reverseFormObjectTypeLabels = {

@@ -5,10 +5,11 @@ import {
   FormType,
   HistoryTypes,
   PurposeTypes,
+  RequestDataType,
   RolesTypes,
   StatusTypes,
-  TableItemWidth
-} from "./utils/constants";
+  TableItemWidth,
+} from './utils/constants';
 
 export interface User {
   id?: string;
@@ -41,7 +42,7 @@ export interface Tenant {
   phone?: string;
 }
 
-export type ProfileId = "freelancer" | "expert" | string;
+export type ProfileId = 'freelancer' | 'expert' | string;
 
 export interface Profile {
   id: ProfileId;
@@ -159,12 +160,31 @@ export interface RequestFilters {
   createdTo?: string;
   status?: { id: StatusTypes; label: string }[];
   purpose?: { id: PurposeTypes; label: string }[];
+  objects?: Object[];
+  requestDataType?: { id: RequestDataType; label: string };
+  category?: { id: FormObjectType; label: string };
 }
 
 export interface RequestFiltersProps {
   status?: { $in: StatusTypes[] };
   createdAt?: { $gte?: Date; $lt?: Date };
   purpose?: { $in: PurposeTypes[] };
+  objects?: { id: { $in: string[] } };
+  data?: { extended: boolean };
+  category?: FormObjectType;
+}
+
+export interface Object {
+  id: string;
+  cadastralId: string;
+  name: string;
+  category: string;
+  municipality: string;
+  municipalityCode: number;
+  area: number;
+  length: number;
+  lat: number;
+  lng: number;
 }
 
 export interface Form {

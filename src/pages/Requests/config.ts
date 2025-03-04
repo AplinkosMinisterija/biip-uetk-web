@@ -1,5 +1,11 @@
 import { FilterInputTypes } from '../../components/other/DynamicFilter/Filter';
-import { getPurposeTypes, getRequestStatusTypes } from '../../utils/options';
+import { getLocationList } from '../../utils/functions';
+import {
+  getFormObjectTypes,
+  getPurposeTypes,
+  getRequestDataTypes,
+  getRequestStatusTypes,
+} from '../../utils/options';
 import { formFiltersLabels } from '../../utils/texts';
 
 export const filterConfig = {
@@ -25,6 +31,36 @@ export const filterConfig = {
     inputType: FilterInputTypes.multiselect,
     options: getRequestStatusTypes(),
   },
+  objects: {
+    label: formFiltersLabels.objects,
+    key: 'objects',
+    inputType: FilterInputTypes.asyncMultiSelect,
+    optionsApi: getLocationList,
+    optionLabel: (option) => {
+      const { name, cadastralId, categoryTranslate } = option;
+      return `${name}, ${cadastralId}, ${categoryTranslate}`;
+    },
+    getOptionValue: (option) => option.cadastralId,
+  },
+  category: {
+    label: formFiltersLabels.objectType,
+    key: 'category',
+    inputType: FilterInputTypes.singleselect,
+    options: getFormObjectTypes(),
+  },
+  requestDataType: {
+    label: formFiltersLabels.requestDataType,
+    key: 'requestDataType',
+    inputType: FilterInputTypes.singleselect,
+    options: getRequestDataTypes(),
+  },
 };
 
-export const rowConfig = [['createdFrom', 'createdTo'], ['purpose'], ['status']];
+export const rowConfig = [
+  ['objects'],
+  ['category'],
+  ['createdFrom', 'createdTo'],
+  ['purpose'],
+  ['status'],
+  ['requestDataType'],
+];

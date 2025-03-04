@@ -1,27 +1,23 @@
-import { isEmpty } from "lodash";
-import { useEffect } from "react";
-import Api from "../../../api";
-import { ColumnButtonProps } from "../../../components/other/ColumnButton";
-import { DynamicFilterProps } from "../../../components/other/DynamicFilter";
-import { NotFoundProps } from "../../../components/other/NotFound";
-import { ButtonInfo } from "../../../components/wrappers/PageWrapper";
-import { actions as columnActions } from "../../../state/columns/reducer";
-import { actions } from "../../../state/filters/reducer";
-import {
-  useAppSelector,
-  useGenericTablePageHooks,
-  useTableData
-} from "../../../state/hooks";
-import { useIsTenantUser } from "../../../utils/hooks";
-import { slugs } from "../../../utils/routes";
+import { isEmpty } from 'lodash';
+import { useEffect } from 'react';
+import Api from '../../../api';
+import { ColumnButtonProps } from '../../../components/other/ColumnButton';
+import { DynamicFilterProps } from '../../../components/other/DynamicFilter';
+import { NotFoundProps } from '../../../components/other/NotFound';
+import { ButtonInfo } from '../../../components/wrappers/PageWrapper';
+import { actions as columnActions } from '../../../state/columns/reducer';
+import { actions } from '../../../state/filters/reducer';
+import { useAppSelector, useGenericTablePageHooks, useTableData } from '../../../state/hooks';
+import { useIsTenantUser } from '../../../utils/hooks';
+import { slugs } from '../../../utils/routes';
 import {
   buttonsTitles,
   emptyStateLabels,
   emptyStateUrlLabels,
-  requestLabels
-} from "../../../utils/texts";
-import { filterConfig, rowConfig } from "../config";
-import { mapRequestFilters, mapRequests } from "../functions";
+  requestLabels,
+} from '../../../utils/texts';
+import { filterConfig, rowConfig } from '../config';
+import { mapRequestFilters, mapRequests } from '../functions';
 
 export const useData = () => {
   const { dispatch, navigate, page } = useGenericTablePageHooks();
@@ -29,28 +25,24 @@ export const useData = () => {
   const columns = useAppSelector((state) => state.columns.request);
   const isTenantUser = useIsTenantUser();
   useEffect(() => {
-    dispatch(
-      columnActions.handleSetRequestColumns(
-        requestLabels({ showCreatedBy: isTenantUser })
-      )
-    );
+    dispatch(columnActions.handleSetRequestColumns(requestLabels({ showCreatedBy: isTenantUser })));
   }, [isTenantUser, dispatch]);
 
   const { tableData, loading } = useTableData({
     endpoint: () =>
       Api.requests({
         page,
-        filter: mapRequestFilters(filters)
+        query: mapRequestFilters(filters),
       }),
     mapData: (list) => mapRequests(list),
     dependencyArray: [page, filters],
-    name: "requests"
+    name: 'requests',
   });
 
   const buttonInfo: ButtonInfo = {
     url: slugs.newRequest,
     loading,
-    label: buttonsTitles.newExcerpt
+    label: buttonsTitles.newExcerpt,
   };
 
   const filterInfo: DynamicFilterProps = {
@@ -58,20 +50,19 @@ export const useData = () => {
     filterConfig: filterConfig,
     isFilterApplied: !isEmpty(filters),
     rowConfig: rowConfig,
-    onSetFilters: (filters: any) =>
-      dispatch(actions.setRequestFilters(filters)),
-    filters: filters
+    onSetFilters: (filters: any) => dispatch(actions.setRequestFilters(filters)),
+    filters: filters,
   };
 
   const columnInfo: ColumnButtonProps = {
     columns,
-    handleToggle: (key) => dispatch(columnActions.toggleRequestColumns(key))
+    handleToggle: (key) => dispatch(columnActions.toggleRequestColumns(key)),
   };
 
   const notFoundInfo: NotFoundProps = {
     url: slugs.newRequest,
     urlLabel: emptyStateUrlLabels.request,
-    label: emptyStateLabels.request
+    label: emptyStateLabels.request,
   };
 
   return {
@@ -81,6 +72,6 @@ export const useData = () => {
     buttonInfo,
     navigate,
     loading,
-    tableData
+    tableData,
   };
 };
