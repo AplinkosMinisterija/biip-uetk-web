@@ -47,6 +47,7 @@ export const formFiltersLabels = {
   species: 'Rūšis',
   users: 'Pateikė',
   type: 'Tipas',
+  purpose: 'Duomenų gavimo tikslas',
 };
 
 export const userFilterLabels = {
