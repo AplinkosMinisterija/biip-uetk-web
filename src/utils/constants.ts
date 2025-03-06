@@ -262,3 +262,8 @@ export enum PurposeTypes {
   SCIENTIFIC_INVESTIGATION = 'SCIENTIFIC_INVESTIGATION',
   OTHER = 'OTHER',
 }
+
+export enum RequestDataType {
+  BASIC_DATA = 'BASIC_DATA',
+  EXTENDED_DATA = 'EXTENDED_DATA',
+}

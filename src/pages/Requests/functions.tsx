@@ -1,13 +1,13 @@
-import { isEmpty } from "lodash";
-import TableStatusRowItem from "../../components/fields/TableStatusRowItem";
-import FilesToDownload from "../../components/other/FilesToDownload";
-import TableMaxWidthItem from "../../components/other/TableMaxWIdthItem";
-import { TableRow } from "../../components/tables/table";
-import { Request, RequestFilters, RequestFiltersProps } from "../../types";
-import { colorsByStatus } from "../../utils/constants";
-import { formatDate, formatDateFrom, formatDateTo } from "../../utils/format";
-import { canShowResponseDate } from "../../utils/functions";
-import { purposeTypeLabels, requestStatusLabels } from "../../utils/texts";
+import { isEmpty } from 'lodash';
+import TableStatusRowItem from '../../components/fields/TableStatusRowItem';
+import FilesToDownload from '../../components/other/FilesToDownload';
+import TableMaxWidthItem from '../../components/other/TableMaxWIdthItem';
+import { TableRow } from '../../components/tables/table';
+import { Request, RequestFilters } from '../../types';
+import { colorsByStatus, RequestDataType } from '../../utils/constants';
+import { formatDate, formatDateFrom, formatDateTo } from '../../utils/format';
+import { canShowResponseDate } from '../../utils/functions';
+import { purposeTypeLabels, requestStatusLabels } from '../../utils/texts';
 
 export const mapRequestFilters = (filters: RequestFilters) => {
   const params: any = {};
@@ -16,12 +16,23 @@ export const mapRequestFilters = (filters: RequestFilters) => {
     (!!filters.createdFrom || !!filters.createdTo) &&
       (params.createdAt = {
         ...(filters.createdFrom && {
-          $gte: formatDateFrom(new Date(filters.createdFrom))
+          $gte: formatDateFrom(new Date(filters.createdFrom)),
         }),
         ...(filters.createdTo && {
-          $lt: formatDateTo(new Date(filters.createdTo))
-        })
+          $lt: formatDateTo(new Date(filters.createdTo)),
+        }),
       });
+
+    filters?.requestDataType &&
+      (params.data = JSON.stringify({
+        extended: filters.requestDataType.id === RequestDataType.EXTENDED_DATA,
+      }));
+
+    filters?.category && (params.category = filters.category.id);
+
+    filters?.objects &&
+      !isEmpty(filters?.objects) &&
+      (params.objects = { id: { $in: filters?.objects?.map((state) => state.cadastralId) } });
 
     !isEmpty(filters?.purpose) &&
       (params.purpose = { $in: filters?.purpose?.map((state) => state.id) });
@@ -48,8 +59,8 @@ export const mapRequests = (requests: Request[]): TableRow[] =>
           info={[
             {
               label: requestStatusLabels[request.status!],
-              color: colorsByStatus[request.status!]
-            }
+              color: colorsByStatus[request.status!],
+            },
           ]}
         />
       ),
@@ -59,6 +70,6 @@ export const mapRequests = (requests: Request[]): TableRow[] =>
       respondedAt:
         canShowResponseDate(request?.status) &&
         request.respondedAt &&
-        formatDate(new Date(request.respondedAt))
+        formatDate(new Date(request.respondedAt)),
     };
   });

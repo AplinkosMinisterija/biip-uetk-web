@@ -1,15 +1,8 @@
-import Axios, { AxiosInstance, AxiosResponse } from "axios";
-import { isEmpty } from "lodash";
-import Cookies from "universal-cookie";
-import {
-  Form,
-  FormFiltersProps,
-  Request,
-  Tenant,
-  User,
-  UserFilters
-} from "./types";
-import { Populations, Resources, SortFields } from "./utils/constants";
+import Axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { isEmpty } from 'lodash';
+import Cookies from 'universal-cookie';
+import { Form, FormFiltersProps, Request, Tenant, User, UserFilters } from './types';
+import { Populations, Resources, SortFields } from './utils/constants';
 const cookies = new Cookies();
 
 interface GetAll {
@@ -75,7 +68,7 @@ interface Create {
 }
 
 class Api {
-  private readonly proxy: string = "/api";
+  private readonly proxy: string = '/api';
 
   private AuthApiAxios: AxiosInstance;
 
@@ -87,12 +80,12 @@ class Api {
         if (!config.url) {
           return config;
         }
-        const token = cookies.get("token");
-        const profileId = cookies.get("profileId");
+        const token = cookies.get('token');
+        const profileId = cookies.get('profileId');
         if (token) {
-          config.headers!.Authorization = "Bearer " + token;
+          config.headers!.Authorization = 'Bearer ' + token;
 
-          if (!isNaN(profileId)) config.headers!["X-Profile"] = profileId;
+          if (!isNaN(profileId)) config.headers!['X-Profile'] = profileId;
         }
         config.url = this.proxy + config.url;
 
@@ -100,7 +93,7 @@ class Api {
       },
       (error) => {
         Promise.reject(error);
-      }
+      },
     );
   }
 
@@ -121,7 +114,7 @@ class Api {
     query,
     searchFields,
     scope,
-    fields
+    fields,
   }: GetAll) => {
     const config = {
       params: {
@@ -134,83 +127,73 @@ class Api {
         ...(!!sort && { sort }),
         ...(!!query && { query }),
         ...(!!scope && { scope }),
-        ...(!!fields && { fields })
-      }
+        ...(!!fields && { fields }),
+      },
     };
 
-    return this.errorWrapper(() =>
-      this.AuthApiAxios.get(`/${resource}`, config)
-    );
+    return this.errorWrapper(() => this.AuthApiAxios.get(`/${resource}`, config));
   };
 
   getOne = async ({ resource, id, populate, scope }: GetOne) => {
     const config = {
       params: {
         ...(!!populate && { populate }),
-        ...(!!scope && { scope })
-      }
+        ...(!!scope && { scope }),
+      },
     };
 
     return this.errorWrapper(() =>
-      this.AuthApiAxios.get(`/${resource}${id ? `/${id}` : ""}`, config)
+      this.AuthApiAxios.get(`/${resource}${id ? `/${id}` : ''}`, config),
     );
   };
 
   patch = async ({ resource, id, params }: UpdateOne) => {
-    return this.errorWrapper(() =>
-      this.AuthApiAxios.patch(`/${resource}/${id}`, params)
-    );
+    return this.errorWrapper(() => this.AuthApiAxios.patch(`/${resource}/${id}`, params));
   };
 
   delete = async ({ resource, id }: Delete) => {
-    return this.errorWrapper(() =>
-      this.AuthApiAxios.delete(`/${resource}/${id}`)
-    );
+    return this.errorWrapper(() => this.AuthApiAxios.delete(`/${resource}/${id}`));
   };
   post = async ({ resource, params }: Create) => {
-    return this.errorWrapper(() =>
-      this.AuthApiAxios.post(`/${resource}`, params)
-    );
+    return this.errorWrapper(() => this.AuthApiAxios.post(`/${resource}`, params));
   };
 
   getUserInfo = async (): Promise<User> => {
-    return this.errorWrapper(() => this.AuthApiAxios.get("/users/me"));
+    return this.errorWrapper(() => this.AuthApiAxios.get('/users/me'));
   };
 
   logout = async () => {
-    return this.errorWrapper(() => this.AuthApiAxios.post("/users/logout"));
+    return this.errorWrapper(() => this.AuthApiAxios.post('/users/logout'));
   };
 
   authApi = async ({ resource, params }: AuthApiProps) => {
-    return this.errorWrapper(() =>
-      this.AuthApiAxios.post(`/${resource}`, params || {})
-    );
+    return this.errorWrapper(() => this.AuthApiAxios.post(`/${resource}`, params || {}));
   };
 
   refreshToken = async () => {
     return this.authApi({
       resource: Resources.REFRESH_TOKEN,
-      params: { token: cookies.get("refreshToken") }
+      params: { token: cookies.get('refreshToken') },
     });
   };
 
   login = async (params: any) => {
     return this.authApi({
       resource: Resources.LOGIN,
-      params
+      params,
     });
   };
 
   eGatesSign = async () => {
     return this.authApi({
-      resource: Resources.E_GATES_SIGN
+      resource: Resources.E_GATES_SIGN,
     });
   };
 
   eGatesLogin = async (params) => {
     return this.authApi({
       resource: Resources.E_GATES_LOGIN,
-      params
+      params,
     });
   };
 
@@ -219,7 +202,7 @@ class Api {
       resource: Resources.SEARCH,
       query,
       search,
-      page
+      page,
     });
 
   getRequest = async (id: string, scope?: string): Promise<Request> =>
@@ -227,45 +210,42 @@ class Api {
       resource: Resources.REQUESTS,
       populate: [Populations.CAN_EDIT, Resources.GEOM],
       scope,
-      id
+      id,
     });
 
   deleteRequest = async (id: string): Promise<Request> => {
     return await this.delete({
       resource: Resources.REQUESTS,
-      id
+      id,
     });
   };
 
-  uploadFiles = async (
-    resource: Resources,
-    files: File[] = []
-  ): Promise<any> => {
+  uploadFiles = async (resource: Resources, files: File[] = []): Promise<any> => {
     if (isEmpty(files)) return [];
 
     const config = {
-      headers: { "Content-Type": "multipart/form-data" }
+      headers: { 'Content-Type': 'multipart/form-data' },
     };
 
     try {
       const data = await Promise.all(
         files?.map(async (file) => {
           const formData = new FormData();
-          formData.append("file", file);
+          formData.append('file', file);
           const { data } = await this.AuthApiAxios.post(
             `/${resource}/${Resources.UPLOAD}`,
             formData,
-            config
+            config,
           );
           return data;
-        })
+        }),
       );
 
       return data?.map((file) => {
         return {
           name: file.filename,
           size: file.size,
-          url: file?.url
+          url: file?.url,
         };
       });
     } catch (e: any) {
@@ -276,7 +256,7 @@ class Api {
   forms = async ({
     filter,
     page,
-    pageSize
+    pageSize,
   }: TableList<FormFiltersProps>): Promise<GetAllResponse<Form>> =>
     await this.getAll({
       resource: Resources.FORMS,
@@ -284,20 +264,20 @@ class Api {
       sort: [SortFields.CREATED_AT],
       page,
       filter,
-      pageSize
+      pageSize,
     });
 
   form = async (id: string): Promise<Form> =>
     await this.getOne({
       resource: Resources.FORMS,
       populate: [Resources.GEOM, Resources.CAN_EDIT],
-      id
+      id,
     });
 
   createForm = async (params: any): Promise<Form> => {
     return await this.post({
       resource: Resources.FORMS,
-      params
+      params,
     });
   };
 
@@ -305,35 +285,35 @@ class Api {
     return await this.patch({
       resource: Resources.FORMS,
       params,
-      id
+      id,
     });
   };
 
   requests = async ({
-    filter,
+    query,
     page,
-    pageSize
+    pageSize,
   }: TableList<FormFiltersProps>): Promise<GetAllResponse<Request>> =>
     await this.getAll({
       resource: Resources.REQUESTS,
       populate: [Resources.CREATED_BY, Populations.OBJECTS],
       sort: [SortFields.CREATED_AT],
       page,
-      filter,
-      pageSize
+      query,
+      pageSize,
     });
 
   request = async (id: string): Promise<Request> =>
     await this.getOne({
       resource: Resources.REQUESTS,
       populate: [Resources.GEOM, Populations.CAN_EDIT, Populations.OBJECTS],
-      id
+      id,
     });
 
   createRequests = async (params: any): Promise<Request> => {
     return await this.post({
       resource: Resources.REQUESTS,
-      params
+      params,
     });
   };
 
@@ -341,14 +321,14 @@ class Api {
     return await this.patch({
       resource: Resources.REQUESTS,
       params,
-      id
+      id,
     });
   };
 
   tenantUsers = async ({
     filter,
     page,
-    pageSize
+    pageSize,
   }: TableList<UserFilters>): Promise<GetAllResponse<User>> =>
     await this.getAll({
       resource: Resources.USERS,
@@ -356,20 +336,20 @@ class Api {
       populate: [Populations.ROLE],
       sort: [SortFields.LAST_NAME],
       filter,
-      pageSize
+      pageSize,
     });
 
   tenantUser = async (id: string): Promise<User> =>
     await this.getOne({
       resource: Resources.USERS,
       populate: [Populations.ROLE],
-      id
+      id,
     });
 
   createTenantUser = async (params: any): Promise<User> => {
     return await this.post({
       resource: Resources.USERS,
-      params
+      params,
     });
   };
 
@@ -377,53 +357,53 @@ class Api {
     return await this.patch({
       resource: Resources.USERS,
       params,
-      id
+      id,
     });
   };
 
   deleteTenantUser = async (id: string): Promise<User> =>
     await this.delete({
       resource: Resources.USERS,
-      id
+      id,
     });
 
   updateProfile = async (id: string, params: any): Promise<User> =>
     await this.patch({
       resource: Resources.USERS,
       params,
-      id
+      id,
     });
 
   getRequestHistory = async ({ page, pageSize, id }: TableList) =>
     await this.getAll({
       resource: `${Resources.REQUESTS}/${id}/${Resources.HISTORY}`,
       page,
-      pageSize
+      pageSize,
     });
 
   getFormHistory = async ({ page, pageSize, id }: TableList) =>
     await this.getAll({
       resource: `${Resources.FORMS}/${id}/${Resources.HISTORY}`,
       page,
-      pageSize
+      pageSize,
     });
 
   getMapToken = async () =>
     await this.getOne({
-      resource: Resources.MAPS_AUTH
+      resource: Resources.MAPS_AUTH,
     });
 
   getTenantInfo = async (id: string) =>
     await this.getOne({
       resource: Resources.TENANTS,
-      id
+      id,
     });
 
   updateTenant = async (id: string, params: any): Promise<Tenant> =>
     await this.patch({
       resource: Resources.TENANTS,
       params,
-      id
+      id,
     });
 }
 
