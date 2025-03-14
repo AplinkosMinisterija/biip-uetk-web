@@ -16,7 +16,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useTableData = ({ endpoint, mapData, dependencyArray, name }: TableDataProp) => {
-  const { data, isLoading } = useQuery({
+  const { data = { data: [], totalPages: 0 }, isLoading } = useQuery({
     queryKey: [name, dependencyArray],
     queryFn: endpoint,
     onError: handleErrorFromServerToast,
