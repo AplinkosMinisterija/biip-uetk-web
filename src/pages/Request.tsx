@@ -1,4 +1,6 @@
+import { MapField } from '@aplinkosministerija/design-system';
 import { isEqual } from 'lodash';
+import { useEffect, useRef } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -9,14 +11,17 @@ import SimpleContainer from '../components/containers/SimpleContainer';
 import AsyncMultiSelect from '../components/fields/AsyncMultiSelect';
 import SelectField from '../components/fields/SelectField';
 import TextAreaField from '../components/fields/TextAreaField';
+import EmailChangeAlert from '../components/other/EmailChangeAlert';
 import { GeneratedFileComponent } from '../components/other/GeneratedFileComponent';
 import LoaderComponent from '../components/other/LoaderComponent';
 import TermsAndConditions from '../components/other/TermsAndConditions';
 import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
+import { useAppSelector } from '../state/hooks';
 import { device } from '../styles';
 import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponents';
-import { PurposeTypes, StatusTypes } from '../utils/constants';
+import { mapsHost, PurposeTypes, StatusTypes } from '../utils/constants';
 import { getLocationList, handleErrorFromServerToast, isNew } from '../utils/functions';
+import { useGetCurrentProfile } from '../utils/hooks';
 import { purposeTypesOptions } from '../utils/options';
 import { slugs } from '../utils/routes';
 import {
@@ -28,9 +33,6 @@ import {
   url,
 } from '../utils/texts';
 import { validateRequest } from '../utils/validation';
-import EmailChangeAlert from '../components/other/EmailChangeAlert';
-import { useAppSelector } from '../state/hooks';
-import { useGetCurrentProfile } from '../utils/hooks';
 
 export interface RequestProps {
   id?: string;
@@ -142,7 +144,6 @@ const RequestPage = () => {
 
   const initialValues: RequestProps = {
     objects: request?.objects || [],
-    //geom: !isEmpty(request?.geom) ? request?.geom : undefined,
     agreeWithConditions: disabled || false,
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
@@ -150,14 +151,44 @@ const RequestPage = () => {
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
+  const mapPath = '/uetk?hideSidebar=true&preview=true';
 
   const renderForm = (values: RequestProps, errors: any, handleChange: any) => {
+    const objects = values.objects || [];
+
+    const cadastralIds = objects.map((item) => {
+      return item?.cadastralId;
+    });
+
+    const objectsRef = useRef(values.objects);
+
+    useEffect(() => {
+      objectsRef.current = values.objects;
+    }, [values.objects]);
+
+    const handleClick = (result) => {
+      if (disabled) return;
+
+      const objects = objectsRef.current;
+
+      const item = result?.[0];
+
+      if (item) {
+        const name = item?.['1. Pavadinimas'];
+        const cadastralId = item?.['2. Kadastro identifikavimo kodas'];
+        const categoryTranslate = item?.['3. Kategorija'];
+
+        if (!objects.some((obj) => obj.cadastralId === cadastralId)) {
+          handleChange('objects', [...objects, { name, cadastralId, categoryTranslate }]);
+        }
+      }
+    };
     return (
       <Container>
         <ColumnOne>
           {!disabled && <EmailChangeAlert />}
           <InnerContainer>
-            <SimpleContainer title={formLabels.infoAboutUser}>
+            <SimpleContainer title={formLabels.requestInfo}>
               <Row columns={2}>
                 <SelectField
                   disabled={disabled}
@@ -204,7 +235,7 @@ const RequestPage = () => {
               </Row>
             </SimpleContainer>
 
-            <SimpleContainer>
+            <SimpleContainer title={formLabels.objectList}>
               <MapContainer>
                 <AsyncMultiSelect
                   disabled={disabled}
@@ -226,17 +257,13 @@ const RequestPage = () => {
                   showError={false}
                 />
 
-                {/* <Map
-                  queryString={mapQueryString}
-                  error={errors?.geom}
-                  onSave={(data) => handleChange("geom", data)}
-                  value={values?.geom}
-                  height={"300px"}
-                  showError={false}
+                <MapField
+                  {...(cadastralIds && { filter: { cadastralId: { $in: cadastralIds } } })}
+                  onClick={handleClick}
+                  mapHost={mapsHost}
+                  mapPath={mapPath}
+                  allow="geolocation *"
                 />
-                {errors?.geom && errors.objects && (
-                  <ErrorMessage error="Prašome nurodyti, ar pageidaujate pasirinkti vietą iš žemėlapio ar objektus iš pateiktų objektų sąrašo" />
-                )} */}
               </MapContainer>
             </SimpleContainer>
 
