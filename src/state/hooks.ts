@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { TableData, TableRow } from "../components/tables/table";
-import { handleErrorFromServerToast } from "../utils/functions";
-import type { AppDispatch, RootState } from "./store";
+import { useQuery } from 'react-query';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { TableRow } from '../components/tables/table';
+import { handleErrorFromServerToast } from '../utils/functions';
+import type { AppDispatch, RootState } from './store';
 
 interface TableDataProp {
   endpoint: () => Promise<any>;
@@ -16,27 +15,18 @@ interface TableDataProp {
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const useTableData = ({
-  endpoint,
-  mapData,
-  dependencyArray,
-  name
-}: TableDataProp) => {
-  const [tableData, setTableData] = useState<TableData>({ data: [] });
-
-  const { isLoading } = useQuery([name, dependencyArray], () => endpoint(), {
-    onError: () => {
-      handleErrorFromServerToast();
-    },
-    onSuccess: (list) => {
-      setTableData({
-        data: mapData(list?.rows || []),
-        totalPages: list?.totalPages
-      });
-    }
+export const useTableData = ({ endpoint, mapData, dependencyArray, name }: TableDataProp) => {
+  const { data = { data: [], totalPages: 0 }, isLoading } = useQuery({
+    queryKey: [name, dependencyArray],
+    queryFn: endpoint,
+    onError: handleErrorFromServerToast,
+    select: ({ rows = [], totalPages = 0 }) => ({
+      data: mapData(rows),
+      totalPages,
+    }),
   });
 
-  return { tableData, loading: isLoading };
+  return { tableData: data, loading: isLoading };
 };
 
 export const useGenericTablePageHooks = () => {

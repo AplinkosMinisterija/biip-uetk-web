@@ -238,6 +238,7 @@ export const buttonsTitles = {
 };
 
 export const formLabels = {
+  requestInfo: 'Išrašo informacija',
   infoAboutTenant: 'Informacija apie įmonę',
   selectProfile: 'Pasirinkite paskyrą',
   login: 'Prisijungti',
@@ -265,6 +266,7 @@ export const formLabels = {
   avgPerennialDebit95: 'Vidutinis daugiametis debitas 95 %',
   maxSpringFloodDebit: 'MAKSIMALUS PAVASARIO POTVYNIO VANDENS DEBITAS',
   springDebit1: 'Pavasario potvynio (lietaus poplūdžio) 1 % debitas',
+  objectList: 'Objektų sąrašas',
 };
 export const inputLabels = {
   requestType: 'Išrašo duomenų tipas',
