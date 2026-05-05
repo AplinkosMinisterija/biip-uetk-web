@@ -267,3 +267,11 @@ export enum RequestDataType {
   BASIC_DATA = 'BASIC_DATA',
   EXTENDED_DATA = 'EXTENDED_DATA',
 }
+
+export enum TerritoryType {
+  MUNICIPALITY = 'MUNICIPALITY',
+  BASIN = 'BASIN',
+  FREE_DRAW = 'FREE_DRAW',
+}
+
+export const ANY_OBJECT_CATEGORY = 'ALL';
