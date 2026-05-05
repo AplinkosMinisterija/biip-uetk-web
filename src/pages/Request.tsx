@@ -19,19 +19,31 @@ import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
 import { useAppSelector } from '../state/hooks';
 import { device } from '../styles';
 import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponents';
-import { mapsHost, PurposeTypes, StatusTypes } from '../utils/constants';
+import {
+  ANY_OBJECT_CATEGORY,
+  FormObjectType,
+  mapsHost,
+  PurposeTypes,
+  StatusTypes,
+  TerritoryType,
+} from '../utils/constants';
 import { getLocationList, handleErrorFromServerToast, isNew } from '../utils/functions';
 import { useGetCurrentProfile } from '../utils/hooks';
 import { purposeTypesOptions } from '../utils/options';
 import { slugs } from '../utils/routes';
 import {
   formLabels,
+  formObjectTypeLabels,
   inputLabels,
+  objectCategoryLabel,
   pageTitles,
   purposeTypeLabels,
   requestHistoryStatusLabels,
+  territoryTypeLabels,
   url,
 } from '../utils/texts';
+import RadioOptions from '../components/buttons/RadioOptionts';
+import TextField from '../components/fields/TextField';
 import { validateRequest } from '../utils/validation';
 
 export interface RequestProps {
@@ -45,6 +57,10 @@ export interface RequestProps {
   extended?: any;
   geom?: any;
   agreeWithConditions: boolean;
+  objectCategory?: string;
+  territoryType?: TerritoryType | string;
+  municipalities?: string;
+  basins?: string;
 }
 
 export interface RequestPayload {
@@ -58,6 +74,10 @@ export interface RequestPayload {
   canValidate?: boolean;
   data?: {
     extended?: any;
+    category?: string;
+    territoryType?: string;
+    municipalities?: string[];
+    basins?: string[];
   };
   geom?: any;
 }
@@ -122,7 +142,39 @@ const RequestPage = () => {
   });
 
   const handleSubmit = async (values: RequestProps) => {
-    const { agreeWithConditions, extended, objects, ...rest } = values;
+    const {
+      agreeWithConditions,
+      extended,
+      objects,
+      objectCategory,
+      territoryType,
+      municipalities,
+      basins,
+      ...rest
+    } = values;
+
+    const data: RequestPayload['data'] = { extended: extended === 'true' };
+
+    if (objectCategory && objectCategory !== ANY_OBJECT_CATEGORY) {
+      data.category = objectCategory;
+    }
+
+    if (territoryType) {
+      data.territoryType = territoryType;
+      if (territoryType === TerritoryType.MUNICIPALITY && municipalities?.trim()) {
+        data.municipalities = municipalities
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+      if (territoryType === TerritoryType.BASIN && basins?.trim()) {
+        data.basins = basins
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+    }
+
     const params: RequestPayload = {
       ...rest,
       notifyEmail: currentProfile?.email || userEmail || '',
@@ -132,7 +184,7 @@ const RequestPage = () => {
           id: item?.cadastralId,
         };
       }),
-      data: { extended: extended === 'true' },
+      data,
     };
 
     if (isNew(id)) {
@@ -148,6 +200,10 @@ const RequestPage = () => {
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
     extended: request?.data?.extended?.toString() || 'false',
+    objectCategory: (request?.data as any)?.category || ANY_OBJECT_CATEGORY,
+    territoryType: (request?.data as any)?.territoryType || TerritoryType.FREE_DRAW,
+    municipalities: ((request?.data as any)?.municipalities || []).join(', '),
+    basins: ((request?.data as any)?.basins || []).join(', '),
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
@@ -232,7 +288,51 @@ const RequestPage = () => {
                     return requestDataTypeLabels[e];
                   }}
                 />
+                <SelectField
+                  disabled={disabled}
+                  label={inputLabels.objectCategory}
+                  value={values.objectCategory}
+                  name={'objectCategory'}
+                  onChange={(e) => handleChange('objectCategory', e)}
+                  options={[ANY_OBJECT_CATEGORY, ...Object.keys(FormObjectType)]}
+                  getOptionLabel={(e) => objectCategoryLabel(e)}
+                />
               </Row>
+              <Row columns={1}>
+                <RadioOptions
+                  disabled={disabled}
+                  label={inputLabels.territoryType}
+                  name="territoryType"
+                  value={values.territoryType as string}
+                  onChange={(value) => handleChange('territoryType', value)}
+                  options={Object.entries(territoryTypeLabels).map(([value, label]) => ({
+                    value,
+                    label,
+                  }))}
+                />
+              </Row>
+              {values.territoryType === TerritoryType.MUNICIPALITY && (
+                <Row columns={1}>
+                  <TextField
+                    disabled={disabled}
+                    label={inputLabels.municipalities}
+                    placeholder="pvz. Vilniaus m., Kauno r."
+                    value={values.municipalities || ''}
+                    onChange={(e: string) => handleChange('municipalities', e)}
+                  />
+                </Row>
+              )}
+              {values.territoryType === TerritoryType.BASIN && (
+                <Row columns={1}>
+                  <TextField
+                    disabled={disabled}
+                    label={inputLabels.basins}
+                    placeholder="pvz. Nemuno, Neries"
+                    value={values.basins || ''}
+                    onChange={(e: string) => handleChange('basins', e)}
+                  />
+                </Row>
+              )}
             </SimpleContainer>
 
             <SimpleContainer title={formLabels.objectList}>

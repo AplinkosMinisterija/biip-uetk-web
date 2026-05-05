@@ -270,6 +270,10 @@ export const formLabels = {
 };
 export const inputLabels = {
   requestType: 'Išrašo duomenų tipas',
+  objectCategory: 'Objektų kategorija',
+  territoryType: 'Teritorijos pasirinkimo būdas',
+  municipalities: 'Savivaldybės',
+  basins: 'Baseinai / pabaseiniai',
   generating: 'Išrašas kuriamas',
   hydrostaticId: 'Hidrostatinio unikalus identifikatorius',
   attribute: 'Atributas',
@@ -429,6 +433,17 @@ export const formObjectTypeLabels = {
 export const requestDataTypeLabels = {
   [RequestDataType.BASIC_DATA]: 'Pagrindiniai duomenys (.pdf)',
   [RequestDataType.EXTENDED_DATA]: 'Išplėstiniai duomenys (.pdf)',
+};
+
+export const territoryTypeLabels = {
+  MUNICIPALITY: 'Savivaldybės teritorija',
+  BASIN: 'Upių baseinas / pabaseinis',
+  FREE_DRAW: 'Laisvai pažymėta teritorija',
+};
+
+export const objectCategoryLabel = (key: string) => {
+  if (key === 'ALL') return 'Visi objektai';
+  return formObjectTypeLabels[key] || key;
 };
 
 export const reverseFormObjectTypeLabels = {
