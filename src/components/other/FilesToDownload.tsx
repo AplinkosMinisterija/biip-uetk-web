@@ -7,12 +7,20 @@ export interface FilesToDownloadProps {
   showFileName?: boolean;
 }
 
+const getPathSuffix = (raw: string) => {
+  try {
+    return new URL(raw).pathname.toLowerCase();
+  } catch (_) {
+    return raw.toLowerCase().split("?")[0];
+  }
+};
+
 const getDownloadLabel = (url: string) => {
-  const lower = url.toLowerCase();
-  if (lower.endsWith(".geojson") || lower.endsWith(".json")) {
+  const path = getPathSuffix(url);
+  if (path.endsWith(".geojson") || path.endsWith(".json")) {
     return buttonsTitles.downloadGeoJson;
   }
-  if (lower.endsWith(".pdf")) {
+  if (path.endsWith(".pdf")) {
     return buttonsTitles.downloadPdf;
   }
   return buttonsTitles.download;
@@ -30,7 +38,7 @@ const FilesToDownload = ({ url, showFileName }: FilesToDownloadProps) => {
           e.stopPropagation();
         }}
       >
-        <DownloadContainer target={"_blank"} href={url} download>
+        <DownloadContainer href={url} download>
           {getDownloadLabel(url)}
           <StyledIcon name={"download"} />
         </DownloadContainer>
