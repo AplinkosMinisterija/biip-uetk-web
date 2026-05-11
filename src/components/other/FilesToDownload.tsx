@@ -7,6 +7,17 @@ export interface FilesToDownloadProps {
   showFileName?: boolean;
 }
 
+const getDownloadLabel = (url: string) => {
+  const lower = url.toLowerCase();
+  if (lower.endsWith(".geojson") || lower.endsWith(".json")) {
+    return buttonsTitles.downloadGeoJson;
+  }
+  if (lower.endsWith(".pdf")) {
+    return buttonsTitles.downloadPdf;
+  }
+  return buttonsTitles.download;
+};
+
 const FilesToDownload = ({ url, showFileName }: FilesToDownloadProps) => {
   if (!url) return <></>;
 
@@ -20,7 +31,7 @@ const FilesToDownload = ({ url, showFileName }: FilesToDownloadProps) => {
         }}
       >
         <DownloadContainer target={"_blank"} href={url} download>
-          {buttonsTitles.download}
+          {getDownloadLabel(url)}
           <StyledIcon name={"download"} />
         </DownloadContainer>
       </Container>

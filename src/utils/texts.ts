@@ -199,6 +199,8 @@ export const menuLabels = {
 };
 export const buttonsTitles = {
   download: 'Atsisiųsti',
+  downloadPdf: 'Atsisiųsti PDF',
+  downloadGeoJson: 'Atsisiųsti GeoJSON',
   or: 'arba',
   forgotPassword: 'Pamiršau slaptažodį',
   login: 'Prisijungti',
