@@ -266,4 +266,10 @@ export enum PurposeTypes {
 export enum RequestDataType {
   BASIC_DATA = 'BASIC_DATA',
   EXTENDED_DATA = 'EXTENDED_DATA',
+  GEOJSON = 'GEOJSON',
+}
+
+export enum RequestFormat {
+  PDF = 'PDF',
+  GEOJSON = 'GEOJSON',
 }
