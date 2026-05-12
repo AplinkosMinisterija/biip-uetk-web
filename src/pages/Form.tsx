@@ -38,6 +38,7 @@ import {
   HydroPowerPlantType,
   mapsHost,
   Resources,
+  StatusTypes,
   WaterExcessCulvertType,
 } from '../utils/constants';
 import {
@@ -1469,7 +1470,7 @@ const FormPage = () => {
         </ColumnOne>
         {!isNew(id) && (
           <ColumnTwo>
-            {form?.generatedFile && (
+            {form?.status === StatusTypes.APPROVED && (
               <GeneratedFileComponent generatedFile={form.generatedFile} />
             )}
             <FormHistoryContainer
