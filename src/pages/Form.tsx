@@ -9,6 +9,7 @@ import ButtonsGroup from '../components/buttons/ButtonsGroup';
 import SimpleButton from '../components/buttons/SimpleButton';
 import FormHistoryContainer from '../components/containers/FormHistoryContainer';
 import SimpleContainer from '../components/containers/SimpleContainer';
+import { GeneratedFileComponent } from '../components/other/GeneratedFileComponent';
 import AsyncSelectField from '../components/fields/AsyncSelect';
 import Map from '../components/map/DrawMap';
 import EmailChangeAlert from '../components/other/EmailChangeAlert';
@@ -1468,6 +1469,9 @@ const FormPage = () => {
         </ColumnOne>
         {!isNew(id) && (
           <ColumnTwo>
+            {form?.generatedFile && (
+              <GeneratedFileComponent generatedFile={form.generatedFile} />
+            )}
             <FormHistoryContainer
               name="formRequests"
               formHistoryLabels={formHistoryLabels}
