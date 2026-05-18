@@ -15,6 +15,15 @@ const getPathSuffix = (raw: string) => {
   }
 };
 
+const isExternalUrl = (raw: string) => {
+  try {
+    const parsed = new URL(raw, window.location.origin);
+    return parsed.origin !== window.location.origin;
+  } catch (_) {
+    return false;
+  }
+};
+
 const getDownloadLabel = (url: string) => {
   const path = getPathSuffix(url);
   if (path.endsWith(".geojson") || path.endsWith(".json")) {
@@ -37,7 +46,12 @@ const FileDownloadContainer = ({ url, showFileName }: FileDownloadProps) => {
             e.stopPropagation();
           }}
         >
-          <DownloadContainer href={url} download>
+          <DownloadContainer
+            href={url}
+            download
+            target={isExternalUrl(url) ? "_blank" : undefined}
+            rel={isExternalUrl(url) ? "noopener noreferrer" : undefined}
+          >
             {getDownloadLabel(url)}
             <StyledIcon name={"download"} />
           </DownloadContainer>

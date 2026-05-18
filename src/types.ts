@@ -207,6 +207,7 @@ export interface Form {
   canValidate?: boolean;
   agreeWithConditions?: boolean;
   editFields?: { attribute?: string; value?: string }[];
+  generatedFile?: string;
 }
 
 export interface Request {
