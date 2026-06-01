@@ -26,9 +26,6 @@ const isExternalUrl = (raw: string) => {
 
 const getDownloadLabel = (url: string) => {
   const path = getPathSuffix(url);
-  if (path.endsWith(".geojson") || path.endsWith(".json")) {
-    return buttonsTitles.downloadGeoJson;
-  }
   if (path.endsWith(".pdf")) {
     return buttonsTitles.downloadPdf;
   }

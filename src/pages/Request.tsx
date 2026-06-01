@@ -58,19 +58,15 @@ export interface RequestPayload {
   canValidate?: boolean;
   data?: {
     extended?: any;
-    format?: string;
   };
   geom?: any;
 }
 
-const REQUEST_FORMAT_GEOJSON = 'geojson';
-
-const requestDataTypes = ['false', 'true', REQUEST_FORMAT_GEOJSON];
+const requestDataTypes = ['false', 'true'];
 
 const requestDataTypeLabels = {
   false: 'Pagrindiniai duomenys (.pdf)',
   true: 'Išplėstiniai duomenys (.pdf)',
-  [REQUEST_FORMAT_GEOJSON]: 'Erdviniai duomenys (.geojson)',
 };
 
 const RequestPage = () => {
@@ -136,10 +132,7 @@ const RequestPage = () => {
           id: item?.cadastralId,
         };
       }),
-      data:
-        extended === REQUEST_FORMAT_GEOJSON
-          ? { extended: false, format: 'GEOJSON' }
-          : { extended: extended === 'true' },
+      data: { extended: extended === 'true' },
     };
 
     if (isNew(id)) {
@@ -154,10 +147,7 @@ const RequestPage = () => {
     agreeWithConditions: disabled || false,
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    extended:
-      request?.data?.format === 'GEOJSON'
-        ? REQUEST_FORMAT_GEOJSON
-        : request?.data?.extended?.toString() || 'false',
+    extended: request?.data?.extended?.toString() || 'false',
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);

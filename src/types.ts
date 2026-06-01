@@ -227,7 +227,6 @@ export interface Request {
   data?: {
     unverified?: boolean;
     extended?: boolean;
-    format?: string;
   };
   geom?: any;
   agreeWithConditions?: boolean;

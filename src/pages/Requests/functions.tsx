@@ -24,11 +24,9 @@ export const mapRequestFilters = (filters: RequestFilters) => {
       });
 
     if (filters?.requestDataType) {
-      params.data = JSON.stringify(
-        filters.requestDataType.id === RequestDataType.GEOJSON
-          ? { format: 'GEOJSON' }
-          : { extended: filters.requestDataType.id === RequestDataType.EXTENDED_DATA },
-      );
+      params.data = JSON.stringify({
+        extended: filters.requestDataType.id === RequestDataType.EXTENDED_DATA,
+      });
     }
 
     filters?.category && (params.category = filters.category.id);
