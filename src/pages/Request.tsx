@@ -58,15 +58,19 @@ export interface RequestPayload {
   canValidate?: boolean;
   data?: {
     extended?: any;
+    format?: string;
   };
   geom?: any;
 }
 
-const requestDataTypes = ['false', 'true'];
+const REQUEST_FORMAT_GDB = 'gdb';
+
+const requestDataTypes = ['false', 'true', REQUEST_FORMAT_GDB];
 
 const requestDataTypeLabels = {
   false: 'Pagrindiniai duomenys (.pdf)',
   true: 'Išplėstiniai duomenys (.pdf)',
+  [REQUEST_FORMAT_GDB]: 'Erdviniai duomenys (Geodatabase, .zip)',
 };
 
 const RequestPage = () => {
@@ -132,7 +136,10 @@ const RequestPage = () => {
           id: item?.cadastralId,
         };
       }),
-      data: { extended: extended === 'true' },
+      data:
+        extended === REQUEST_FORMAT_GDB
+          ? { extended: false, format: 'GDB' }
+          : { extended: extended === 'true' },
     };
 
     if (isNew(id)) {
@@ -147,7 +154,10 @@ const RequestPage = () => {
     agreeWithConditions: disabled || false,
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    extended: request?.data?.extended?.toString() || 'false',
+    extended:
+      request?.data?.format === 'GDB'
+        ? REQUEST_FORMAT_GDB
+        : request?.data?.extended?.toString() || 'false',
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);

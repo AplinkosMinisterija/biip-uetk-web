@@ -29,6 +29,9 @@ const getDownloadLabel = (url: string) => {
   if (path.endsWith(".pdf")) {
     return buttonsTitles.downloadPdf;
   }
+  if (path.endsWith(".zip")) {
+    return buttonsTitles.downloadGdb;
+  }
   return buttonsTitles.download;
 };
 
