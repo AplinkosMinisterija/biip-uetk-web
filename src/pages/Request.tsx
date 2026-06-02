@@ -63,14 +63,14 @@ export interface RequestPayload {
   geom?: any;
 }
 
-const REQUEST_FORMAT_GEOJSON = 'geojson';
+const REQUEST_FORMAT_GDB = 'gdb';
 
-const requestDataTypes = ['false', 'true', REQUEST_FORMAT_GEOJSON];
+const requestDataTypes = ['false', 'true', REQUEST_FORMAT_GDB];
 
 const requestDataTypeLabels = {
   false: 'Pagrindiniai duomenys (.pdf)',
   true: 'Išplėstiniai duomenys (.pdf)',
-  [REQUEST_FORMAT_GEOJSON]: 'Erdviniai duomenys (.geojson)',
+  [REQUEST_FORMAT_GDB]: 'Erdviniai duomenys (Geodatabase, .zip)',
 };
 
 const RequestPage = () => {
@@ -137,8 +137,8 @@ const RequestPage = () => {
         };
       }),
       data:
-        extended === REQUEST_FORMAT_GEOJSON
-          ? { extended: false, format: 'GEOJSON' }
+        extended === REQUEST_FORMAT_GDB
+          ? { extended: false, format: 'GDB' }
           : { extended: extended === 'true' },
     };
 
@@ -155,8 +155,8 @@ const RequestPage = () => {
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
     extended:
-      request?.data?.format === 'GEOJSON'
-        ? REQUEST_FORMAT_GEOJSON
+      request?.data?.format === 'GDB'
+        ? REQUEST_FORMAT_GDB
         : request?.data?.extended?.toString() || 'false',
   };
 

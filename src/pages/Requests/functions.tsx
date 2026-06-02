@@ -25,8 +25,8 @@ export const mapRequestFilters = (filters: RequestFilters) => {
 
     if (filters?.requestDataType) {
       params.data = JSON.stringify(
-        filters.requestDataType.id === RequestDataType.GEOJSON
-          ? { format: 'GEOJSON' }
+        filters.requestDataType.id === RequestDataType.GDB
+          ? { format: 'GDB' }
           : { extended: filters.requestDataType.id === RequestDataType.EXTENDED_DATA },
       );
     }
