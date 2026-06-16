@@ -64,13 +64,20 @@ export interface RequestPayload {
 }
 
 const REQUEST_FORMAT_GDB = 'gdb';
+const REQUEST_FORMAT_GEOJSON = 'geojson';
 
-const requestDataTypes = ['false', 'true', REQUEST_FORMAT_GDB];
+const requestDataTypes = [
+  'false',
+  'true',
+  REQUEST_FORMAT_GDB,
+  REQUEST_FORMAT_GEOJSON,
+];
 
 const requestDataTypeLabels = {
   false: 'Pagrindiniai duomenys (.pdf)',
   true: 'Išplėstiniai duomenys (.pdf)',
   [REQUEST_FORMAT_GDB]: 'Erdviniai duomenys (Geodatabase, .zip)',
+  [REQUEST_FORMAT_GEOJSON]: 'Erdviniai duomenys (GeoJSON, WGS84)',
 };
 
 const RequestPage = () => {
@@ -139,7 +146,9 @@ const RequestPage = () => {
       data:
         extended === REQUEST_FORMAT_GDB
           ? { extended: false, format: 'GDB' }
-          : { extended: extended === 'true' },
+          : extended === REQUEST_FORMAT_GEOJSON
+            ? { extended: false, format: 'GEOJSON' }
+            : { extended: extended === 'true' },
     };
 
     if (isNew(id)) {
@@ -157,7 +166,9 @@ const RequestPage = () => {
     extended:
       request?.data?.format === 'GDB'
         ? REQUEST_FORMAT_GDB
-        : request?.data?.extended?.toString() || 'false',
+        : request?.data?.format === 'GEOJSON'
+          ? REQUEST_FORMAT_GEOJSON
+          : request?.data?.extended?.toString() || 'false',
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);

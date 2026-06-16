@@ -272,4 +272,5 @@ export enum RequestDataType {
 export enum RequestFormat {
   PDF = 'PDF',
   GDB = 'GDB',
+  GEOJSON = 'GEOJSON',
 }
