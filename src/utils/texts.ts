@@ -201,6 +201,7 @@ export const buttonsTitles = {
   download: 'Atsisiųsti',
   downloadPdf: 'Atsisiųsti PDF',
   downloadGdb: 'Atsisiųsti Geodatabase (ZIP)',
+  downloadGeoJson: 'Atsisiųsti GeoJSON',
   or: 'arba',
   forgotPassword: 'Pamiršau slaptažodį',
   login: 'Prisijungti',
@@ -432,6 +433,7 @@ export const requestDataTypeLabels = {
   [RequestDataType.BASIC_DATA]: 'Pagrindiniai duomenys (.pdf)',
   [RequestDataType.EXTENDED_DATA]: 'Išplėstiniai duomenys (.pdf)',
   [RequestDataType.GDB]: 'Erdviniai duomenys (Geodatabase, .zip)',
+  [RequestDataType.GEOJSON]: 'Erdviniai duomenys (GeoJSON, WGS84)',
 };
 
 export const reverseFormObjectTypeLabels = {

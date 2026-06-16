@@ -19,7 +19,12 @@ import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
 import { useAppSelector } from '../state/hooks';
 import { device } from '../styles';
 import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponents';
-import { mapsHost, PurposeTypes, StatusTypes } from '../utils/constants';
+import {
+  mapsHost,
+  PurposeTypes,
+  RequestFormat,
+  StatusTypes,
+} from '../utils/constants';
 import { getLocationList, handleErrorFromServerToast, isNew } from '../utils/functions';
 import { useGetCurrentProfile } from '../utils/hooks';
 import { purposeTypesOptions } from '../utils/options';
@@ -66,12 +71,18 @@ export interface RequestPayload {
 const REQUEST_FORMAT_GDB = 'gdb';
 const REQUEST_FORMAT_GEOJSON = 'geojson';
 
-const requestDataTypes = [
-  'false',
-  'true',
-  REQUEST_FORMAT_GDB,
-  REQUEST_FORMAT_GEOJSON,
-];
+// Maps the radio-button option <-> the backend's `data` shape both ways,
+// so the form doesn't need a ladder of ternaries when adding a new
+// format. Extras (a future XLSX, FlatGeoBuf, ...) add one entry here.
+const spatialFormats: Record<string, RequestFormat> = {
+  [REQUEST_FORMAT_GDB]: RequestFormat.GDB,
+  [REQUEST_FORMAT_GEOJSON]: RequestFormat.GEOJSON,
+};
+const optionByFormat: Record<string, string> = Object.fromEntries(
+  Object.entries(spatialFormats).map(([option, format]) => [format, option]),
+);
+
+const requestDataTypes = ['false', 'true', ...Object.keys(spatialFormats)];
 
 const requestDataTypeLabels = {
   false: 'Pagrindiniai duomenys (.pdf)',
@@ -143,12 +154,9 @@ const RequestPage = () => {
           id: item?.cadastralId,
         };
       }),
-      data:
-        extended === REQUEST_FORMAT_GDB
-          ? { extended: false, format: 'GDB' }
-          : extended === REQUEST_FORMAT_GEOJSON
-            ? { extended: false, format: 'GEOJSON' }
-            : { extended: extended === 'true' },
+      data: spatialFormats[extended]
+        ? { extended: false, format: spatialFormats[extended] }
+        : { extended: extended === 'true' },
     };
 
     if (isNew(id)) {
@@ -164,11 +172,9 @@ const RequestPage = () => {
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
     extended:
-      request?.data?.format === 'GDB'
-        ? REQUEST_FORMAT_GDB
-        : request?.data?.format === 'GEOJSON'
-          ? REQUEST_FORMAT_GEOJSON
-          : request?.data?.extended?.toString() || 'false',
+      optionByFormat[request?.data?.format ?? ''] ??
+      request?.data?.extended?.toString() ??
+      'false',
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);

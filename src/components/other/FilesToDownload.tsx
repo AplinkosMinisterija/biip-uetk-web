@@ -24,15 +24,19 @@ const isExternalUrl = (raw: string) => {
   }
 };
 
+// Generated extracts arrive as .pdf, .zip (Geodatabase), or .geojson —
+// label the button accordingly so users know what they're downloading
+// before clicking. Anything else falls back to a generic "Atsisiųsti".
+const downloadLabelByExt: Record<string, string> = {
+  ".pdf": buttonsTitles.downloadPdf,
+  ".zip": buttonsTitles.downloadGdb,
+  ".geojson": buttonsTitles.downloadGeoJson,
+};
+
 const getDownloadLabel = (url: string) => {
   const path = getPathSuffix(url);
-  if (path.endsWith(".pdf")) {
-    return buttonsTitles.downloadPdf;
-  }
-  if (path.endsWith(".zip")) {
-    return buttonsTitles.downloadGdb;
-  }
-  return buttonsTitles.download;
+  const ext = Object.keys(downloadLabelByExt).find((e) => path.endsWith(e));
+  return ext ? downloadLabelByExt[ext] : buttonsTitles.download;
 };
 
 const FilesToDownload = ({ url, showFileName }: FilesToDownloadProps) => {

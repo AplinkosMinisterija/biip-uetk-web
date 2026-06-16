@@ -24,15 +24,19 @@ const isExternalUrl = (raw: string) => {
   }
 };
 
+// Mirrors FilesToDownload.tsx — the two components share an export
+// name; GeneratedFileComponent currently consumes this file, so the
+// table-cell download button picks up its label from here.
+const downloadLabelByExt: Record<string, string> = {
+  ".pdf": buttonsTitles.downloadPdf,
+  ".zip": buttonsTitles.downloadGdb,
+  ".geojson": buttonsTitles.downloadGeoJson,
+};
+
 const getDownloadLabel = (url: string) => {
   const path = getPathSuffix(url);
-  if (path.endsWith(".pdf")) {
-    return buttonsTitles.downloadPdf;
-  }
-  if (path.endsWith(".zip")) {
-    return buttonsTitles.downloadGdb;
-  }
-  return buttonsTitles.download;
+  const ext = Object.keys(downloadLabelByExt).find((e) => path.endsWith(e));
+  return ext ? downloadLabelByExt[ext] : buttonsTitles.download;
 };
 
 const FileDownloadContainer = ({ url, showFileName }: FileDownloadProps) => {

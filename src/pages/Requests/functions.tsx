@@ -4,7 +4,21 @@ import FilesToDownload from '../../components/other/FilesToDownload';
 import TableMaxWidthItem from '../../components/other/TableMaxWIdthItem';
 import { TableRow } from '../../components/tables/table';
 import { Request, RequestFilters } from '../../types';
-import { colorsByStatus, RequestDataType } from '../../utils/constants';
+import {
+  colorsByStatus,
+  RequestDataType,
+  RequestFormat,
+} from '../../utils/constants';
+
+// Map from the filter dropdown value to the backend `data` shape it
+// implies. Centralizing this here so adding a future format (XLSX,
+// FlatGeoBuf, ...) is one entry, not another ternary leg.
+const dataFilterByType: Record<string, any> = {
+  [RequestDataType.GDB]: { format: RequestFormat.GDB },
+  [RequestDataType.GEOJSON]: { format: RequestFormat.GEOJSON },
+  [RequestDataType.EXTENDED_DATA]: { extended: true },
+  [RequestDataType.BASIC_DATA]: { extended: false },
+};
 import { formatDate, formatDateFrom, formatDateTo } from '../../utils/format';
 import { canShowResponseDate } from '../../utils/functions';
 import { purposeTypeLabels, requestStatusLabels } from '../../utils/texts';
@@ -24,11 +38,9 @@ export const mapRequestFilters = (filters: RequestFilters) => {
       });
 
     if (filters?.requestDataType) {
-      params.data = JSON.stringify(
-        filters.requestDataType.id === RequestDataType.GDB
-          ? { format: 'GDB' }
-          : { extended: filters.requestDataType.id === RequestDataType.EXTENDED_DATA },
-      );
+      const data =
+        dataFilterByType[filters.requestDataType.id] ?? { extended: false };
+      params.data = JSON.stringify(data);
     }
 
     filters?.category && (params.category = filters.category.id);

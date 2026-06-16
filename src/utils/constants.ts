@@ -267,6 +267,7 @@ export enum RequestDataType {
   BASIC_DATA = 'BASIC_DATA',
   EXTENDED_DATA = 'EXTENDED_DATA',
   GDB = 'GDB',
+  GEOJSON = 'GEOJSON',
 }
 
 export enum RequestFormat {
