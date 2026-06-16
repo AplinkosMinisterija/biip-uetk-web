@@ -1,6 +1,6 @@
 import styled from "styled-components";
+import { getDownloadLabel } from "../../utils/texts";
 import Icon from "./Icons";
-import { getDownloadLabel } from "./downloadLabel";
 
 export interface FilesToDownloadProps {
   url: string;

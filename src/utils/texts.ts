@@ -197,11 +197,35 @@ export const menuLabels = {
   tenantUsers: 'Įmonės darbuotojai',
   myProfile: 'MANO PASKYRA',
 };
+// Generated extracts arrive as .pdf, .zip (Geodatabase), or .geojson —
+// label the button accordingly so users know what they're downloading
+// before clicking. Anything else falls back to the generic
+// buttonsTitles.download.
+export const downloadLabelByExt: Record<string, string> = {
+  '.pdf': 'Atsisiųsti PDF',
+  '.zip': 'Atsisiųsti Geodatabase (ZIP)',
+  '.geojson': 'Atsisiųsti GeoJSON',
+};
+
+const pathExt = (raw: string) => {
+  try {
+    return new URL(raw).pathname.toLowerCase();
+  } catch (_) {
+    return raw.toLowerCase().split('?')[0];
+  }
+};
+
+export const getDownloadLabel = (url: string) => {
+  const path = pathExt(url);
+  const ext = Object.keys(downloadLabelByExt).find((e) => path.endsWith(e));
+  return ext ? downloadLabelByExt[ext] : buttonsTitles.download;
+};
+
 export const buttonsTitles = {
   download: 'Atsisiųsti',
-  downloadPdf: 'Atsisiųsti PDF',
-  downloadGdb: 'Atsisiųsti Geodatabase (ZIP)',
-  downloadGeoJson: 'Atsisiųsti GeoJSON',
+  downloadPdf: downloadLabelByExt['.pdf'],
+  downloadGdb: downloadLabelByExt['.zip'],
+  downloadGeoJson: downloadLabelByExt['.geojson'],
   or: 'arba',
   forgotPassword: 'Pamiršau slaptažodį',
   login: 'Prisijungti',
