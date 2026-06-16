@@ -1,19 +1,11 @@
 import styled from "styled-components";
-import { buttonsTitles } from "../../utils/texts";
 import Icon from "./Icons";
+import { getDownloadLabel } from "./downloadLabel";
 
 export interface FileDownloadProps {
   url: string;
   showFileName?: boolean;
 }
-
-const getPathSuffix = (raw: string) => {
-  try {
-    return new URL(raw).pathname.toLowerCase();
-  } catch (_) {
-    return raw.toLowerCase().split("?")[0];
-  }
-};
 
 const isExternalUrl = (raw: string) => {
   try {
@@ -22,21 +14,6 @@ const isExternalUrl = (raw: string) => {
   } catch (_) {
     return false;
   }
-};
-
-// Mirrors FilesToDownload.tsx — the two components share an export
-// name; GeneratedFileComponent currently consumes this file, so the
-// table-cell download button picks up its label from here.
-const downloadLabelByExt: Record<string, string> = {
-  ".pdf": buttonsTitles.downloadPdf,
-  ".zip": buttonsTitles.downloadGdb,
-  ".geojson": buttonsTitles.downloadGeoJson,
-};
-
-const getDownloadLabel = (url: string) => {
-  const path = getPathSuffix(url);
-  const ext = Object.keys(downloadLabelByExt).find((e) => path.endsWith(e));
-  return ext ? downloadLabelByExt[ext] : buttonsTitles.download;
 };
 
 const FileDownloadContainer = ({ url, showFileName }: FileDownloadProps) => {
