@@ -4,10 +4,22 @@ import FilesToDownload from '../../components/other/FilesToDownload';
 import TableMaxWidthItem from '../../components/other/TableMaxWIdthItem';
 import { TableRow } from '../../components/tables/table';
 import { Request, RequestFilters } from '../../types';
-import { colorsByStatus, RequestDataType } from '../../utils/constants';
+import { colorsByStatus, RequestDataType, RequestFormat } from '../../utils/constants';
 import { formatDate, formatDateFrom, formatDateTo } from '../../utils/format';
 import { canShowResponseDate } from '../../utils/functions';
 import { purposeTypeLabels, requestStatusLabels } from '../../utils/texts';
+
+// The backend matches `data` by JSONB containment, so each option filters on
+// the one key that identifies it — a spatial request also carries
+// `extended: false`, which would make it match the basic-data filter too.
+type RequestDataQuery = { extended: boolean } | { format: RequestFormat };
+
+const dataQueryByType: Record<string, RequestDataQuery> = {
+  [RequestDataType.BASIC_DATA]: { extended: false },
+  [RequestDataType.EXTENDED_DATA]: { extended: true },
+  [RequestDataType.GDB]: { format: RequestFormat.GDB },
+  [RequestDataType.GEOJSON]: { format: RequestFormat.GEOJSON },
+};
 
 export const mapRequestFilters = (filters: RequestFilters) => {
   const params: any = {};
@@ -23,12 +35,9 @@ export const mapRequestFilters = (filters: RequestFilters) => {
         }),
       });
 
-    if (filters?.requestDataType) {
-      params.data = JSON.stringify(
-        filters.requestDataType.id === RequestDataType.GDB
-          ? { format: 'GDB' }
-          : { extended: filters.requestDataType.id === RequestDataType.EXTENDED_DATA },
-      );
+    if (filters.requestDataType?.id) {
+      const dataQuery = dataQueryByType[filters.requestDataType.id];
+      dataQuery && (params.data = JSON.stringify(dataQuery));
     }
 
     filters?.category && (params.category = filters.category.id);

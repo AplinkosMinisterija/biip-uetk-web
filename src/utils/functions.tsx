@@ -13,7 +13,7 @@ import {
   StatusTypes,
   SubPoolTypes,
 } from './constants';
-import { validationTexts } from './texts';
+import { buttonsTitles, downloadLabelByExtension, validationTexts } from './texts';
 const env = import.meta.env;
 
 export const handleErrorFromServerToast = (responseError?: string) => {
@@ -165,6 +165,30 @@ export const useGetSortedColumns = (columns: Columns) => {
 };
 
 export const getPublicUrl = (url: string) => `${env.VITE_BASE_URL}/${url}`;
+
+const getUrlPath = (url: string) => {
+  try {
+    return new URL(url).pathname.toLowerCase();
+  } catch (_) {
+    // Not an absolute URL — the extension still sits in front of the query.
+    return url.toLowerCase().split('?')[0];
+  }
+};
+
+export const getDownloadLabel = (url: string) => {
+  const path = getUrlPath(url);
+  const extension = Object.keys(downloadLabelByExtension).find((ext) => path.endsWith(ext));
+
+  return extension ? downloadLabelByExtension[extension] : buttonsTitles.download;
+};
+
+export const isExternalUrl = (url: string) => {
+  try {
+    return new URL(url, window.location.origin).origin !== window.location.origin;
+  } catch (_) {
+    return false;
+  }
+};
 
 export const availableMimeTypes = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf'];
 

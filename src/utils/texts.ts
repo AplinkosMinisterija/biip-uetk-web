@@ -197,10 +197,17 @@ export const menuLabels = {
   tenantUsers: 'Įmonės darbuotojai',
   myProfile: 'MANO PASKYRA',
 };
+
+// A generated extract is a .pdf, a .zip (Geodatabase) or a .geojson — naming
+// the format on the button tells the user what they get before they click.
+export const downloadLabelByExtension: Record<string, string> = {
+  '.pdf': 'Atsisiųsti PDF',
+  '.zip': 'Atsisiųsti Geodatabase (ZIP)',
+  '.geojson': 'Atsisiųsti GeoJSON',
+};
+
 export const buttonsTitles = {
   download: 'Atsisiųsti',
-  downloadPdf: 'Atsisiųsti PDF',
-  downloadGdb: 'Atsisiųsti Geodatabase (ZIP)',
   or: 'arba',
   forgotPassword: 'Pamiršau slaptažodį',
   login: 'Prisijungti',
@@ -432,6 +439,7 @@ export const requestDataTypeLabels = {
   [RequestDataType.BASIC_DATA]: 'Pagrindiniai duomenys (.pdf)',
   [RequestDataType.EXTENDED_DATA]: 'Išplėstiniai duomenys (.pdf)',
   [RequestDataType.GDB]: 'Erdviniai duomenys (Geodatabase, .zip)',
+  [RequestDataType.GEOJSON]: 'Erdviniai duomenys (GeoJSON, WGS84)',
 };
 
 export const reverseFormObjectTypeLabels = {

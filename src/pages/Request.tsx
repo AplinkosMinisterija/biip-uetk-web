@@ -19,7 +19,13 @@ import FormPageWrapper from '../components/wrappers/FormikFormPageWrapper';
 import { useAppSelector } from '../state/hooks';
 import { device } from '../styles';
 import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponents';
-import { mapsHost, PurposeTypes, StatusTypes } from '../utils/constants';
+import {
+  mapsHost,
+  PurposeTypes,
+  RequestDataType,
+  RequestFormat,
+  StatusTypes,
+} from '../utils/constants';
 import { getLocationList, handleErrorFromServerToast, isNew } from '../utils/functions';
 import { useGetCurrentProfile } from '../utils/hooks';
 import { purposeTypesOptions } from '../utils/options';
@@ -29,6 +35,7 @@ import {
   inputLabels,
   pageTitles,
   purposeTypeLabels,
+  requestDataTypeLabels,
   requestHistoryStatusLabels,
   url,
 } from '../utils/texts';
@@ -42,7 +49,7 @@ export interface RequestProps {
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
-  extended?: any;
+  extended: string;
   geom?: any;
   agreeWithConditions: boolean;
 }
@@ -57,20 +64,24 @@ export interface RequestPayload {
   canEdit?: boolean;
   canValidate?: boolean;
   data?: {
-    extended?: any;
+    extended?: boolean;
     format?: string;
   };
   geom?: any;
 }
 
-const REQUEST_FORMAT_GDB = 'gdb';
+// The PDF options are stored by the backend as `data.extended`, the spatial
+// ones as `data.format` — so the select carries either the stringified
+// `extended` flag or the format itself as its value.
+const spatialFormats: string[] = [RequestFormat.GDB, RequestFormat.GEOJSON];
 
-const requestDataTypes = ['false', 'true', REQUEST_FORMAT_GDB];
+const requestDataTypes = ['false', 'true', ...spatialFormats];
 
-const requestDataTypeLabels = {
-  false: 'Pagrindiniai duomenys (.pdf)',
-  true: 'Išplėstiniai duomenys (.pdf)',
-  [REQUEST_FORMAT_GDB]: 'Erdviniai duomenys (Geodatabase, .zip)',
+const dataTypeOptionLabels: Record<string, string> = {
+  false: requestDataTypeLabels[RequestDataType.BASIC_DATA],
+  true: requestDataTypeLabels[RequestDataType.EXTENDED_DATA],
+  [RequestFormat.GDB]: requestDataTypeLabels[RequestDataType.GDB],
+  [RequestFormat.GEOJSON]: requestDataTypeLabels[RequestDataType.GEOJSON],
 };
 
 const RequestPage = () => {
@@ -136,10 +147,9 @@ const RequestPage = () => {
           id: item?.cadastralId,
         };
       }),
-      data:
-        extended === REQUEST_FORMAT_GDB
-          ? { extended: false, format: 'GDB' }
-          : { extended: extended === 'true' },
+      data: spatialFormats.includes(extended)
+        ? { extended: false, format: extended }
+        : { extended: extended === 'true' },
     };
 
     if (isNew(id)) {
@@ -154,10 +164,7 @@ const RequestPage = () => {
     agreeWithConditions: disabled || false,
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    extended:
-      request?.data?.format === 'GDB'
-        ? REQUEST_FORMAT_GDB
-        : request?.data?.extended?.toString() || 'false',
+    extended: request?.data?.format ?? request?.data?.extended?.toString() ?? 'false',
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
@@ -239,7 +246,7 @@ const RequestPage = () => {
                   }}
                   options={requestDataTypes}
                   getOptionLabel={(e) => {
-                    return requestDataTypeLabels[e];
+                    return dataTypeOptionLabels[e];
                   }}
                 />
               </Row>
