@@ -22,6 +22,7 @@ import { ColumnOne, ColumnTwo, Container } from '../styles/GenericStyledComponen
 import {
   mapsHost,
   PurposeTypes,
+  RequestDataType,
   RequestFormat,
   StatusTypes,
 } from '../utils/constants';
@@ -34,6 +35,7 @@ import {
   inputLabels,
   pageTitles,
   purposeTypeLabels,
+  requestDataTypeLabels,
   requestHistoryStatusLabels,
   url,
 } from '../utils/texts';
@@ -47,7 +49,7 @@ export interface RequestProps {
   purpose: PurposeTypes;
   canEdit?: boolean;
   canValidate?: boolean;
-  extended?: any;
+  extended: string;
   geom?: any;
   agreeWithConditions: boolean;
 }
@@ -62,33 +64,24 @@ export interface RequestPayload {
   canEdit?: boolean;
   canValidate?: boolean;
   data?: {
-    extended?: any;
+    extended?: boolean;
     format?: string;
   };
   geom?: any;
 }
 
-const REQUEST_FORMAT_GDB = 'gdb';
-const REQUEST_FORMAT_GEOJSON = 'geojson';
+// The PDF options are stored by the backend as `data.extended`, the spatial
+// ones as `data.format` — so the select carries either the stringified
+// `extended` flag or the format itself as its value.
+const spatialFormats: string[] = [RequestFormat.GDB, RequestFormat.GEOJSON];
 
-// Maps the radio-button option <-> the backend's `data` shape both ways,
-// so the form doesn't need a ladder of ternaries when adding a new
-// format. Extras (a future XLSX, FlatGeoBuf, ...) add one entry here.
-const spatialFormats: Record<string, RequestFormat> = {
-  [REQUEST_FORMAT_GDB]: RequestFormat.GDB,
-  [REQUEST_FORMAT_GEOJSON]: RequestFormat.GEOJSON,
-};
-const optionByFormat: Record<string, string> = Object.fromEntries(
-  Object.entries(spatialFormats).map(([option, format]) => [format, option]),
-);
+const requestDataTypes = ['false', 'true', ...spatialFormats];
 
-const requestDataTypes = ['false', 'true', ...Object.keys(spatialFormats)];
-
-const requestDataTypeLabels = {
-  false: 'Pagrindiniai duomenys (.pdf)',
-  true: 'Išplėstiniai duomenys (.pdf)',
-  [REQUEST_FORMAT_GDB]: 'Erdviniai duomenys (Geodatabase, .zip)',
-  [REQUEST_FORMAT_GEOJSON]: 'Erdviniai duomenys (GeoJSON, WGS84)',
+const dataTypeOptionLabels: Record<string, string> = {
+  false: requestDataTypeLabels[RequestDataType.BASIC_DATA],
+  true: requestDataTypeLabels[RequestDataType.EXTENDED_DATA],
+  [RequestFormat.GDB]: requestDataTypeLabels[RequestDataType.GDB],
+  [RequestFormat.GEOJSON]: requestDataTypeLabels[RequestDataType.GEOJSON],
 };
 
 const RequestPage = () => {
@@ -154,8 +147,8 @@ const RequestPage = () => {
           id: item?.cadastralId,
         };
       }),
-      data: spatialFormats[extended]
-        ? { extended: false, format: spatialFormats[extended] }
+      data: spatialFormats.includes(extended)
+        ? { extended: false, format: extended }
         : { extended: extended === 'true' },
     };
 
@@ -171,10 +164,7 @@ const RequestPage = () => {
     agreeWithConditions: disabled || false,
     purposeValue: request?.purposeValue || '',
     purpose: request?.purpose || PurposeTypes.TERRITORIAL_PLANNING_DOCUMENT,
-    extended:
-      optionByFormat[request?.data?.format ?? ''] ??
-      request?.data?.extended?.toString() ??
-      'false',
+    extended: request?.data?.format ?? request?.data?.extended?.toString() ?? 'false',
   };
 
   const isApproved = isEqual(request?.status, StatusTypes.APPROVED);
@@ -256,7 +246,7 @@ const RequestPage = () => {
                   }}
                   options={requestDataTypes}
                   getOptionLabel={(e) => {
-                    return requestDataTypeLabels[e];
+                    return dataTypeOptionLabels[e];
                   }}
                 />
               </Row>
