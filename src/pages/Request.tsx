@@ -186,7 +186,7 @@ const RequestPage = () => {
     const handleClick = (result) => {
       if (disabled) return;
 
-      const objects = objectsRef.current;
+      // const objects = objectsRef.current;
 
       const item = result?.[0];
 
